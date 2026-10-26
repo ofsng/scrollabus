@@ -69,10 +69,10 @@ Kullanılan ücretsiz hizmetler:
 
 Giriş, e-postana gelen bir bağlantıyla (magic link) yapılır. Bağlantının çalışması için:
 
-1. Supabase → **Authentication → URL Configuration**.
-2. **Site URL**: `https://scrollabus-xxxx.vercel.app`
-3. **Redirect URLs** → **Add URL**: `https://scrollabus-xxxx.vercel.app/**`
-4. Kaydet.
+1. Supabase → **Authentication → URL Configuration**
+   (bulamazsan: `https://supabase.com/dashboard/project/PROJE-KIMLIGIN/auth/url-configuration`).
+2. **Site URL**: Vercel'in **Domains** altında verdiği sabit adres, ör. `https://scrollabus-xxxx.vercel.app` → Save.
+3. **Redirect URLs** gerekmez; uygulama Site URL'ye dönen giriş bağlantısını kendisi tamamlar.
 
 ## Adım 5 — Telefonda kullan
 
