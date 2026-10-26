@@ -1,4 +1,5 @@
 import { N8N_WEBHOOKS } from "./constants";
+import { generateAndSavePosts, generateAndSaveCommentReply } from "./gemini-content";
 
 interface N8NResponse {
   success: boolean;
@@ -41,6 +42,11 @@ export async function triggerMaterialToPost(payload: {
   priority_personas?: string[];
   emphasis?: string;
 }) {
+  // No n8n configured → generate text posts directly with Gemini
+  if (!N8N_WEBHOOKS.materialToPost) {
+    await generateAndSavePosts(payload);
+    return { success: true, generator: "gemini" };
+  }
   return callWebhook(N8N_WEBHOOKS.materialToPost, payload);
 }
 
@@ -50,5 +56,9 @@ export async function triggerCommentReply(payload: {
   comment_body: string;
   learner_context?: string;
 }) {
+  if (!N8N_WEBHOOKS.commentReply) {
+    await generateAndSaveCommentReply(payload);
+    return { success: true, generator: "gemini" };
+  }
   return callWebhook(N8N_WEBHOOKS.commentReply, payload);
 }

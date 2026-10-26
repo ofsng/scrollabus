@@ -686,6 +686,9 @@ function TextContent({
 
 // ─── Main FeedCard ────────────────────────────────────────────────────────────
 
+// Set once /api/tts fails (e.g. no ElevenLabs key) so later taps go straight to browser speech
+let serverTtsUnavailable = false;
+
 export function FeedCard({ post, onOpenComments, onVisible, onPersonaClick }: FeedCardProps) {
   const [isSaved, setIsSaved] = useState(post.is_saved ?? false);
   const [isLiked, setIsLiked] = useState(post.is_liked ?? false);
@@ -748,6 +751,7 @@ export function FeedCard({ post, onOpenComments, onVisible, onPersonaClick }: Fe
   const handleTts = useCallback(async () => {
     // Stop if already playing
     if (isSpeaking) {
+      window.speechSynthesis?.cancel();
       audioRef.current?.pause();
       if (audioRef.current?.src) URL.revokeObjectURL(audioRef.current.src);
       audioRef.current = null;
@@ -755,15 +759,40 @@ export function FeedCard({ post, onOpenComments, onVisible, onPersonaClick }: Fe
       return;
     }
 
+    const text = [post.title, post.body].filter(Boolean).join(". ");
+
+    // Free fallback: the browser's built-in voice. Called synchronously from the
+    // tap whenever possible, since iOS Safari blocks speech started later.
+    const speakWithBrowser = () => {
+      const synth = window.speechSynthesis;
+      if (!synth) {
+        setIsSpeaking(false);
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = navigator.language;
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      synth.cancel();
+      synth.speak(utterance);
+    };
+
     setIsSpeaking(true);
+    if (serverTtsUnavailable) {
+      speakWithBrowser();
+      return;
+    }
+
     try {
-      const text = [post.title, post.body].filter(Boolean).join(". ");
       const res = await fetch("/api/tts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
-      if (!res.ok) throw new Error("TTS request failed");
+      if (!res.ok) {
+        serverTtsUnavailable = true;
+        throw new Error("TTS request failed");
+      }
 
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -783,13 +812,14 @@ export function FeedCard({ post, onOpenComments, onVisible, onPersonaClick }: Fe
 
       await audio.play();
     } catch {
-      setIsSpeaking(false);
+      speakWithBrowser();
     }
   }, [isSpeaking, post.title, post.body]);
 
   // Stop TTS when card scrolls out of view
   useEffect(() => {
     if (!isVisible && isSpeaking) {
+      window.speechSynthesis?.cancel();
       audioRef.current?.pause();
       if (audioRef.current?.src) URL.revokeObjectURL(audioRef.current.src);
       audioRef.current = null;

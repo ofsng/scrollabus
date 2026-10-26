@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { GEMINI_MODEL } from "@/lib/constants";
 
 const VISION_PROMPT = `Extract ALL content from this PDF for use as study material. This may include typed text, handwritten notes, and visual elements.
 
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
       const base64Data = buffer.toString("base64");
 
       const result = await genai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: GEMINI_MODEL,
         contents: [
           {
             parts: [

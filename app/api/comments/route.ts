@@ -1,7 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { triggerCommentReply } from "@/lib/n8n";
 import { writeMemory, recallMemory } from "@/lib/hydra";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
+
+export const maxDuration = 30;
 
 // GET /api/comments?post_id=xxx
 export async function GET(req: NextRequest) {
@@ -75,8 +77,8 @@ export async function POST(req: NextRequest) {
     text: `User asked a question in comments on post ${post_id}: "${commentBody.trim().slice(0, 300)}"`,
   }).catch(() => {});
 
-  // Recall learner memory and pass as context to the n8n persona reply pipeline
-  recallMemory({
+  // Recall learner memory and pass as context to the persona reply pipeline (runs after the response)
+  after(() => recallMemory({
     userId: user.id,
     query: commentBody.trim(),
     maxResults: 5,
@@ -84,7 +86,7 @@ export async function POST(req: NextRequest) {
     const learnerContext = memories.length > 0
       ? memories.map((m, i) => `${i + 1}. ${m}`).join("\n")
       : "";
-    triggerCommentReply({
+    return triggerCommentReply({
       comment_id: comment.id,
       post_id,
       comment_body: commentBody.trim(),
@@ -94,14 +96,14 @@ export async function POST(req: NextRequest) {
     });
   }).catch(() => {
     // Fall back to reply without memory context
-    triggerCommentReply({
+    return triggerCommentReply({
       comment_id: comment.id,
       post_id,
       comment_body: commentBody.trim(),
     }).catch((err) => {
       console.error("[n8n] Comment reply trigger failed:", err);
     });
-  });
+  }));
 
   return NextResponse.json({ comment }, { status: 201 });
 }

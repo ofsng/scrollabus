@@ -325,6 +325,8 @@ erDiagram
 
 ## Quickstart
 
+> **Free setup (no n8n, Gemini free tier only):** see [docs/KURULUM.md](docs/KURULUM.md) (Turkish). With the n8n webhook URLs left empty, posts and comment replies are generated in-app with Gemini.
+
 ### 1. Prerequisites
 
 - Node.js 20+

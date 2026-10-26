@@ -3,7 +3,10 @@ import { triggerMaterialToPost } from "@/lib/n8n";
 import { generateAndSaveQuizzes } from "@/lib/quizzes";
 import { writeMemory } from "@/lib/hydra";
 import { triggerTeachingWorkflow } from "@/lib/dify";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
+
+// Background generation runs after the response; give it room on Vercel
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
@@ -52,21 +55,21 @@ export async function POST(req: NextRequest) {
     text: `User uploaded study material titled "${title}" (${source_type}). Topic preview: ${raw_text.slice(0, 200)}`,
   }).catch(() => {});
 
-  // Fire-and-forget: generate persona-voiced quizzes from the material
-  generateAndSaveQuizzes({
+  // Background: generate persona-voiced quizzes from the material
+  after(() => generateAndSaveQuizzes({
     material_id: material.id,
     raw_text,
     title,
     enabled_personas: enabledPersonas,
   }).catch((err) => {
     console.error("[quiz] Quiz generation failed:", err);
-  });
+  }));
 
   // Kick off Dify teaching plan + n8n content pipeline concurrently.
   // We await Dify here (with a short timeout) so we can pass its pedagogical
   // signals (emphasis, priority_personas) directly into the n8n prompt — closing
   // the loop between memory-aware teaching analysis and content generation.
-  void (async () => {
+  after(async () => {
     let emphasis: string | undefined;
     let priorityPersonas: string[] | undefined;
 
@@ -111,8 +114,8 @@ export async function POST(req: NextRequest) {
       console.error("[dify] Teaching workflow failed:", err);
     }
 
-    // Trigger n8n content pipeline with enriched context from the teaching plan
-    triggerMaterialToPost({
+    // Trigger content pipeline (n8n, or Gemini when n8n isn't configured)
+    await triggerMaterialToPost({
       material_id: material.id,
       raw_text,
       title,
@@ -123,7 +126,7 @@ export async function POST(req: NextRequest) {
     }).catch((err) => {
       console.error("[n8n] Material-to-post trigger failed:", err);
     });
-  })();
+  });
 
   return NextResponse.json({ material_id: material.id, status: "processing" }, { status: 201 });
 }

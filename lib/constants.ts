@@ -135,3 +135,7 @@ export const QUIZZES_PER_MATERIAL = 3;
 
 // Approximate interval (in number of posts) between quiz card insertions in the feed
 export const QUIZ_INSERT_INTERVAL = { min: 4, max: 6 };
+
+// Gemini model used for every in-app AI call; override with GEMINI_MODEL
+// (e.g. "gemini-2.5-flash-lite" for higher free-tier quotas)
+export const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";

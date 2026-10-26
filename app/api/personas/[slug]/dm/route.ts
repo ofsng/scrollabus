@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { writeConversationMemory, recallMemory, formatMemoryContext } from "@/lib/hydra";
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GEMINI_MODEL } from "@/lib/constants";
 
 interface ChatMessage {
   role: "user" | "model";
@@ -60,7 +61,7 @@ You are now in a direct message conversation with a student. Respond conversatio
 
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: GEMINI_MODEL,
     systemInstruction,
   });
 

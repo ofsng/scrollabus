@@ -3,6 +3,7 @@ import { writeConversationMemory, recallMemory, formatMemoryContext } from "@/li
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { Quiz, QuizOption } from "@/lib/types";
+import { GEMINI_MODEL } from "@/lib/constants";
 
 // GET /api/quiz-chat?quiz_id=xxx
 // Returns the persisted chat history for this user + quiz
@@ -169,7 +170,7 @@ ${quizInstruction}${memoryContext}`;
 
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: GEMINI_MODEL,
     systemInstruction,
   });
 

@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createServiceClient } from "@/lib/supabase/service";
-import { QUIZZES_PER_MATERIAL } from "@/lib/constants";
+import { QUIZZES_PER_MATERIAL, GEMINI_MODEL } from "@/lib/constants";
 
 interface RawQuizOption {
   id: string;
@@ -144,7 +144,7 @@ Generate ${quizCount} quiz questions based on this material. Return ONLY a valid
     // Clone model config with updated system instruction
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
     const personaModel = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: GEMINI_MODEL,
       systemInstruction,
       generationConfig: { responseMimeType: "application/json" },
     });
@@ -192,7 +192,7 @@ export async function generateAndSaveQuizzes({
 
   const genAI = new GoogleGenerativeAI(apiKey);
   // Base model used only as a factory reference; each persona call creates its own instance
-  const baseModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+  const baseModel = genAI.getGenerativeModel({ model: GEMINI_MODEL });
 
   const allValidSlugs = Object.keys(PERSONA_QUIZ_STRATEGIES);
   const personas = enabled_personas

@@ -13,6 +13,7 @@ import {
   formatMemoryContext,
 } from "@/lib/hydra";
 import { NextRequest, NextResponse } from "next/server";
+import { GEMINI_MODEL } from "@/lib/constants";
 
 const SYSTEM_BASE = `You are Scrollabus, an enthusiastic and knowledgeable AI study companion on Telegram.
 You help students learn by answering questions, explaining concepts, generating quizzes, and giving recaps.
@@ -27,7 +28,7 @@ async function geminiChat(systemPrompt: string, userMessage: string): Promise<st
 
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: GEMINI_MODEL,
     systemInstruction: systemPrompt,
   });
 
