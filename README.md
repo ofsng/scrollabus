@@ -349,23 +349,13 @@ cp .env.example .env.local
 
 ### 4. Set up Supabase
 
-Run these SQL files against your Supabase project in order:
+Open your project's **SQL Editor** in the Supabase dashboard, paste the contents of
+[`supabase/setup.sql`](supabase/setup.sql) and run it once on a fresh project.
 
-```bash
-# 1. Base schema
-supabase db push --file supabase/schema.sql
-
-# 2. Seed personas
-supabase db push --file supabase/seed.sql
-
-# 3. Incremental migrations (run each in supabase/migrations/ in filename order)
-
-# 4. RPCs
-supabase db push --file supabase/engagement-rpc.sql
-supabase db push --file supabase/community-rpc.sql
-supabase db push --file supabase/external-content-rpc.sql
-supabase db push --file supabase/persona-affinity-rpc.sql
-```
+That file is the schema, persona seed, every migration and all RPCs concatenated in
+the order they were added to the repo. If you run the individual files instead, keep
+that order: the migrations are **not** safe to run alphabetically
+(`add_persona_to_quizzes.sql` depends on `add_quizzes.sql`).
 
 ### 5. Import n8n workflows
 

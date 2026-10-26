@@ -31,7 +31,9 @@ export async function sendStudyNudge({
   try {
     // Try the @photon-ai/imessage-kit SDK first (macOS local mode)
     // Dynamic import so it doesn't crash on non-macOS servers
-    const { IMessageSDK } = await import("@photon-ai/imessage-kit");
+    // Optional macOS-only dependency; webpackIgnore keeps the build from requiring it
+    const pkg = "@photon-ai/imessage-kit";
+    const { IMessageSDK } = await import(/* webpackIgnore: true */ pkg);
     const sdk = new IMessageSDK();
     await sdk.send(phoneNumber, text);
     await sdk.close();

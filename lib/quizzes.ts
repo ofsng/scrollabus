@@ -141,10 +141,6 @@ ${truncated}
 Generate ${quizCount} quiz questions based on this material. Return ONLY a valid JSON array.`;
 
   try {
-    const instance = model.generativeModel
-      ? model.generativeModel({ systemInstruction })
-      : model;
-
     // Clone model config with updated system instruction
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
     const personaModel = genAI.getGenerativeModel({

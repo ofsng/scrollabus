@@ -1,7 +1,7 @@
 import type { Persona } from "./types";
 
 // Static persona config — mirrored in DB via seed SQL
-export const PERSONAS: Record<string, Omit<Persona, "id">> = {
+export const PERSONAS: Record<string, Omit<Persona, "id" | "tone" | "teaching_style" | "created_by" | "is_public">> = {
   "lecture-bestie": {
     slug: "lecture-bestie",
     name: "Lecture Bestie",

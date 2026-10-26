@@ -1,5 +1,5 @@
 export type PostType = "concept" | "example" | "trap" | "review" | "recap";
-export type PostSource = "n8n" | "creao";
+export type PostSource = "n8n" | "creao" | "reactive" | "pulse";
 export type MediaType = "text" | "image" | "video" | "audio" | "slideshow";
 
 export interface SlideshowPayload {

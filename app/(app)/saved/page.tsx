@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import type { Post, SaveCategory } from "@/lib/types";
@@ -111,6 +111,14 @@ function PostCard({
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function SavedPage() {
+  return (
+    <Suspense fallback={null}>
+      <SavedPageContent />
+    </Suspense>
+  );
+}
+
+function SavedPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialCategory = searchParams.get("category") ?? null;
