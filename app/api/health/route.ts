@@ -3,14 +3,18 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { GEMINI_MODEL } from "@/lib/constants";
+import { generateAndSavePosts } from "@/lib/gemini-content";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 type Check = { ok: boolean; detail: string };
 
 // Setup check for the free deployment: open /api/health while signed in to see
 // which piece (env vars, database, Gemini, post generation) is failing.
-export async function GET() {
+// /api/health?retry=1 re-runs post generation for the latest upload and reports the result.
+export async function GET(req: Request) {
+  const retry = new URL(req.url).searchParams.get("retry") === "1";
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -46,12 +50,30 @@ export async function GET() {
   // Did the user's latest upload produce anything?
   const { data: latest } = await supabase
     .from("materials")
-    .select("id, title, created_at")
+    .select("id, title, raw_text, created_at, teaching_plan")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
   if (latest) {
+    if (retry) {
+      const { data: profile } = await supabase.from("profiles").select("enabled_personas").eq("id", user.id).single();
+      const result = await generateAndSavePosts({
+        material_id: latest.id,
+        raw_text: latest.raw_text,
+        title: latest.title,
+        enabled_personas: profile?.enabled_personas ?? undefined,
+      });
+      checks.retry = result.error
+        ? { ok: false, detail: `Generation failed: ${result.error}` }
+        : { ok: true, detail: `Generated ${result.inserted} posts — open the feed` };
+    }
+
+    const generation = retry ? undefined : (latest.teaching_plan as { generation?: { posts?: number; error?: string | null; at?: string } } | null)?.generation;
+    if (!retry) checks.last_generation = generation
+      ? { ok: !generation.error, detail: generation.error ? `Failed at ${generation.at}: ${generation.error}` : `${generation.posts} posts at ${generation.at}` }
+      : { ok: false, detail: "No generation result recorded — the background job never finished (timeout?). Try /api/health?retry=1" };
+
     const [{ count: postCount }, { count: quizCount }] = await Promise.all([
       supabase.from("posts").select("id", { count: "exact", head: true }).eq("material_id", latest.id),
       supabase.from("quizzes").select("id", { count: "exact", head: true }).eq("material_id", latest.id),
