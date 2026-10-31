@@ -1,0 +1,66 @@
+name: Android APK
+
+# Builds the offline mobile app in mobile/ and publishes it as the "latest"
+# release, so the APK is always at:
+# https://github.com/<owner>/<repo>/releases/latest/download/Scrollabus.apk
+on:
+  push:
+    branches: [main]
+    paths: ["mobile/**", ".github/workflows/android-apk.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build web app
+        run: |
+          npm ci
+          npm run build
+          npx cap sync android
+
+      - name: Build APK
+        working-directory: mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/Scrollabus.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Scrollabus-apk
+          path: Scrollabus.apk
+
+      - name: Publish release
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest Scrollabus.apk \
+            --title "Scrollabus APK" \
+            --notes "Built from ${GITHUB_SHA::7}. Download Scrollabus.apk on your phone and open it to install." \
+            --latest
