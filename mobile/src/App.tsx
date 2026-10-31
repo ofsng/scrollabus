@@ -5,6 +5,16 @@ import { splitIntoCards } from "./split";
 import { bundledCategories, bundledLibraryDecks, fetchLibraryUpdates, mergeLibrary } from "./library";
 import { generationErrorMessage, writeDeckOnDevice } from "./generate";
 import {
+  DEFAULT_REMINDER,
+  allowExactReminders,
+  exactRemindersAllowed,
+  onReminderTapped,
+  remindersSupported,
+  scheduleReminders,
+  type ReminderSettings,
+  type ReminderStatus,
+} from "./reminders";
+import {
   loadCategoryPrefs,
   loadCustomCategories,
   loadDecks,
@@ -129,6 +139,7 @@ const EYE_OFF = "M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 
 const TAGS = "M3 12V4h8l10 10-8 8zM7.5 7.5h.01";
 const CHECK = "M5 12l5 5L20 7";
 const CLOCK = "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2";
+const BELL = "M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0";
 const TEXT_SIZE = "M3 19 8 5l5 14M4.8 14h6.4M14 19l3.5-9 3.5 9M15.2 16h4.6";
 const SPARK = "M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z";
 
@@ -818,6 +829,65 @@ function CardSheet({
   );
 }
 
+// ─── Reminder ────────────────────────────────────────────────────────────────
+
+const pad2 = (n: number) => String(n).padStart(2, "0");
+
+function ReminderSheet({
+  settings,
+  status,
+  exact,
+  onChange,
+  onAllowExact,
+  onClose,
+}: {
+  settings: ReminderSettings;
+  status: ReminderStatus | null;
+  exact: boolean;
+  onChange: (next: ReminderSettings) => void;
+  onAllowExact: () => void;
+  onClose: () => void;
+}) {
+  const time = `${pad2(settings.hour)}:${pad2(settings.minute)}`;
+  return (
+    <Sheet title="Hatırlatıcı" onClose={onClose}>
+      {!remindersSupported() && <p className="hint small">Bildirimler yalnızca telefondaki uygulamada çalışır.</p>}
+      <label className="toggle">
+        <input type="checkbox" checked={settings.enabled} onChange={() => onChange({ ...settings, enabled: !settings.enabled })} />
+        <span>Her gün okuma hatırlatıcısı</span>
+      </label>
+      <label className="time-row">
+        <span>Saat</span>
+        <input
+          className="field time"
+          type="time"
+          value={time}
+          disabled={!settings.enabled}
+          onChange={(e) => {
+            const [h, m] = e.target.value.split(":").map(Number);
+            if (Number.isFinite(h) && Number.isFinite(m)) onChange({ ...settings, hour: h, minute: m });
+          }}
+        />
+      </label>
+      {status === "scheduled" && <p className="hint small">Her gün {time}'da okunmamış bir yazıyı hatırlatacağım.</p>}
+      {status === "denied" && (
+        <p className="hint small">
+          Bildirim izni kapalı. Telefonun Ayarlar → Uygulamalar → Scrollabus → Bildirimler bölümünden izin verip uygulamayı yeniden
+          aç.
+        </p>
+      )}
+      {status === "scheduled" && !exact && (
+        <>
+          <p className="hint small">Android hatırlatmayı birkaç dakika geç gösterebilir. Tam saatinde gelmesi için izin verebilirsin.</p>
+          <button className="btn ghost" onClick={onAllowExact}>
+            Tam saatinde gelsin
+          </button>
+        </>
+      )}
+    </Sheet>
+  );
+}
+
 // ─── Library ─────────────────────────────────────────────────────────────────
 
 function Library({
@@ -829,6 +899,7 @@ function Library({
   onOpen,
   onOptions,
   onManageCategories,
+  onReminder,
 }: {
   decks: Deck[];
   categories: Category[];
@@ -838,6 +909,7 @@ function Library({
   onOpen: (id: string) => void;
   onOptions: (id: string) => void;
   onManageCategories: () => void;
+  onReminder: () => void;
 }) {
   const [filter, setFilter] = useState<string | null>(() => readPref<string | null>("libraryFilter", null));
   useEffect(() => {
@@ -868,6 +940,9 @@ function Library({
         <div className="head-actions">
           <button className="pill-btn round-pill" aria-label="Yeni içerikleri kontrol et" onClick={onSync}>
             <Icon d={REFRESH} />
+          </button>
+          <button className="pill-btn round-pill" aria-label="Hatırlatıcı" onClick={onReminder}>
+            <Icon d={BELL} />
           </button>
           <button className="pill-btn" onClick={onManageCategories}>
             <Icon d={TAGS} /> Kategoriler
@@ -948,6 +1023,10 @@ export function App() {
   const [generatingId, setGeneratingId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ text: string; deckId?: string } | null>(null);
   const [sizeIndex, setSizeIndex] = useState(() => readPref<number>("readingSize", 1));
+  const [reminder, setReminder] = useState<ReminderSettings>(() => readPref("reminder", DEFAULT_REMINDER));
+  const [reminderStatus, setReminderStatus] = useState<ReminderStatus | null>(null);
+  const [exactReminders, setExactReminders] = useState(true);
+  const [showReminder, setShowReminder] = useState(false);
   // Bumped to rebuild the feed on purpose (e.g. after writing new content from its empty state)
   const [feedNonce, setFeedNonce] = useState(0);
 
@@ -1038,6 +1117,27 @@ export function App() {
   useEffect(() => writePref("seed", seed), [seed]);
   useEffect(() => writePref("autoGenerate", autoGenerate), [autoGenerate]);
   useEffect(() => writePref("readingSize", sizeIndex), [sizeIndex]);
+
+  // Daily reminder: (re)schedule on launch and whenever its settings change,
+  // each day suggesting a different unread reading, newest first
+  async function refreshReminders(settings: ReminderSettings) {
+    const unread = decksRef.current
+      .filter((d) => d.fromLibrary || d.generated)
+      .filter((d) => d.cards.some((c) => !readRef.current.has(c.id)))
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map((d) => d.title);
+    try {
+      setReminderStatus(await scheduleReminders(settings, unread));
+      setExactReminders(await exactRemindersAllowed());
+    } catch {
+      setReminderStatus(null);
+    }
+  }
+  useEffect(() => {
+    writePref("reminder", reminder);
+    if (decks !== null) void refreshReminders(reminder);
+  }, [reminder, decks === null]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => onReminderTapped(() => setTab("feed")), []);
 
   // Android back button: close a sheet, then leave sub-screens, then exit
   const tabRef = useRef(tab);
@@ -1364,6 +1464,7 @@ export function App() {
             onOpen={openDeck}
             onOptions={setDeckOptions}
             onManageCategories={() => setManagingCategories(true)}
+            onReminder={() => setShowReminder(true)}
           />
         )}
         {tab === "history" && (
@@ -1434,6 +1535,16 @@ export function App() {
             openDeck(historyItem.deck.id);
           }}
           onClose={() => setHistoryItem(null)}
+        />
+      )}
+      {showReminder && (
+        <ReminderSheet
+          settings={reminder}
+          status={reminderStatus}
+          exact={exactReminders}
+          onChange={setReminder}
+          onAllowExact={() => void allowExactReminders().then(() => refreshReminders(reminder))}
+          onClose={() => setShowReminder(false)}
         />
       )}
       {managingCategories && (

@@ -25,6 +25,8 @@ Sunucu, giriş, yapay zekâ ya da API anahtarı yok; her şey telefonda saklanı
 - **Okundu takibi:** bir kart ~2,5 saniye ekranda kalınca okundu sayılır ve akışa bir daha
   gelmez (kütüphaneden açtığın bir notta tüm kartlar görünür). **Geçmiş** sekmesinde
   okuduklarını gün gün görür, kaydedebilir ya da "okunmadı" yapabilirsin.
+- **Hatırlatıcı:** her gün 07:30'da okunmamış bir yazıyı öneren bildirim gelir (telefonun
+  kendisi planlar, sunucu yok). Saat ve aç/kapa: Kütüphane → 🔔.
 - **Kendi kategorilerine içerik:** Kütüphane → Kategoriler'e Gemini anahtarını girersen
   uygulama kendi kategorilerine her gün (açılışta) otomatik bir okuma yazar; ✨ ile istediğin
   kategoriye hemen yazdırabilirsin. Anahtar yalnızca telefonda saklanır.

@@ -400,7 +400,10 @@ button {
 }
 .head-actions {
   display: flex;
-  gap: 6px;
+  gap: 4px;
+}
+.page-head h1 {
+  font-size: 24px;
 }
 .pill-btn {
   display: inline-flex;
@@ -409,7 +412,7 @@ button {
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 999px;
   background: var(--surface);
   white-space: nowrap;
@@ -737,6 +740,22 @@ select.field {
   height: 20px;
   accent-color: var(--accent);
 }
+.time-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 15px;
+}
+.field.time {
+  width: auto;
+  padding: 10px 14px;
+  font-variant-numeric: tabular-nums;
+}
+.field.time:disabled {
+  opacity: 0.4;
+}
+
 .link-btn {
   align-self: flex-start;
   padding: 0;
