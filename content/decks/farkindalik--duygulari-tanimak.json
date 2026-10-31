@@ -2,32 +2,27 @@
  "id": "farkindalik--duygulari-tanimak",
  "category": "farkindalik",
  "title": "Duyguları Tanımak",
- "version": 2,
+ "version": 3,
  "cards": [
   {
    "title": "Duygunu adlandır",
-   "text": "Matthew Lieberman ve ekibinin araştırmaları, bir duyguyu kelimelerle adlandırmanın beyindeki duygusal tepkiyi azaltabildiğini gösteriyor. \"Kötüyüm\" yerine \"Hayal kırıklığına uğradım ve biraz da kırgınım\" demek, duyguyu yönetilebilir kılar.",
-   "action": "Bugün kendini \"kötü\" hissettiğinde iki daha net kelime bul: kırgın, yorgun, kaygılı, hayal kırıklığına uğramış..."
+   "text": "Matthew Lieberman ve ekibinin araştırmaları, bir duyguyu kelimelerle adlandırmanın beyindeki duygusal tepkiyi azaltabildiğini gösteriyor. \"Kötüyüm\" yerine \"Hayal kırıklığına uğradım ve biraz da kırgınım\" demek, duyguyu yönetilebilir kılar."
   },
   {
    "title": "Uyaran ile tepki arasında",
-   "text": "Viktor Frankl'a atfedilen bir fikre göre uyaran ile tepki arasında bir boşluk vardır ve özgürlüğümüz o boşlukta yatar. Öfkelendiğinde birkaç derin nefes almak, o boşluğu genişletmektir.",
-   "action": "Bir sonraki sinirlendiğin anda cevap vermeden önce 3 derin nefes al ve sor: \"Bu cevaptan bir saat sonra ne hissedeceğim?\""
+   "text": "Viktor Frankl'a atfedilen bir fikre göre uyaran ile tepki arasında bir boşluk vardır ve özgürlüğümüz o boşlukta yatar. Öfkelendiğinde birkaç derin nefes almak, o boşluğu genişletmektir."
   },
   {
    "title": "Düşünceler gerçek değildir",
-   "text": "\"Herkes beni yetersiz buluyor\" bir düşüncedir, kanıtlanmış bir gerçek değil. Bilişsel davranışçı terapi, düşünceleri sorgulamayı öğretir: Bunun kanıtı ne? Başka bir açıklama olabilir mi?",
-   "action": "Seni rahatsız eden bir düşünceyi yaz ve yanına iki sütun ekle: lehindeki kanıtlar, aleyhindeki kanıtlar."
+   "text": "\"Herkes beni yetersiz buluyor\" bir düşüncedir, kanıtlanmış bir gerçek değil. Bilişsel davranışçı terapi, düşünceleri sorgulamayı öğretir: Bunun kanıtı ne? Başka bir açıklama olabilir mi?"
   },
   {
    "title": "Öz şefkat",
-   "text": "Kristin Neff'e göre öz şefkat, zor anlarda kendine bir arkadaşına davranacağın gibi davranmaktır. Kendini sert bir şekilde eleştirmek motivasyonu artırmaz; öz şefkat ise hatalardan öğrenmeyi kolaylaştırır.",
-   "action": "Bir hatanın ardından kendine, aynı durumdaki yakın bir arkadaşına söyleyeceğin cümleyi yazarak söyle."
+   "text": "Kristin Neff'e göre öz şefkat, zor anlarda kendine bir arkadaşına davranacağın gibi davranmaktır. Kendini sert bir şekilde eleştirmek motivasyonu artırmaz; öz şefkat ise hatalardan öğrenmeyi kolaylaştırır."
   },
   {
    "title": "Duygular dalga gibidir",
-   "text": "Yoğun duygular bir dalga gibi yükselir, zirveye ulaşır ve geçer. Onları bastırmak ya da hemen tepki vermek yerine izlemek, dalganın geçtiğini görmeni sağlar. Bu yaklaşıma \"dalga sörfü\" de denir.",
-   "action": "Bir dahaki güçlü dürtüde (atıştırma, telefon, öfke) 10 dakikalık sayaç kur ve dalganın yükselip inişini izle."
+   "text": "Yoğun duygular bir dalga gibi yükselir, zirveye ulaşır ve geçer. Onları bastırmak ya da hemen tepki vermek yerine izlemek, dalganın geçtiğini görmeni sağlar. Bu yaklaşıma \"dalga sörfü\" de denir."
   }
  ]
 }

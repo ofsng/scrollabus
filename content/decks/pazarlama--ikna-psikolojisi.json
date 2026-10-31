@@ -2,32 +2,27 @@
  "id": "pazarlama--ikna-psikolojisi",
  "category": "pazarlama",
  "title": "İkna Psikolojisi",
- "version": 2,
+ "version": 3,
  "cards": [
   {
    "title": "Karşılıklılık",
-   "text": "Robert Cialdini'nin ikna ilkelerinden biri: İnsanlar kendilerine bir şey verene karşılık verme eğilimindedir. Ücretsiz deneme, numune ya da gerçekten faydalı bir içerik, güven ve karşılık verme isteği yaratır.",
-   "action": "Hedef kitlene bu hafta karşılıksız bir değer ver: kısa bir rehber, ücretsiz bir ipucu ya da faydalı bir kontrol listesi."
+   "text": "Robert Cialdini'nin ikna ilkelerinden biri: İnsanlar kendilerine bir şey verene karşılık verme eğilimindedir. Ücretsiz deneme, numune ya da gerçekten faydalı bir içerik, güven ve karşılık verme isteği yaratır."
   },
   {
    "title": "Kıtlık etkisi",
-   "text": "Az bulunan ya da süresi sınırlı olan şeyleri daha değerli algılarız. \"Son 3 ürün\" ya da \"Bugün sona eriyor\" ifadeleri bu yüzden etkilidir. Ama sahte kıtlık, güveni çok hızlı yok eder.",
-   "action": "Bir dahaki \"son fırsat\" mesajında 24 saat bekle ve sor: Bu sınır gerçek mi, bu ürüne gerçekten ihtiyacım var mı?"
+   "text": "Az bulunan ya da süresi sınırlı olan şeyleri daha değerli algılarız. \"Son 3 ürün\" ya da \"Bugün sona eriyor\" ifadeleri bu yüzden etkilidir. Ama sahte kıtlık, güveni çok hızlı yok eder."
   },
   {
    "title": "Çapa etkisi",
-   "text": "İlk duyduğumuz sayı, sonraki yargılarımızı etkiler. Önce yüksek fiyatlı seçeneği görmek, orta seçeneği daha makul gösterir. Birçok fiyat listesinin en pahalı paketle başlamasının nedeni budur.",
-   "action": "Bir teklif hazırlarken üç seçenek sun ve en yüksek fiyatlıyı ilk göster. Hangisinin seçildiğini gözlemle."
+   "text": "İlk duyduğumuz sayı, sonraki yargılarımızı etkiler. Önce yüksek fiyatlı seçeneği görmek, orta seçeneği daha makul gösterir. Birçok fiyat listesinin en pahalı paketle başlamasının nedeni budur."
   },
   {
    "title": "Özellik değil, fayda",
-   "text": "Pazarlama profesörü Theodore Levitt'e atfedilen söz: \"İnsanlar matkap değil, duvarda bir delik satın almak ister.\" Ürünün ne olduğunu değil, müşterinin hayatında neyi değiştirdiğini anlat.",
-   "action": "Ürününün ya da hizmetinin 3 özelliğini yaz ve her birinin yanına \"yani müşteri...\" diye başlayan faydasını ekle."
+   "text": "Pazarlama profesörü Theodore Levitt'e atfedilen söz: \"İnsanlar matkap değil, duvarda bir delik satın almak ister.\" Ürünün ne olduğunu değil, müşterinin hayatında neyi değiştirdiğini anlat."
   },
   {
    "title": "Hikâye anlatıcılığı",
-   "text": "İnsanlar istatistikleri unutur, hikâyeleri hatırlar. İyi bir pazarlama hikâyesinde kahraman marka değil müşteridir; marka, kahramana yol gösteren rehberdir.",
-   "action": "Bir müşterinin önce-sonra hikâyesini üç cümlede yaz: Sorunu neydi, ne denedi, şimdi ne değişti?"
+   "text": "İnsanlar istatistikleri unutur, hikâyeleri hatırlar. İyi bir pazarlama hikâyesinde kahraman marka değil müşteridir; marka, kahramana yol gösteren rehberdir."
   }
  ]
 }

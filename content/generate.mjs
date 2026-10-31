@@ -6,7 +6,7 @@
 //
 // Optional env: GEMINI_MODEL (default gemini-flash-latest; there is no time
 // limit here, so the slower but better model is worth it),
-// DECKS_PER_RUN (default 3), CATEGORY (only that category id).
+// DECKS_PER_RUN (default 1: one reading a day), CATEGORY (only that category id).
 
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -16,7 +16,7 @@ import { DEFAULT_MODEL, generateDeck } from "./prompt.mjs";
 const DIR = dirname(fileURLToPath(import.meta.url));
 const KEY = process.env.GEMINI_API_KEY;
 const MODEL = process.env.GEMINI_MODEL || DEFAULT_MODEL;
-const PER_RUN = Number(process.env.DECKS_PER_RUN || 3);
+const PER_RUN = Number(process.env.DECKS_PER_RUN || 1);
 
 if (!KEY) {
   console.error("GEMINI_API_KEY is not set. Add it under Settings → Secrets and variables → Actions.");
@@ -33,12 +33,13 @@ const slug = (s) =>
 const indexPath = join(DIR, "index.json");
 const index = JSON.parse(await readFile(indexPath, "utf8"));
 
-// Grow the categories with the fewest decks first, so the library stays balanced
-const counts = new Map(index.categories.map((c) => [c.id, 0]));
-for (const d of index.decks) counts.set(d.category, (counts.get(d.category) ?? 0) + 1);
+// Take turns: the category that has waited longest for a new reading goes next
+// (index.decks is in publication order, so a later position means more recent)
+const lastWritten = new Map(index.categories.map((c) => [c.id, -1]));
+index.decks.forEach((d, i) => lastWritten.set(d.category, i));
 const targets = index.categories
   .filter((c) => !process.env.CATEGORY || c.id === process.env.CATEGORY)
-  .sort((a, b) => counts.get(a.id) - counts.get(b.id))
+  .sort((a, b) => lastWritten.get(a.id) - lastWritten.get(b.id))
   .slice(0, PER_RUN);
 
 const today = new Date().toISOString().slice(0, 10);

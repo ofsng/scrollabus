@@ -1,7 +1,7 @@
 name: Daily content
 
-# Writes new reading decks with Gemini every morning (Turkey time) and commits
-# them to content/. The mobile app downloads new decks on its next launch.
+# Writes one new reading every morning (Turkey time), taking the categories in
+# turn, and commits it to content/. The app downloads it on its next launch.
 # Needs the GEMINI_API_KEY repository secret.
 on:
   schedule:
@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
     inputs:
       decks:
-        description: "How many decks to write"
-        default: "3"
+        description: "How many readings to write"
+        default: "1"
       category:
         description: "Only this category id (optional, e.g. finans)"
         default: ""
@@ -34,7 +34,7 @@ jobs:
       - name: Write new decks
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          DECKS_PER_RUN: ${{ inputs.decks || '3' }}
+          DECKS_PER_RUN: ${{ inputs.decks || '1' }}
           CATEGORY: ${{ inputs.category }}
         run: node content/generate.mjs
 

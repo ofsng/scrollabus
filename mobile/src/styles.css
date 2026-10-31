@@ -9,6 +9,10 @@
   --muted: #a39fae;
   --accent: #ff5d73;
   --nav-h: 60px;
+  /* Off-white on near-black: high enough contrast to read, softer than pure white */
+  --reading-text: #e3ddd2;
+  --reading-muted: rgba(227, 221, 210, 0.5);
+  --reading-font: "Literata", Georgia, "Times New Roman", serif;
   color-scheme: dark;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
@@ -70,14 +74,15 @@ button {
   display: none;
 }
 
+/* Reading: one calm, steady layout tuned for long-form text */
 .card {
   height: 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   position: relative;
   display: flex;
-  align-items: center;
-  padding: calc(var(--sat) + 64px) 72px 48px 26px;
+  justify-content: center;
+  padding: calc(var(--sat) + 64px) 24px 64px;
   content-visibility: auto;
   contain-intrinsic-size: auto 100vh;
   user-select: none;
@@ -85,49 +90,105 @@ button {
 
 .card-body {
   width: 100%;
+  max-width: 34em;
   max-height: 100%;
   overflow-y: auto;
+  scrollbar-width: none;
+  margin: auto 0;
+  font-size: var(--reading-size, 19px);
+}
+.card-body::-webkit-scrollbar {
+  display: none;
+}
+.card-body.has-more {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 3em), transparent);
+}
+.card-body.has-more + .more-hint {
+  opacity: 1;
+}
+.more-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--reading-muted);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
 }
 
 .card-deck {
-  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(244, 241, 234, 0.55);
-  margin-bottom: 10px;
+  color: var(--reading-muted);
+  margin-bottom: 1.1em;
+}
+.card-deck span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card-part {
+  flex: none;
+  font-variant-numeric: tabular-nums;
 }
 
-.card-title {
-  font-size: 19px;
-  font-weight: 700;
-  margin: 0 0 14px;
-  color: rgba(244, 241, 234, 0.85);
+.card-title,
+.reading .card-title {
+  font-family: var(--reading-font);
+  font-size: 1.2em;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 0.7em;
+  color: var(--reading-text);
 }
 
 .card-text {
-  margin: 0;
-  line-height: 1.45;
-  font-weight: 600;
-  white-space: pre-line;
+  font-family: var(--reading-font);
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--reading-text);
   text-wrap: pretty;
+  hyphens: auto;
+  font-kerning: normal;
+}
+.card-text p {
+  margin: 0;
+}
+.card-text p + p {
+  margin-top: 0.85em;
 }
 
 .card-side {
   position: absolute;
-  right: 14px;
-  bottom: 56px;
+  right: 12px;
+  bottom: 14px;
 }
 
 .round {
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(6px);
-  transition: transform 0.15s;
+  color: var(--reading-muted);
+  transition: transform 0.15s, color 0.15s;
+}
+.round svg {
+  width: 22px;
+  height: 22px;
 }
 .round:active {
   transform: scale(0.9);
@@ -146,23 +207,35 @@ button {
   animation: burst 0.7s ease-out forwards;
 }
 .burst svg {
-  width: 110px;
-  height: 110px;
+  width: 96px;
+  height: 96px;
 }
 @keyframes burst {
   0% { transform: scale(0.4); opacity: 0; }
-  30% { transform: scale(1.1); opacity: 0.95; }
+  30% { transform: scale(1.1); opacity: 0.85; }
   100% { transform: scale(1); opacity: 0; }
 }
 
-.counter {
-  position: absolute;
-  left: 26px;
-  bottom: 16px;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(244, 241, 234, 0.6);
-  pointer-events: none;
+.topbar-row {
+  display: flex;
+  align-items: flex-start;
+}
+.topbar-row .chips {
+  flex: 1;
+  min-width: 0;
+}
+.aa-btn {
+  flex: none;
+  margin: -2px 10px 0 0;
+  padding: 7px;
+  border-radius: 999px;
+  color: var(--reading-muted);
+  display: grid;
+  place-items: center;
+}
+.aa-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 .topbar {
@@ -172,7 +245,7 @@ button {
   right: 0;
   z-index: 2;
   padding-top: calc(var(--sat) + 10px);
-  background: linear-gradient(rgba(14, 13, 18, 0.75), transparent);
+  background: linear-gradient(rgba(11, 11, 14, 0.92) 55%, transparent);
 }
 
 .chips {
@@ -200,8 +273,8 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(244, 241, 234, 0.8);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(232, 227, 218, 0.7);
 }
 .chip svg {
   width: 16px;
@@ -407,6 +480,9 @@ button {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.row.done {
+  opacity: 0.42;
+}
 .row-meta {
   font-size: 13px;
   color: var(--muted);
@@ -439,24 +515,22 @@ select.field {
 /* ─── Card action ──────────────────────────────────────── */
 
 .card-action {
-  margin-top: 18px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.1);
-  border-left: 3px solid var(--accent);
-  font-size: 15px;
-  line-height: 1.45;
-  font-weight: 500;
-  color: rgba(244, 241, 234, 0.92);
+  margin-top: 1.2em;
+  padding: 0.7em 0 0.1em 0.9em;
+  border-left: 2px solid rgba(255, 93, 115, 0.6);
+  font-size: 0.85em;
+  line-height: 1.55;
+  font-weight: 400;
+  color: var(--reading-muted);
 }
 .card-action-label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: rgba(255, 93, 115, 0.8);
 }
 
 /* ─── Bottom sheet ─────────────────────────────────────── */
@@ -617,15 +691,9 @@ select.field {
   flex-direction: column;
   gap: 6px;
 }
-.sheet-card-title {
-  margin: 4px 0 0;
-  font-size: 19px;
-}
-.sheet-card-text {
-  margin: 0;
-  font-size: 17px;
-  line-height: 1.5;
-  white-space: pre-line;
+.sheet-reading {
+  font-size: var(--reading-size, 19px);
+  padding: 4px 2px 8px;
 }
 .sheet-actions {
   display: flex;

@@ -1,6 +1,6 @@
 export interface GeneratedDeck {
   title: string;
-  cards: { title?: string; text: string; action: string }[];
+  cards: { title?: string; text: string; action?: string }[];
 }
 
 export const DEFAULT_MODEL: string;

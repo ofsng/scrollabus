@@ -2,32 +2,27 @@
  "id": "pazarlama--satisin-temelleri",
  "category": "pazarlama",
  "title": "Satışın Temelleri",
- "version": 2,
+ "version": 3,
  "cards": [
   {
    "title": "Dinleyen satar",
-   "text": "En iyi satışçılar en çok konuşanlar değil, en iyi soruları soranlardır. Müşterinin ihtiyacını anlamadan önerilen bir ürün, ne kadar iyi olursa olsun ilgisiz bir teklif gibi gelir.",
-   "action": "Bir sonraki ikna konuşmasında sürenin en az yarısında karşı tarafı konuştur. Sorularını önceden hazırla."
+   "text": "En iyi satışçılar en çok konuşanlar değil, en iyi soruları soranlardır. Müşterinin ihtiyacını anlamadan önerilen bir ürün, ne kadar iyi olursa olsun ilgisiz bir teklif gibi gelir."
   },
   {
    "title": "İtiraz bir ilgi işaretidir",
-   "text": "\"Çok pahalı\" diyen müşteri hâlâ konuşuyordur. İtiraz, müşterinin neyi önemsediğini gösterir. Savunmaya geçmek yerine \"Bu fiyatı neyle karşılaştırıyorsunuz?\" diye sor.",
-   "action": "En sık duyduğun 3 itirazı yaz ve her biri için bir merak sorusu hazırla."
+   "text": "\"Çok pahalı\" diyen müşteri hâlâ konuşuyordur. İtiraz, müşterinin neyi önemsediğini gösterir. Savunmaya geçmek yerine \"Bu fiyatı neyle karşılaştırıyorsunuz?\" diye sor."
   },
   {
    "title": "Mevcut müşteri altındır",
-   "text": "Yeni müşteri kazanmanın maliyeti, mevcut müşteriyi elde tutmaktan genellikle çok daha yüksektir. Memnun bir müşteri tekrar alır ve başkalarına önerir; ağızdan ağıza yayılım hâlâ en güvenilir pazarlamadır.",
-   "action": "Bu hafta mevcut bir müşterine yalnızca teşekkür etmek ve geri bildirim istemek için ulaş."
+   "text": "Yeni müşteri kazanmanın maliyeti, mevcut müşteriyi elde tutmaktan genellikle çok daha yüksektir. Memnun bir müşteri tekrar alır ve başkalarına önerir; ağızdan ağıza yayılım hâlâ en güvenilir pazarlamadır."
   },
   {
    "title": "Hedef kitleni daralt",
-   "text": "\"Herkes için\" olan bir ürün aslında kimse için değildir. Belirli bir kişiyi hayal et: yaşını, sorununu, gününü nasıl geçirdiğini. Mesajın ne kadar spesifik olursa o kadar güçlü yankı bulur.",
-   "action": "İdeal müşterini tek bir kişi gibi tarif et: yaşı, en büyük sorunu ve seni günün hangi anında düşündüğü."
+   "text": "\"Herkes için\" olan bir ürün aslında kimse için değildir. Belirli bir kişiyi hayal et: yaşını, sorununu, gününü nasıl geçirdiğini. Mesajın ne kadar spesifik olursa o kadar güçlü yankı bulur."
   },
   {
    "title": "Somut referanslar",
-   "text": "Gerçek müşteri yorumları, kullanıcı sayıları ve tanınmış referanslar karar vermeyi kolaylaştırır. Somut bir müşteri hikâyesi, en parlak reklam cümlesinden daha ikna edicidir.",
-   "action": "Memnun bir müşterinden izin alarak 2-3 cümlelik somut bir yorum iste ve teklifinin en üstüne koy."
+   "text": "Gerçek müşteri yorumları, kullanıcı sayıları ve tanınmış referanslar karar vermeyi kolaylaştırır. Somut bir müşteri hikâyesi, en parlak reklam cümlesinden daha ikna edicidir."
   }
  ]
 }

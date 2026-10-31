@@ -1,0 +1,36 @@
+{
+ "id": "bilim--boylam-problemi-ve-john-harrison",
+ "category": "bilim",
+ "title": "Boylam Problemi ve John Harrison",
+ "version": 3,
+ "cards": [
+  {
+   "title": "Sisli bir gece, 1707",
+   "text": "22 Ekim 1707 gecesi, Akdeniz'den dönen bir İngiliz donanması güvenli sularda olduğunu sanıyordu. Oysa gemiler rotalarından sapmış, İngiltere'nin güneybatı ucundaki Scilly Adaları'nın kayalıklarına doğru ilerliyordu. Dört savaş gemisi kayalara çarparak battı; tahminlere göre bin dört yüz ile iki bin arasında denizci hayatını kaybetti, aralarında filonun komutanı Amiral Cloudesley Shovell da vardı.\n\nFelaketin nedeni basit ama korkunçtu: Denizciler nerede olduklarını bilmiyorlardı."
+  },
+  {
+   "title": "Enlem kolay, boylam imkânsız",
+   "text": "Bir geminin konumu iki sayıyla belirlenir. Enlem, yani kuzey-güney konumu, öğle vakti Güneş'in ya da geceleyin Kutup Yıldızı'nın ufuktan yüksekliği ölçülerek yüzyıllardır bulunabiliyordu. Boylam ise başka bir hikâyeydi.\n\nDünya her saatte 15 derece döndüğü için boylam aslında bir zaman farkıdır. Gemideki yerel öğle vakti ile limandaki saat arasındaki fark bilinirse, ne kadar doğuda ya da batıda olunduğu hesaplanabilir. Sorun şuydu: Sallanan, ıslak ve sıcaklığı sürekli değişen bir gemide haftalarca doğru çalışan bir saat yoktu."
+  },
+  {
+   "title": "Yirmi bin sterlinlik ödül",
+   "text": "Scilly faciasından yedi yıl sonra, 1714'te İngiliz Parlamentosu Boylam Yasası'nı çıkardı. Boylamı yarım derece hassasiyetle bulmanın pratik bir yolunu gösterene 20.000 sterlin ödül vaat ediliyordu; bu, bugünün parasıyla milyonlarca sterline denk gelen bir servetti. Başvuruları değerlendirmek için de Boylam Kurulu kuruldu.\n\nDönemin bilim insanlarının çoğu çözümün gökyüzünde olduğuna inanıyordu: Ay'ın yıldızlara göre konumu dikkatle ölçülürse, gökyüzü dev bir saat gibi okunabilirdi."
+  },
+  {
+   "title": "Köylü bir marangoz",
+   "text": "Ödülün peşine düşenlerden biri, İngiltere'nin kuzeyinde, Lincolnshire'da yaşayan kendi kendini yetiştirmiş bir marangoz ve saatçiydi: John Harrison. Harrison'ın cevabı gökyüzünde değil, mekanizmadaydı. Denizde de şaşmayan bir saat yapılabilirse sorun kendiliğinden çözülecekti.\n\nİlk deniz saati H1'i 1735'te tamamladı. Büyük ölçüde pirinçten yapılmış, yaklaşık 34 kilo ağırlığında, birbirine bağlı yaylı kollarla dengelenen tuhaf bir makineydi. Denemelerde umut verdi ama Harrison memnun değildi; sonraki yirmi yılını onu yeniden tasarlamakla geçirdi."
+  },
+  {
+   "title": "Cepteki devrim: H4",
+   "text": "H2 ve H3'te büyük makineleri geliştirmeye çalışan Harrison, sonunda beklenmedik bir yöne döndü. 1759'da tamamladığı H4, öncekilerin aksine büyük bir cep saati boyutundaydı.\n\n1761'de H4, Jamaika'ya giden bir gemide denendi. 81 günlük yolculuğun sonunda saatin yalnızca birkaç saniye saptığı görüldü. Bu, yasanın istediği hassasiyetin çok ötesindeydi. Küçük, hassas ve dayanıklı bir mekanizmanın, devasa makinelerden daha iyi sonuç verebileceği kanıtlanmıştı."
+  },
+  {
+   "title": "Ödülün gecikmesi",
+   "text": "Başarıya rağmen Boylam Kurulu ödülü vermekte direndi. Kurulda gökbilimsel yöntemi savunanlar ağırlıktaydı; özellikle sonradan Kraliyet Astronomu olan Nevil Maskelyne, Ay mesafesi yöntemini destekliyordu. Kurul yeni denemeler, ayrıntılı açıklamalar ve kopyalar istedi.\n\nYaşı ilerleyen Harrison ve oğlu William sonunda Kral III. George'a başvurdu. Kralın desteği ve Parlamento'nun 1773'teki kararıyla Harrison önemli bir para ödülü aldı; ancak resmi büyük ödülü hiçbir zaman kazanamadı. Üç yıl sonra, 1776'da öldü."
+  },
+  {
+   "title": "Bugüne kalan miras",
+   "text": "Harrison'ın açtığı yol kısa sürede denizciliği dönüştürdü. Kaptan James Cook, ikinci büyük yolculuğunda H4'ün bir kopyasını yanına aldı ve onu güvenilir bir rehber olarak övdü. Deniz kronometreleri on dokuzuncu yüzyılda gemilerin vazgeçilmez aracı oldu.\n\nAynı fikir bugün de cebimizde: Telefonumuzdaki GPS, uydulardaki son derece hassas atom saatlerinden gelen sinyallerin zaman farkını ölçerek konumumuzu bulur. Konumu bilmek, hâlâ zamanı doğru bilmekten geçiyor."
+  }
+ ]
+}

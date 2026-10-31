@@ -2,32 +2,27 @@
  "id": "motivasyon--icsel-motivasyon",
  "category": "motivasyon",
  "title": "İçsel Motivasyon",
- "version": 2,
+ "version": 3,
  "cards": [
   {
    "title": "Özerklik, ustalık, amaç",
-   "text": "Daniel Pink'e göre içsel motivasyonun üç temeli vardır: işini nasıl yapacağına kendin karar verebilmek, bir şeyde giderek daha iyi olmak ve yaptığın işin bir anlamı olduğunu hissetmek. Ödül ve ceza basit işlerde işe yarar, yaratıcı işlerde çoğu zaman yaramaz.",
-   "action": "İşinde ya da derslerinde bu üçünden hangisi en zayıf? Onu güçlendirecek tek bir değişikliği bu hafta dene."
+   "text": "Daniel Pink'e göre içsel motivasyonun üç temeli vardır: işini nasıl yapacağına kendin karar verebilmek, bir şeyde giderek daha iyi olmak ve yaptığın işin bir anlamı olduğunu hissetmek. Ödül ve ceza basit işlerde işe yarar, yaratıcı işlerde çoğu zaman yaramaz."
   },
   {
    "title": "Motivasyon eylemden sonra gelir",
-   "text": "Çoğumuz harekete geçmek için motive olmayı bekleriz; oysa genellikle tersi olur. Küçük bir başlangıç, devam etme isteğini doğurur. Kendine \"sadece beş dakika\" demek çoğu zaman yeterlidir.",
-   "action": "Hiç canının istemediği bir işe \"sadece 5 dakika\" de ve sayaç kur. 5 dakika sonra bırakmakta özgürsün."
+   "text": "Çoğumuz harekete geçmek için motive olmayı bekleriz; oysa genellikle tersi olur. Küçük bir başlangıç, devam etme isteğini doğurur. Kendine \"sadece beş dakika\" demek çoğu zaman yeterlidir."
   },
   {
    "title": "İlerleme ilkesi",
-   "text": "Teresa Amabile'nin araştırması, insanlar için iş yerindeki en motive edici deneyimin anlamlı bir işte küçük de olsa ilerleme kaydetmek olduğunu gösterdi. Günün sonunda neler yaptığını yazmak, bu etkiyi görünür kılar.",
-   "action": "Bu akşam bugün ilerlediğin 3 küçük şeyi yaz. Bir hafta boyunca tekrarla ve listeyi okuduğunda ne hissettiğine bak."
+   "text": "Teresa Amabile'nin araştırması, insanlar için iş yerindeki en motive edici deneyimin anlamlı bir işte küçük de olsa ilerleme kaydetmek olduğunu gösterdi. Günün sonunda neler yaptığını yazmak, bu etkiyi görünür kılar."
   },
   {
    "title": "Akış hali",
-   "text": "Mihaly Csikszentmihalyi, kendimizi tamamen bir işe kaptırdığımız ve zamanın nasıl geçtiğini anlamadığımız duruma \"akış\" der. Akış, görevin zorluğu ile becerimiz dengede olduğunda ortaya çıkar.",
-   "action": "Zamanın nasıl geçtiğini anlamadığın son anı hatırla: Ne yapıyordun? Bu hafta ona bilinçli olarak bir saat ayır."
+   "text": "Mihaly Csikszentmihalyi, kendimizi tamamen bir işe kaptırdığımız ve zamanın nasıl geçtiğini anlamadığımız duruma \"akış\" der. Akış, görevin zorluğu ile becerimiz dengede olduğunda ortaya çıkar."
   },
   {
    "title": "Nedenini bil",
-   "text": "Nietzsche'nin sözü: \"Yaşamak için bir nedeni olan, hemen her nasıla katlanabilir.\" Zor bir hedefe giderken onu neden istediğini yazmak ve sık sık hatırlamak, motivasyonun düştüğü anlarda yol gösterir.",
-   "action": "En önemli hedefini ve onu neden istediğini tek cümleyle yaz. Her gün göreceğin bir yere koy."
+   "text": "Nietzsche'nin sözü: \"Yaşamak için bir nedeni olan, hemen her nasıla katlanabilir.\" Zor bir hedefe giderken onu neden istediğini yazmak ve sık sık hatırlamak, motivasyonun düştüğü anlarda yol gösterir."
   }
  ]
 }

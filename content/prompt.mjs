@@ -4,32 +4,36 @@
 export const DEFAULT_MODEL = "gemini-flash-latest";
 
 export function buildDeckPrompt(categoryName, titles, cardTitles) {
-  return `Sen insanların hayatında gerçekten işe yarayan, kısa okuma kartları yazan bir Türkçe içerik editörüsün.
-Okuyucu sosyal medyada kaydırır gibi okuyor; boş, klişe ya da genel geçer cümlelere tahammülü yok.
+  return `Sen okurlarına okuma alışkanlığı kazandırmak isteyen, derinlikli ve akıcı yazan bir Türkçe deneme ve popüler bilim yazarısın.
+Okurun her gün bir yazı okuyor; amacı gerçekten bir şey öğrenmek ve kültürel birikimini artırmak. Yüzeysel, liste gibi ya da kişisel gelişim kitabı tonunda öğüt veren metinlerden hoşlanmıyor.
+
 Kategori: ${categoryName}
 
-Bu kategoride daha önce yazılmış başlıklar (bunları ve çok benzerlerini TEKRARLAMA):
+Bu kategoride daha önce yazılmış yazılar (bunları ve çok benzerlerini TEKRARLAMA):
 ${titles.length ? titles.map((t) => `- ${t}`).join("\n") : "- (henüz yok)"}
 
-Bu kategoride daha önce anlatılmış kavramlar (bunları TEKRAR ANLATMA, yeni şeyler öğret):
+Daha önce anlatılmış kavramlar (bunları yeniden anlatma):
 ${cardTitles.length ? cardTitles.join(", ") : "(henüz yok)"}
 
-Bu kategoride yeni ve belirli bir konu seç ve 5 kartlık bir okuma parçası yaz.
+Bu kategoride belirli ve ilginç bir konu seç: bir kavramın tarihi, bir düşünürün fikri, önemli bir araştırmanın hikâyesi, bir olayın ya da buluşun arka planı gibi. Sonra onu bir kitap bölümü gibi derinlemesine anlat.
 
-Her kart:
-- Tek başına anlaşılır, somut bir fikir öğretsin: isimli bir kavram, iyi bilinen bir araştırma, bir yöntem, bir çerçeve ya da gerçek bir örnek.
-- Merak uyandıran bir cümleyle başlasın; somut bir örnek, sayı ya da gündelik hayattan bir sahne içersin.
-- "text" alanı 220-380 karakter olsun.
-- "action" alanında okuyucunun BUGÜN uygulayabileceği tek bir somut adım olsun (en fazla 160 karakter): ne yapacağı, ne zaman ve nasıl açıkça belli olsun. Örnek: "Yarın sabah e-postaya bakmadan önce 25 dakikalık sayaç kur ve en zor işine başla."
+Yapı:
+- Konu ne gerektiriyorsa o kadar kart yaz: 5 ile 9 arası, abartmadan.
+- Kartlar sırayla okunur ve tek bir bütün oluşturur. İlk kart merak uyandırarak konuya girer; ortadaki kartlar konuyu adım adım derinleştirir (kökeni, kişiler, nasıl işlediği, örnekler, tartışmalar ve eleştiriler); son kart toparlar ve konunun bugünle bağını kurar.
+- Her kartın metni 400-650 karakter olsun: bir ya da iki paragraf. Paragrafları boş satırla ayır.
+- Kart başlıkları kısa olsun (en fazla 6 kelime), bir kitabın ara başlıkları gibi.
 
-Yasaklar:
-- "Kendine inan", "pozitif düşün", "hedeflerine odaklan", "önemlidir" gibi içi boş, genel tavsiyeler.
-- Uydurma istatistik, sahte alıntı ya da emin olmadığın isim/tarih. Einstein'a atfedilen "bileşik faiz dünyanın sekizinci harikasıdır" gibi kaynağı belirsiz popüler alıntıları kullanma. Bir kişiden, kitaptan ya da araştırmadan bahsedeceksen yalnızca iyi bilinen ve doğru olduğundan emin olduklarını kullan; tartışmalı bilgiyi tartışmalı olarak belirt.
+Üslup:
+- Akıcı, sıcak ve anlatıcı yaz; somut sahneler, isimler, yerler, tarihler ve örnekler kullan.
+- Okura emir verme ve öğüt verme ("şunu yap", "bunu dene", "unutma ki" gibi cümleler kurma).
+- "action" alanını neredeyse hiç kullanma. Yalnızca yazının sonunda gerçekten anlamlı, küçük bir deneme önerisi varsa en fazla BİR karta ekle; çoğu yazıda hiç olmasın.
 
-Kart başlıkları kısa olsun (en fazla 6 kelime). Doğal, akıcı bir Türkçe kullan.
+Doğruluk:
+- Uydurma istatistik, sahte alıntı ya da emin olmadığın isim/tarih kullanma. Einstein'a atfedilen "bileşik faiz dünyanın sekizinci harikasıdır" gibi kaynağı belirsiz popüler alıntılardan kaçın.
+- Yalnızca doğru olduğundan emin olduğun bilgileri kullan; tartışmalı ya da kesin olmayan bilgiyi öyle olduğunu belirterek anlat.
 
-Yalnızca şu JSON'u döndür:
-{"title": "Okuma parçasının başlığı", "cards": [{"title": "Kart başlığı", "text": "Kart metni", "action": "Bugün uygulanacak adım"}]}`;
+Doğal ve akıcı bir Türkçe kullan. Yalnızca şu JSON'u döndür:
+{"title": "Yazının başlığı", "cards": [{"title": "Ara başlık", "text": "Kart metni"}]}`;
 }
 
 // Anything outside Latin script (e.g. stray Thai or CJK tokens) means a garbled answer
@@ -39,22 +43,21 @@ export function parseDeck(raw) {
   const data = JSON.parse(raw);
   if (FOREIGN.test(raw.replace(/\s/g, ""))) throw new Error("Response contains non-Turkish characters");
   const title = typeof data?.title === "string" ? data.title.trim() : "";
+  let actionUsed = false;
   const cards = (Array.isArray(data?.cards) ? data.cards : [])
-    .filter(
-      (c) =>
-        typeof c?.text === "string" &&
-        c.text.trim().length >= 80 &&
-        c.text.trim().length <= 700 &&
-        typeof c?.action === "string" &&
-        c.action.trim().length >= 20
-    )
-    .map((c) => ({
-      title: typeof c.title === "string" ? c.title.trim() : undefined,
-      text: c.text.trim(),
-      action: c.action.trim(),
-    }));
-  if (!title || cards.length < 3) throw new Error(`Unusable response: ${raw.slice(0, 200)}`);
-  return { title, cards: cards.slice(0, 8) };
+    .filter((c) => typeof c?.text === "string" && c.text.trim().length >= 150 && c.text.trim().length <= 900)
+    .map((c) => {
+      // At most one "try this" step per deck; reading, not homework
+      const action = !actionUsed && typeof c.action === "string" && c.action.trim().length >= 20 ? c.action.trim() : undefined;
+      if (action) actionUsed = true;
+      return {
+        title: typeof c.title === "string" ? c.title.trim() : undefined,
+        text: c.text.trim(),
+        ...(action ? { action } : {}),
+      };
+    });
+  if (!title || cards.length < 4) throw new Error(`Unusable response: ${raw.slice(0, 200)}`);
+  return { title, cards: cards.slice(0, 10) };
 }
 
 export class GeminiError extends Error {

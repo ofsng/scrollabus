@@ -69,13 +69,29 @@ function shuffled<T>(items: T[], seed: number): T[] {
 // Decks are shuffled, but each deck's cards stay together and in order
 const deckItems = (decks: Deck[]): FeedItem[] => decks.flatMap((deck) => deck.cards.map((card) => ({ card, deck })));
 
-function textSize(card: Card) {
-  const n = card.text.length + (card.action ? 120 : 0);
-  if (n < 90) return 30;
-  if (n < 180) return 25;
-  if (n < 300) return 21;
-  if (n < 450) return 19;
-  return 17;
+// Reading sizes cycled by the "Aa" button; one steady size is easier on the eyes
+// than sizes that jump from card to card
+const READING_SIZES = [17, 19, 21, 23];
+
+const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+
+function CardText({ card }: { card: Card }) {
+  return (
+    <>
+      {card.title && <h2 className="card-title">{card.title}</h2>}
+      <div className="card-text">
+        {paragraphs(card.text).map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
+      </div>
+      {card.action && (
+        <div className="card-action">
+          <span className="card-action-label">Bugün dene</span>
+          {card.action}
+        </div>
+      )}
+    </>
+  );
 }
 
 const formatDate = (ms: number) =>
@@ -113,6 +129,7 @@ const EYE_OFF = "M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 
 const TAGS = "M3 12V4h8l10 10-8 8zM7.5 7.5h.01";
 const CHECK = "M5 12l5 5L20 7";
 const CLOCK = "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2";
+const TEXT_SIZE = "M3 19 8 5l5 14M4.8 14h6.4M14 19l3.5-9 3.5 9M15.2 16h4.6";
 const SPARK = "M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z";
 
 // ─── Bottom sheet ────────────────────────────────────────────────────────────
@@ -175,6 +192,7 @@ function Feed({
   onRead,
   header,
   empty,
+  textScale,
 }: {
   items: FeedItem[];
   // Remembers the scroll position; feeds that drop read cards start at the top instead
@@ -184,6 +202,8 @@ function Feed({
   onRead?: (cardId: string) => void;
   header?: React.ReactNode;
   empty: React.ReactNode;
+  // Changes when the reading size changes, to re-check which cards overflow
+  textScale?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
@@ -198,6 +218,26 @@ function Feed({
     const timer = setTimeout(() => onReadRef.current?.(id), READ_AFTER_MS);
     return () => clearTimeout(timer);
   }, [index, items]);
+
+  // Long cards at large sizes scroll inside the card; fade their bottom edge so
+  // it is clear there is more to read
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const mark = () =>
+      el.querySelectorAll<HTMLElement>(".card-body").forEach((body) => {
+        const more = body.scrollHeight > body.clientHeight + 2;
+        const atEnd = body.scrollTop + body.clientHeight >= body.scrollHeight - 4;
+        body.classList.toggle("has-more", more && !atEnd);
+      });
+    mark();
+    el.addEventListener("scroll", mark, { capture: true, passive: true });
+    window.addEventListener("resize", mark);
+    return () => {
+      el.removeEventListener("scroll", mark, { capture: true });
+      window.removeEventListener("resize", mark);
+    };
+  }, [items, textScale]);
 
   // Restore where you left off in this feed
   useEffect(() => {
@@ -243,12 +283,13 @@ function Feed({
         {items.map(({ card, deck }, i) => {
           const hue = hueFor(deck.categoryId ?? deck.id);
           const isSaved = saved.has(card.id);
+          const part = deck.cards.indexOf(card) + 1;
           return (
             <article
               key={card.id}
               data-index={i}
               className="card"
-              style={{ background: `linear-gradient(160deg, hsl(${hue} 42% 20%), hsl(${(hue + 40) % 360} 48% 9%))` }}
+              style={{ background: `linear-gradient(180deg, hsl(${hue} 16% 12%), hsl(${hue} 12% 8%))` }}
               onDoubleClick={() => {
                 if (!isSaved) onToggleSave(card.id);
                 setBurst(card.id);
@@ -256,19 +297,22 @@ function Feed({
               }}
             >
               <div className="card-body">
-                <div className="card-deck">{deck.title}</div>
-                {card.title && card.title.toLocaleLowerCase("tr") !== deck.title.toLocaleLowerCase("tr") && (
-                  <h2 className="card-title">{card.title}</h2>
-                )}
-                <p className="card-text" style={{ fontSize: textSize(card) }}>
-                  {card.text}
-                </p>
-                {card.action && (
-                  <div className="card-action">
-                    <span className="card-action-label">Bugün dene</span>
-                    {card.action}
-                  </div>
-                )}
+                <div className="card-deck">
+                  <span>{deck.title}</span>
+                  {deck.cards.length > 1 && (
+                    <span className="card-part">
+                      {part} / {deck.cards.length}
+                    </span>
+                  )}
+                </div>
+                <CardText
+                  card={
+                    card.title?.toLocaleLowerCase("tr") === deck.title.toLocaleLowerCase("tr") ? { ...card, title: undefined } : card
+                  }
+                />
+              </div>
+              <div className="more-hint" aria-hidden="true">
+                devamı ↓
               </div>
               {burst === card.id && (
                 <div className="burst">
@@ -287,9 +331,6 @@ function Feed({
             </article>
           );
         })}
-      </div>
-      <div className="counter">
-        {index + 1} / {items.length}
       </div>
     </div>
   );
@@ -759,14 +800,9 @@ function CardSheet({
   const { card, deck } = item;
   return (
     <Sheet title={deck.title} onClose={onClose}>
-      {card.title && <h3 className="sheet-card-title">{card.title}</h3>}
-      <p className="sheet-card-text">{card.text}</p>
-      {card.action && (
-        <div className="card-action">
-          <span className="card-action-label">Bugün dene</span>
-          {card.action}
-        </div>
-      )}
+      <div className="reading sheet-reading">
+        <CardText card={card} />
+      </div>
       <div className="sheet-actions">
         <button className={`btn ghost ${isSaved ? "saved" : ""}`} onClick={onToggleSave}>
           <Icon d={HEART} filled={isSaved} /> {isSaved ? "Kaydedildi" : "Kaydet"}
@@ -816,9 +852,11 @@ function Library({
   }, [decks]);
   const byId = new Map(categories.map((c) => [c.id, c]));
 
+  const isDone = (d: Deck) => d.cards.length > 0 && d.cards.every((c) => read.has(c.id));
+  // Newest first, but decks you have finished sink to the bottom
   const visible = decks
     .filter((d) => filter === null || (d.categoryId ?? "") === filter)
-    .sort((a, b) => b.createdAt - a.createdAt);
+    .sort((a, b) => Number(isDone(a)) - Number(isDone(b)) || b.createdAt - a.createdAt);
 
   return (
     <div className="screen page">
@@ -863,7 +901,11 @@ function Library({
           const progress =
             readCount === 0 ? `${deck.cards.length} kart` : readCount === deck.cards.length ? "✓ Okundu" : `${readCount}/${deck.cards.length} okundu`;
           return (
-            <li key={deck.id} className="row" style={{ borderLeftColor: `hsl(${hueFor(deck.categoryId ?? deck.id)} 60% 55%)` }}>
+            <li
+              key={deck.id}
+              className={`row ${readCount === deck.cards.length && readCount > 0 ? "done" : ""}`}
+              style={{ borderLeftColor: `hsl(${hueFor(deck.categoryId ?? deck.id)} 60% 55%)` }}
+            >
               <button className="row-main" onClick={() => onOpen(deck.id)}>
                 <span className="row-title">{deck.title}</span>
                 <span className="row-meta">
@@ -905,6 +947,7 @@ export function App() {
   const [autoGenerate, setAutoGenerate] = useState(() => readPref<boolean>("autoGenerate", true));
   const [generatingId, setGeneratingId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ text: string; deckId?: string } | null>(null);
+  const [sizeIndex, setSizeIndex] = useState(() => readPref<number>("readingSize", 1));
   // Bumped to rebuild the feed on purpose (e.g. after writing new content from its empty state)
   const [feedNonce, setFeedNonce] = useState(0);
 
@@ -994,6 +1037,7 @@ export function App() {
   useEffect(() => writePref("source", source), [source]);
   useEffect(() => writePref("seed", seed), [seed]);
   useEffect(() => writePref("autoGenerate", autoGenerate), [autoGenerate]);
+  useEffect(() => writePref("readingSize", sizeIndex), [sizeIndex]);
 
   // Android back button: close a sheet, then leave sub-screens, then exit
   const tabRef = useRef(tab);
@@ -1191,27 +1235,40 @@ export function App() {
 
   const chips = (
     <div className="topbar">
-      <div className="chips">
+      <div className="topbar-row">
+        <div className="chips">
+          <button
+            className={`chip ${source.kind === "mix" ? "on" : ""}`}
+            onClick={() => {
+              // Tapping "Karışık" again reshuffles
+              if (source.kind === "mix") reshuffle();
+              setSource({ kind: "mix" });
+            }}
+          >
+            <Icon d={SHUFFLE} /> Karışık
+          </button>
+          {activeDeck && <button className="chip on">{activeDeck.title}</button>}
+          {feedCategories.map((c) => (
+            <button
+              key={c.id}
+              className={`chip ${activeCategory?.id === c.id ? "on" : ""}`}
+              onClick={() => setSource({ kind: "category", id: c.id })}
+            >
+              {categoryLabel(c)}
+            </button>
+          ))}
+        </div>
         <button
-          className={`chip ${source.kind === "mix" ? "on" : ""}`}
+          className="aa-btn"
+          aria-label="Yazı boyutu"
           onClick={() => {
-            // Tapping "Karışık" again reshuffles
-            if (source.kind === "mix") reshuffle();
-            setSource({ kind: "mix" });
+            const next = (sizeIndex + 1) % READING_SIZES.length;
+            setSizeIndex(next);
+            showToast(`Yazı boyutu: ${["Küçük", "Orta", "Büyük", "Çok büyük"][next]}`);
           }}
         >
-          <Icon d={SHUFFLE} /> Karışık
+          <Icon d={TEXT_SIZE} />
         </button>
-        {activeDeck && <button className="chip on">{activeDeck.title}</button>}
-        {feedCategories.map((c) => (
-          <button
-            key={c.id}
-            className={`chip ${activeCategory?.id === c.id ? "on" : ""}`}
-            onClick={() => setSource({ kind: "category", id: c.id })}
-          >
-            {categoryLabel(c)}
-          </button>
-        ))}
       </div>
     </div>
   );
@@ -1265,7 +1322,7 @@ export function App() {
     );
 
   return (
-    <div className="app">
+    <div className="app" style={{ "--reading-size": `${READING_SIZES[sizeIndex] ?? 19}px` } as React.CSSProperties}>
       <main className="main">
         {tab === "feed" && (
           <Feed
@@ -1275,6 +1332,7 @@ export function App() {
             saved={saved}
             onToggleSave={toggleSave}
             onRead={markRead}
+            textScale={sizeIndex}
             header={allDecks.length > 0 ? chips : undefined}
             empty={feedEmpty}
           />
@@ -1286,6 +1344,7 @@ export function App() {
             positionKey="pos:saved"
             saved={saved}
             onToggleSave={toggleSave}
+            textScale={sizeIndex}
             empty={
               <>
                 <h2>Kaydedilen kart yok</h2>

@@ -2,32 +2,27 @@
  "id": "kariyer--kariyer-insa-etmek",
  "category": "kariyer",
  "title": "Kariyer İnşa Etmek",
- "version": 2,
+ "version": 3,
  "cards": [
   {
    "title": "T tipi beceriler",
-   "text": "Bir alanda derin uzmanlık (T harfinin dikey çizgisi) ile birçok alanda genel bilginin (yatay çizgi) birleşimi değerli bir profil oluşturur. Uzmanlık seni ayırt eder, genişlik ise farklı ekiplerle çalışabilmeni sağlar.",
-   "action": "Kendi T'ni çiz: Dikey çizgiye en derin uzmanlığını, yatay çizgiye diğer alanlarını yaz. Hangi yatay alan uzmanlığını güçlendirir?"
+   "text": "Bir alanda derin uzmanlık (T harfinin dikey çizgisi) ile birçok alanda genel bilginin (yatay çizgi) birleşimi değerli bir profil oluşturur. Uzmanlık seni ayırt eder, genişlik ise farklı ekiplerle çalışabilmeni sağlar."
   },
   {
    "title": "Zayıf bağların gücü",
-   "text": "Sosyolog Mark Granovetter, insanların iş fırsatlarını çoğu zaman yakın arkadaşlarından değil, tanıdık düzeyindeki \"zayıf bağlardan\" duyduğunu buldu. Eski iş arkadaşlarınla arada bir iletişim kurmak, düşündüğünden daha değerlidir.",
-   "action": "Bu hafta uzun süredir konuşmadığın 3 eski iş ya da okul arkadaşına kısa bir \"Ne yapıyorsun?\" mesajı at."
+   "text": "Sosyolog Mark Granovetter, insanların iş fırsatlarını çoğu zaman yakın arkadaşlarından değil, tanıdık düzeyindeki \"zayıf bağlardan\" duyduğunu buldu. Eski iş arkadaşlarınla arada bir iletişim kurmak, düşündüğünden daha değerlidir."
   },
   {
    "title": "Beceri yığını",
-   "text": "Bir alanda dünyanın en iyisi olmak çok zordur; ama birkaç alanda en iyi %25'in içinde olmak mümkündür. Bu becerilerin nadir bir birleşimi (örneğin yazılım + iletişim + finans) seni benzersiz kılar.",
-   "action": "Sahip olduğun 3 farklı beceriyi yaz ve bunları birleştiren bir iş ya da proje fikri bul."
+   "text": "Bir alanda dünyanın en iyisi olmak çok zordur; ama birkaç alanda en iyi %25'in içinde olmak mümkündür. Bu becerilerin nadir bir birleşimi (örneğin yazılım + iletişim + finans) seni benzersiz kılar."
   },
   {
    "title": "Görünür ol",
-   "text": "İyi iş yapmak yetmez; yaptığın işin bilinmesi de gerekir. Başarılarını düzenli olarak not et, öğrendiklerini paylaş ve yöneticine ilerlemeni anlat. Görünürlük övünmek değil, bilgilendirmektir.",
-   "action": "Bir \"başarılar\" dosyası aç ve bu hafta tamamladığın bir işi sonucuyla birlikte, mümkünse sayılarla yaz."
+   "text": "İyi iş yapmak yetmez; yaptığın işin bilinmesi de gerekir. Başarılarını düzenli olarak not et, öğrendiklerini paylaş ve yöneticine ilerlemeni anlat. Görünürlük övünmek değil, bilgilendirmektir."
   },
   {
    "title": "Öğrenmeyi öğren",
-   "text": "Teknoloji hızla değişirken bugünün becerileri birkaç yıl içinde eskiyebilir. En kalıcı beceri, yeni bir şeyi hızlı öğrenebilmektir. Her yıl tamamen yeni bir alana küçük bir adım atmak, bu kası güçlendirir.",
-   "action": "Bu ay tamamen yeni bir konuya 5 saat ayırmayı planla. İlk adım: o konuyu anlatan en iyi tek kaynağı bul."
+   "text": "Teknoloji hızla değişirken bugünün becerileri birkaç yıl içinde eskiyebilir. En kalıcı beceri, yeni bir şeyi hızlı öğrenebilmektir. Her yıl tamamen yeni bir alana küçük bir adım atmak, bu kası güçlendirir."
   }
  ]
 }
