@@ -272,43 +272,86 @@ button {
   border-radius: 14px;
   font-weight: 700;
   font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn svg {
+  width: 18px;
+  height: 18px;
+}
+.btn:disabled {
+  opacity: 0.4;
 }
 .btn.primary {
   background: var(--accent);
   color: #fff;
 }
-.btn.primary:disabled {
-  opacity: 0.4;
-}
 .btn.ghost {
+  background: var(--surface-2);
+}
+.btn.dashed {
   background: var(--surface);
   border: 1px dashed var(--muted);
+}
+.btn.danger {
+  background: #e5484d;
+  color: #fff;
+}
+.btn.outline-danger {
+  border: 1px solid rgba(229, 72, 77, 0.5);
+  color: #ff7b80;
+}
+.btn.small {
+  width: auto;
+  flex: none;
+  padding: 12px 16px;
+  font-size: 15px;
 }
 .empty .btn {
   width: auto;
   padding: 13px 28px;
 }
 
+/* Long lists must never squeeze the header or chip strip */
+.page > * {
+  flex-shrink: 0;
+}
+
 .page-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
 }
-.sync {
+.head-actions {
+  display: flex;
+  gap: 6px;
+}
+.pill-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--muted);
-  padding: 6px 10px;
+  color: var(--text);
+  padding: 8px 12px;
   border-radius: 999px;
   background: var(--surface);
+  white-space: nowrap;
 }
-.sync svg {
+.round-pill {
+  padding: 8px;
+}
+.page-head h1 + .hint {
+  margin-top: 2px;
+  min-height: 1em;
+}
+.pill-btn svg {
   width: 16px;
   height: 16px;
+  color: var(--muted);
 }
 
 .chips.strip {
@@ -318,26 +361,17 @@ button {
 .page .chip {
   max-width: none;
 }
-.chip.add {
-  background: transparent;
-  border: 1px dashed var(--muted);
-}
 .page .chip:not(.on) {
   background: var(--surface);
-}
-
-.link-danger {
-  align-self: flex-start;
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 0;
 }
 
 .hint {
   margin: 0;
   color: var(--muted);
   font-size: 14px;
+}
+.hint.small {
+  font-size: 13px;
 }
 
 .list {
@@ -346,7 +380,7 @@ button {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .row {
@@ -360,32 +394,15 @@ button {
 .row-main {
   flex: 1;
   min-width: 0;
-  padding: 12px 0 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.row-open {
   text-align: left;
+  padding: 13px 0 13px 14px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 0;
-}
-.row-select {
-  align-self: flex-start;
-  max-width: 100%;
-  font: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  background: var(--surface-2);
-  border: 0;
-  border-radius: 999px;
-  padding: 5px 10px;
 }
 .row-title {
   font-weight: 700;
+  font-size: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -393,11 +410,198 @@ button {
 .row-meta {
   font-size: 13px;
   color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .icon-btn {
   padding: 14px;
   color: var(--muted);
+  display: grid;
+  place-items: center;
+}
+.icon-btn.on {
+  color: var(--accent);
+}
+.icon-btn:disabled {
+  opacity: 0.4;
+}
+
+select.field {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* ─── Card action ──────────────────────────────────────── */
+
+.card-action {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--accent);
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 500;
+  color: rgba(244, 241, 234, 0.92);
+}
+.card-action-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ─── Bottom sheet ─────────────────────────────────────── */
+
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+  animation: fade 0.15s ease-out;
+}
+.sheet {
+  width: 100%;
+  max-height: 88dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: 22px 22px 0 0;
+  padding-bottom: var(--sab);
+  animation: rise 0.2s ease-out;
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px 0 20px;
+}
+.sheet-head h2 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sheet-body {
+  overflow-y: auto;
+  padding: 4px 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sheet-body .field {
+  background: var(--bg);
+}
+.sheet-label {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+@keyframes fade {
+  from { opacity: 0; }
+}
+@keyframes rise {
+  from { transform: translateY(40px); opacity: 0.6; }
+}
+
+.pick-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pick {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--surface-2);
+  color: rgba(244, 241, 234, 0.85);
+}
+.pick.on {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.inline-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.inline-form .field {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+}
+.inline-form .field.emoji {
+  flex: none;
+  width: 56px;
+  text-align: center;
+  padding: 12px 4px;
+}
+
+.confirm {
+  display: flex;
+  gap: 8px;
+}
+
+.cat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--surface-2);
+}
+.cat-row.editing {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 10px 0;
+}
+.cat-row.dim .cat-emoji,
+.cat-row.dim .cat-name {
+  opacity: 0.45;
+}
+.cat-emoji {
+  width: 28px;
+  text-align: center;
+  font-size: 20px;
+}
+.cat-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
+.cat-name small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.cat-row .icon-btn {
+  padding: 10px;
 }
 
 /* ─── Bottom nav ───────────────────────────────────────── */

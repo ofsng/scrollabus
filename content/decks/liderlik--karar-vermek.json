@@ -2,26 +2,32 @@
  "id": "liderlik--karar-vermek",
  "category": "liderlik",
  "title": "Karar Vermek",
+ "version": 2,
  "cards": [
   {
    "title": "Tek yönlü ve iki yönlü kapılar",
-   "text": "Jeff Bezos kararları ikiye ayırır: Geri dönüşü olmayan \"tek yönlü kapılar\" dikkatle verilmelidir; geri alınabilen \"iki yönlü kapılar\" ise hızla. Kararların çoğu ikinci türdendir ama birinci tür gibi ağır işlenir."
+   "text": "Jeff Bezos kararları ikiye ayırır: Geri dönüşü olmayan \"tek yönlü kapılar\" dikkatle verilmelidir; geri alınabilen \"iki yönlü kapılar\" ise hızla. Kararların çoğu ikinci türdendir ama birinci tür gibi ağır işlenir.",
+   "action": "Beklettiğin bir kararı al ve sor: Geri alınabilir mi? Evetse bugün karar ver."
   },
   {
    "title": "Yüzde 70 kuralı",
-   "text": "Bezos'a göre kararların çoğu, istediğin bilginin yaklaşık %70'ine sahipken verilmelidir; %90'ı beklersen muhtemelen geç kalırsın. Hatalı bir kararı fark edip düzeltmek, çoğu zaman geç verilmiş bir karardan daha ucuzdur."
+   "text": "Bezos'a göre kararların çoğu, istediğin bilginin yaklaşık %70'ine sahipken verilmelidir; %90'ı beklersen muhtemelen geç kalırsın. Hatalı bir kararı fark edip düzeltmek, çoğu zaman geç verilmiş bir karardan daha ucuzdur.",
+   "action": "Ertelediğin bir karar için eksik bilgiyi yaz. Yaklaşık %70'e ulaştıysan karar ver ve bir düzeltme planı belirle."
   },
   {
    "title": "Ön ölüm analizi",
-   "text": "Psikolog Gary Klein'ın tekniği: Projeye başlamadan önce ekipçe \"Bir yıl sonrayız ve proje başarısız oldu. Neden?\" diye düşünün. Bu yöntem, kimsenin dile getirmeye cesaret edemediği riskleri ortaya çıkarır."
+   "text": "Psikolog Gary Klein'ın tekniği: Projeye başlamadan önce ekipçe \"Bir yıl sonrayız ve proje başarısız oldu. Neden?\" diye düşünün. Bu yöntem, kimsenin dile getirmeye cesaret edemediği riskleri ortaya çıkarır.",
+   "action": "Yeni bir projeden önce 10 dakika ayır, \"Bu proje neden başarısız oldu?\" sorusuna 5 cevap yaz ve her birine bir önlem ekle."
   },
   {
    "title": "Karar yorgunluğu",
-   "text": "Gün içinde verilen her karar zihinsel enerji tüketir. Bu yüzden bazı yöneticiler ne giyeceği gibi küçük kararları rutine bağlar. Önemli kararları zihninin taze olduğu saatlere bırak."
+   "text": "Gün içinde verilen her karar zihinsel enerji tüketir. Bu yüzden bazı yöneticiler ne giyeceği gibi küçük kararları rutine bağlar. Önemli kararları zihninin taze olduğu saatlere bırak.",
+   "action": "Her gün tekrar eden 3 küçük kararı (kahvaltı, kıyafet, spor saati) sabitle ve enerjini büyük kararlara sakla."
   },
   {
    "title": "Önce dinle, en son konuş",
-   "text": "Toplantıda en kıdemli kişi fikrini ilk söylerse, diğerleri genellikle ona yaklaşır. İyi liderler önce dinler ve en son konuşur. Herkesin fikrini önce yazılı olarak toplamak da farklı sesleri korur."
+   "text": "Toplantıda en kıdemli kişi fikrini ilk söylerse, diğerleri genellikle ona yaklaşır. İyi liderler önce dinler ve en son konuşur. Herkesin fikrini önce yazılı olarak toplamak da farklı sesleri korur.",
+   "action": "Bir sonraki toplantıda fikrini en son söyle; önce herkesten görüşünü tek cümleyle yazmasını iste."
   }
  ]
 }

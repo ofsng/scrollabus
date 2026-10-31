@@ -2,26 +2,32 @@
  "id": "iliskiler--dostluk-ve-bag",
  "category": "iliskiler",
  "title": "Dostluk ve Bağ",
+ "version": 2,
  "cards": [
   {
    "title": "Yalnızlık bir sağlık meselesi",
-   "text": "Julianne Holt-Lunstad ve ekibinin analizleri, güçlü sosyal bağların daha uzun bir yaşamla ilişkili olduğunu gösterdi. Sosyal izolasyonun etkisi, sigara ve obezite gibi bilinen risk faktörleriyle karşılaştırılabilir düzeyde bulundu."
+   "text": "Julianne Holt-Lunstad ve ekibinin analizleri, güçlü sosyal bağların daha uzun bir yaşamla ilişkili olduğunu gösterdi. Sosyal izolasyonun etkisi, sigara ve obezite gibi bilinen risk faktörleriyle karşılaştırılabilir düzeyde bulundu.",
+   "action": "Bu hafta bir arkadaşınla yüz yüze ya da sesli bir görüşme planla. Mesajlaşma sayılmaz."
   },
   {
    "title": "Harvard'ın 80 yıllık araştırması",
-   "text": "1938'den beri süren Harvard Yetişkin Gelişimi Çalışması, uzun ve mutlu bir hayatın en güçlü belirleyicilerinden birinin zenginlik ya da şöhret değil, yakın ve sıcak ilişkiler olduğunu ortaya koydu."
+   "text": "1938'den beri süren Harvard Yetişkin Gelişimi Çalışması, uzun ve mutlu bir hayatın en güçlü belirleyicilerinden birinin zenginlik ya da şöhret değil, yakın ve sıcak ilişkiler olduğunu ortaya koydu.",
+   "action": "Hayatındaki en önemli 5 ilişkiyi yaz. En uzun süredir ayrı kaldığın kişiyle bu hafta buluş."
   },
   {
    "title": "Arkadaşlık zaman ister",
-   "text": "Jeffrey Hall'un araştırmasına göre birini sıradan bir arkadaş edinmek yaklaşık 50 saat, yakın arkadaş edinmek ise 200 saatten fazla birlikte vakit geçirmeyi gerektiriyor. Dostluk, düzenli küçük temaslarla inşa edilir."
+   "text": "Jeffrey Hall'un araştırmasına göre birini sıradan bir arkadaş edinmek yaklaşık 50 saat, yakın arkadaş edinmek ise 200 saatten fazla birlikte vakit geçirmeyi gerektiriyor. Dostluk, düzenli küçük temaslarla inşa edilir.",
+   "action": "Tanıdık seviyesinde kalmış ama sevdiğin birine düzenli bir ritüel öner: haftalık yürüyüş ya da aylık kahve."
   },
   {
    "title": "Kırılganlık bağ kurar",
-   "text": "Brené Brown'a göre gerçek bağ, kendimizi olduğumuz gibi gösterme cesaretinden doğar. Kusursuz görünmeye çalışmak mesafe yaratır; zorluklarını paylaşmak ise karşındakinin de açılmasına izin verir."
+   "text": "Brené Brown'a göre gerçek bağ, kendimizi olduğumuz gibi gösterme cesaretinden doğar. Kusursuz görünmeye çalışmak mesafe yaratır; zorluklarını paylaşmak ise karşındakinin de açılmasına izin verir.",
+   "action": "Güvendiğin birine son zamanlarda zorlandığın bir şeyi anlat ve tavsiye değil, sadece dinlenmek istediğini söyle."
   },
   {
    "title": "Derin sorular",
-   "text": "Psikolog Arthur Aron'un \"yakınlaştıran 36 soru\" çalışması, giderek kişiselleşen soruları karşılıklı yanıtlamanın iki yabancı arasında bile yakınlık hissini artırabildiğini gösterdi. Derin sohbetler, yüzeysel olanlardan daha güçlü bağ kurar."
+   "text": "Psikolog Arthur Aron'un \"yakınlaştıran 36 soru\" çalışması, giderek kişiselleşen soruları karşılıklı yanıtlamanın iki yabancı arasında bile yakınlık hissini artırabildiğini gösterdi. Derin sohbetler, yüzeysel olanlardan daha güçlü bağ kurar.",
+   "action": "Bu akşam sohbette şunu sor: \"Senin için mükemmel bir gün nasıl geçer?\""
   }
  ]
 }

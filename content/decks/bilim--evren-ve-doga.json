@@ -2,26 +2,32 @@
  "id": "bilim--evren-ve-doga",
  "category": "bilim",
  "title": "Evren ve Doğa",
+ "version": 2,
  "cards": [
   {
    "title": "Işık yılı",
-   "text": "Işık saniyede yaklaşık 300.000 km yol alır. Bir ışık yılı, ışığın bir yılda kat ettiği mesafedir: yaklaşık 9,46 trilyon km. Gökyüzünde gördüğümüz yıldızların ışığı yola yıllar, hatta binlerce yıl önce çıkmıştır; yani aslında geçmişe bakarız."
+   "text": "Işık saniyede yaklaşık 300.000 km yol alır. Bir ışık yılı, ışığın bir yılda kat ettiği mesafedir: yaklaşık 9,46 trilyon km. Gökyüzünde gördüğümüz yıldızların ışığı yola yıllar, hatta binlerce yıl önce çıkmıştır; yani aslında geçmişe bakarız.",
+   "action": "Bu akşam gökyüzündeki en parlak yıldızı bul ve bir gökyüzü uygulamasıyla ışığının kaç yıl önce yola çıktığını öğren."
   },
   {
    "title": "Sekiz dakikalık gecikme",
-   "text": "Güneş'ten çıkan ışık Dünya'ya yaklaşık 8 dakika 20 saniyede ulaşır. Yani Güneş'e baktığımızda onu her zaman yaklaşık 8 dakika önceki haliyle görürüz."
+   "text": "Güneş'ten çıkan ışık Dünya'ya yaklaşık 8 dakika 20 saniyede ulaşır. Yani Güneş'e baktığımızda onu her zaman yaklaşık 8 dakika önceki haliyle görürüz.",
+   "action": "Bu bilgiyi bugün birine anlat. Öğrendiğin şeyi başkasına açıklamak, onu kalıcı hatırlamanın en etkili yollarından biridir."
   },
   {
    "title": "Okyanusların nefesi",
-   "text": "Soluduğumuz oksijenin önemli bir kısmı okyanuslardaki mikroskobik fitoplanktonlar tarafından üretilir. Bilim insanlarının tahminlerine göre Dünya'daki oksijen üretiminin yaklaşık yarısı okyanuslardan gelir."
+   "text": "Soluduğumuz oksijenin önemli bir kısmı okyanuslardaki mikroskobik fitoplanktonlar tarafından üretilir. Bilim insanlarının tahminlerine göre Dünya'daki oksijen üretiminin yaklaşık yarısı okyanuslardan gelir.",
+   "action": "Bu hafta tek kullanımlık plastiği bilinçli olarak azalt: kendi şişeni ve çantanı yanında taşı."
   },
   {
    "title": "Ahtapotların zekâsı",
-   "text": "Ahtapotların nöronlarının yaklaşık üçte ikisi beyinlerinde değil, kollarındadır. Kavanoz kapağı açabilir, labirent çözebilir ve kamuflaj için renklerini ve deri dokularını saniyeler içinde değiştirebilirler."
+   "text": "Ahtapotların nöronlarının yaklaşık üçte ikisi beyinlerinde değil, kollarındadır. Kavanoz kapağı açabilir, labirent çözebilir ve kamuflaj için renklerini ve deri dokularını saniyeler içinde değiştirebilirler.",
+   "action": "Ahtapotlar sorunları deneme yanılmayla çözer. Bugün takıldığın bir sorunda ilk yöntemde ısrar etme, 3 farklı yaklaşım dene."
   },
   {
    "title": "Ağaçlar iletişim kurar mı?",
-   "text": "Ormanlarda ağaç kökleri, mantarlarla kurdukları ağlar (mikorizal ağlar) aracılığıyla besin ve kimyasal sinyal alışverişi yapabilir. Bu \"orman ağı\" fikri çok popüler olsa da kapsamı bilim insanları arasında hâlâ tartışılıyor."
+   "text": "Ormanlarda ağaç kökleri, mantarlarla kurdukları ağlar (mikorizal ağlar) aracılığıyla besin ve kimyasal sinyal alışverişi yapabilir. Bu \"orman ağı\" fikri çok popüler olsa da kapsamı bilim insanları arasında hâlâ tartışılıyor.",
+   "action": "Bu hafta bir parkta ya da ormanda telefonsuz 20 dakika yürü ve sonrasında nasıl hissettiğini not et."
   }
  ]
 }

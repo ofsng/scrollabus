@@ -2,26 +2,32 @@
  "id": "finans--yatirim-psikolojisi",
  "category": "finans",
  "title": "Yatırım Psikolojisi",
+ "version": 2,
  "cards": [
   {
    "title": "Kayıptan kaçınma",
-   "text": "Daniel Kahneman ve Amos Tversky, kaybetmenin acısının aynı miktarı kazanmanın sevincinden kabaca iki kat güçlü hissedildiğini gösterdi. Bu yüzden yatırımcılar zarar eden yatırımı elde tutmaya, kâr edeni ise erken satmaya meyillidir."
+   "text": "Daniel Kahneman ve Amos Tversky, kaybetmenin acısının aynı miktarı kazanmanın sevincinden kabaca iki kat güçlü hissedildiğini gösterdi. Bu yüzden yatırımcılar zarar eden yatırımı elde tutmaya, kâr edeni ise erken satmaya meyillidir.",
+   "action": "Zararda bir yatırımın varsa sor: \"Bugün elimde nakit olsaydı bunu yeniden alır mıydım?\" Cevap hayırsa neden tutuyorsun?"
   },
   {
    "title": "Çeşitlendirme",
-   "text": "\"Bütün yumurtaları aynı sepete koyma.\" Farklı varlıklara, sektörlere ve bölgelere dağıtılmış bir portföy, tek bir yatırımın çöküşünden daha az etkilenir. Çeşitlendirme riski yok etmez ama azaltır."
+   "text": "\"Bütün yumurtaları aynı sepete koyma.\" Farklı varlıklara, sektörlere ve bölgelere dağıtılmış bir portföy, tek bir yatırımın çöküşünden daha az etkilenir. Çeşitlendirme riski yok etmez ama azaltır.",
+   "action": "Birikimini kalemlere ayırıp yüzdelerini yaz. Tek bir varlık %50'yi geçiyorsa bu riski bilerek mi taşıdığını düşün."
   },
   {
    "title": "Piyasayı zamanlamak",
-   "text": "En dipte alıp en tepede satmaya çalışmak cazip ama son derece zordur. Piyasanın en iyi günleri çoğu zaman en kötü günlerin hemen ardından gelir. Düzenli aralıklarla sabit tutarda yatırım yapmak, zamanlama riskini azaltmanın basit bir yoludur."
+   "text": "En dipte alıp en tepede satmaya çalışmak cazip ama son derece zordur. Piyasanın en iyi günleri çoğu zaman en kötü günlerin hemen ardından gelir. Düzenli aralıklarla sabit tutarda yatırım yapmak, zamanlama riskini azaltmanın basit bir yoludur.",
+   "action": "\"Doğru zamanı\" beklemek yerine her ay aynı gün, aynı tutarda düzenli yatırım yapmayı dene."
   },
   {
    "title": "Batık maliyet yanılgısı",
-   "text": "Harcadığın para ya da zaman geri gelmez; bu yüzden yeni bir karar verirken onu hesaba katmamalısın. \"Bu kadar para verdim, devam etmeliyim\" düşüncesi, kötü bir yatırımı ya da projeyi gereğinden uzun sürdürmene yol açabilir."
+   "text": "Harcadığın para ya da zaman geri gelmez; bu yüzden yeni bir karar verirken onu hesaba katmamalısın. \"Bu kadar para verdim, devam etmeliyim\" düşüncesi, kötü bir yatırımı ya da projeyi gereğinden uzun sürdürmene yol açabilir.",
+   "action": "Sadece \"çok emek verdim\" diye sürdürdüğün bir abonelik, proje ya da yatırım bul ve bugünden sonraki değerine bak."
   },
   {
    "title": "Risk ve getiri",
-   "text": "Daha yüksek getiri beklentisi genellikle daha yüksek risk demektir. \"Risksiz ve yüksek getiri\" vaat eden her teklife şüpheyle yaklaş; dolandırıcılıkların çoğu tam olarak bu cümleyle başlar."
+   "text": "Daha yüksek getiri beklentisi genellikle daha yüksek risk demektir. \"Risksiz ve yüksek getiri\" vaat eden her teklife şüpheyle yaklaş; dolandırıcılıkların çoğu tam olarak bu cümleyle başlar.",
+   "action": "\"Garantili yüksek kazanç\" teklifinde üç soru sor: Kim denetliyor? Para nereden kazanılıyor? Paramı ne zaman geri alabilirim?"
   }
  ]
 }

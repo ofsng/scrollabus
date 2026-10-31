@@ -2,26 +2,32 @@
  "id": "sosyoloji--toplumu-anlamak",
  "category": "sosyoloji",
  "title": "Toplumu Anlamak",
+ "version": 2,
  "cards": [
   {
    "title": "Sosyolojik muhayyile",
-   "text": "C. Wright Mills'e göre kişisel sorunlar çoğu zaman toplumsal yapılarla bağlantılıdır. İşsiz kalan bir kişi bireysel bir sorun yaşar; ama milyonlarca insan işsizse bu ekonomik ve toplumsal bir meseledir. Sosyolojik muhayyile, bu iki düzeyi birlikte görebilmektir."
+   "text": "C. Wright Mills'e göre kişisel sorunlar çoğu zaman toplumsal yapılarla bağlantılıdır. İşsiz kalan bir kişi bireysel bir sorun yaşar; ama milyonlarca insan işsizse bu ekonomik ve toplumsal bir meseledir. Sosyolojik muhayyile, bu iki düzeyi birlikte görebilmektir.",
+   "action": "Seni zorlayan kişisel bir sorunu düşün ve sor: Bunu benim gibi kaç kişi yaşıyor ve ortak nedeni ne olabilir?"
   },
   {
    "title": "Thomas teoremi",
-   "text": "\"İnsanlar bir durumu gerçek olarak tanımlarsa, o durum sonuçları bakımından gerçek olur.\" Bir semtin tehlikeli olduğuna inanan insanlar oradan uzaklaşır, dükkânlar kapanır ve semt gerçekten tenhalaşıp güvensizleşebilir. Algılar, gerçeği şekillendirir."
+   "text": "\"İnsanlar bir durumu gerçek olarak tanımlarsa, o durum sonuçları bakımından gerçek olur.\" Bir semtin tehlikeli olduğuna inanan insanlar oradan uzaklaşır, dükkânlar kapanır ve semt gerçekten tenhalaşıp güvensizleşebilir. Algılar, gerçeği şekillendirir.",
+   "action": "Birisi hakkında kesin bildiğini sandığın bir yargını seç. Onu destekleyen gerçek kanıtları ve sadece varsayımları ayrı ayrı yaz."
   },
   {
    "title": "Kendini gerçekleştiren kehanet",
-   "text": "Robert Merton'un kavramı: Yanlış bir beklenti, davranışları değiştirerek kendini doğru çıkarabilir. Merton'un örneğinde sağlam bir bankanın batacağı söylentisine inanan herkes parasını çekmeye koşar ve banka gerçekten zor duruma düşer."
+   "text": "Robert Merton'un kavramı: Yanlış bir beklenti, davranışları değiştirerek kendini doğru çıkarabilir. Merton'un örneğinde sağlam bir bankanın batacağı söylentisine inanan herkes parasını çekmeye koşar ve banka gerçekten zor duruma düşer.",
+   "action": "Hakkında düşük beklentin olan birine bu hafta gerçek bir sorumluluk ver ve sonucu gözlemle."
   },
   {
    "title": "Toplumsal normlar",
-   "text": "Normlar, yazılı olmasalar da davranışlarımızı yönlendiren beklentilerdir: asansörde kapıya dönmek ya da sırada beklemek gibi. Bir normu çiğnediğinde üzerine çevrilen tuhaf bakışlar, onun ne kadar güçlü olduğunu gösterir."
+   "text": "Normlar, yazılı olmasalar da davranışlarımızı yönlendiren beklentilerdir: asansörde kapıya dönmek ya da sırada beklemek gibi. Bir normu çiğnediğinde üzerine çevrilen tuhaf bakışlar, onun ne kadar güçlü olduğunu gösterir.",
+   "action": "Bugün sorgulamadan uyduğun 3 kuralı fark et. Hangisi sana gerçekten hizmet ediyor, hangisi sadece alışkanlık?"
   },
   {
    "title": "Anomi",
-   "text": "Émile Durkheim, toplumsal kuralların zayıfladığı ya da hızla değiştiği dönemlerde bireylerin yönsüz ve tatminsiz hissettiğini gözlemledi ve buna anomi dedi. Hızlı değişim dönemlerinde anlam arayışının artmasının bir nedeni de budur."
+   "text": "Émile Durkheim, toplumsal kuralların zayıfladığı ya da hızla değiştiği dönemlerde bireylerin yönsüz ve tatminsiz hissettiğini gözlemledi ve buna anomi dedi. Hızlı değişim dönemlerinde anlam arayışının artmasının bir nedeni de budur.",
+   "action": "Kendini yönsüz hissettiğinde senin için değişmeyen 3 değeri yaz ve bu haftaki kararlarını bu üçüne göre kontrol et."
   }
  ]
 }

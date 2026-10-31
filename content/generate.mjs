@@ -52,21 +52,29 @@ async function gemini(prompt) {
 }
 
 function buildPrompt(category, titles) {
-  return `Sen kısa, öğretici okuma kartları yazan bir Türkçe içerik editörüsün.
+  return `Sen insanların hayatında gerçekten işe yarayan, kısa okuma kartları yazan bir Türkçe içerik editörüsün.
+Okuyucu sosyal medyada kaydırır gibi okuyor; boş, klişe ya da genel geçer cümlelere tahammülü yok.
 Kategori: ${category.name}
 
 Bu kategoride daha önce yazılmış başlıklar (bunları ve çok benzerlerini TEKRARLAMA):
 ${titles.length ? titles.map((t) => `- ${t}`).join("\n") : "- (henüz yok)"}
 
-Bu kategoride yeni bir konu seç ve o konu hakkında 5 kartlık bir okuma parçası yaz.
-Kurallar:
-- Her kart tek başına anlaşılır olsun: bir kavram, iyi bilinen bir araştırma, bir yöntem ya da uygulanabilir bir öneri.
-- Her kartın metni 220-400 karakter olsun; sade, akıcı ve doğal bir Türkçe kullan.
-- Uydurma istatistik, sahte alıntı ya da emin olmadığın isim/tarih KULLANMA. Bir kişiden, kitaptan ya da araştırmadan bahsedeceksen yalnızca iyi bilinen ve doğru olduğundan emin olduklarını kullan. Tartışmalı bir bilgi varsa bunu belirt.
-- Kart başlıkları kısa olsun (en fazla 6 kelime).
+Bu kategoride yeni ve belirli bir konu seç ve 5 kartlık bir okuma parçası yaz.
+
+Her kart:
+- Tek başına anlaşılır, somut bir fikir öğretsin: isimli bir kavram, iyi bilinen bir araştırma, bir yöntem, bir çerçeve ya da gerçek bir örnek.
+- Merak uyandıran bir cümleyle başlasın; somut bir örnek, sayı ya da gündelik hayattan bir sahne içersin.
+- "text" alanı 220-380 karakter olsun.
+- "action" alanında okuyucunun BUGÜN uygulayabileceği tek bir somut adım olsun (en fazla 160 karakter): ne yapacağı, ne zaman ve nasıl açıkça belli olsun. Örnek: "Yarın sabah e-postaya bakmadan önce 25 dakikalık sayaç kur ve en zor işine başla."
+
+Yasaklar:
+- "Kendine inan", "pozitif düşün", "hedeflerine odaklan", "önemlidir" gibi içi boş, genel tavsiyeler.
+- Uydurma istatistik, sahte alıntı ya da emin olmadığın isim/tarih. Bir kişiden, kitaptan ya da araştırmadan bahsedeceksen yalnızca iyi bilinen ve doğru olduğundan emin olduklarını kullan; tartışmalı bilgiyi tartışmalı olarak belirt.
+
+Kart başlıkları kısa olsun (en fazla 6 kelime). Doğal, akıcı bir Türkçe kullan.
 
 Yalnızca şu JSON'u döndür:
-{"title": "Okuma parçasının başlığı", "cards": [{"title": "Kart başlığı", "text": "Kart metni"}]}`;
+{"title": "Okuma parçasının başlığı", "cards": [{"title": "Kart başlığı", "text": "Kart metni", "action": "Bugün uygulanacak adım"}]}`;
 }
 
 function validate(raw) {
@@ -74,7 +82,11 @@ function validate(raw) {
   const title = typeof data?.title === "string" ? data.title.trim() : "";
   const cards = (Array.isArray(data?.cards) ? data.cards : [])
     .filter((c) => typeof c?.text === "string" && c.text.trim().length >= 80 && c.text.trim().length <= 700)
-    .map((c) => ({ title: typeof c.title === "string" ? c.title.trim() : undefined, text: c.text.trim() }));
+    .map((c) => ({
+      title: typeof c.title === "string" ? c.title.trim() : undefined,
+      text: c.text.trim(),
+      action: typeof c.action === "string" && c.action.trim() ? c.action.trim() : undefined,
+    }));
   if (!title || cards.length < 3) throw new Error(`Unusable response: ${raw.slice(0, 200)}`);
   return { title, cards: cards.slice(0, 8) };
 }
