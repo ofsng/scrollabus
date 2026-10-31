@@ -136,12 +136,12 @@ export const QUIZZES_PER_MATERIAL = 3;
 // Approximate interval (in number of posts) between quiz card insertions in the feed
 export const QUIZ_INSERT_INTERVAL = { min: 4, max: 6 };
 
-// Gemini model used for every in-app AI call; override with GEMINI_MODEL
-// (e.g. "gemini-flash-lite-latest" for higher free-tier quotas). The "-latest"
-// aliases track Google's current Flash models, so old model IDs being retired
-// doesn't break the app.
-export const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
+// Gemini model for chat, DMs, comment replies and PDF reading; override with
+// GEMINI_MODEL. Flash-Lite answers in about a second on the free tier, while full
+// Flash can take most of a minute and hit the serverless time limit. The "-latest"
+// aliases track Google's current models, so retired model IDs don't break the app.
+export const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
 
 // Faster model for bulk generation (feed posts, quizzes) so it finishes inside
 // the serverless time limit; override with GEMINI_FAST_MODEL
-export const GEMINI_FAST_MODEL = process.env.GEMINI_FAST_MODEL || "gemini-flash-lite-latest";
+export const GEMINI_FAST_MODEL = process.env.GEMINI_FAST_MODEL || GEMINI_MODEL;
