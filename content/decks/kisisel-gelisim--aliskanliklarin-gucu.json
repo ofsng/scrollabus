@@ -2,26 +2,32 @@
  "id": "kisisel-gelisim--aliskanliklarin-gucu",
  "category": "kisisel-gelisim",
  "title": "Alışkanlıkların Gücü",
+ "version": 2,
  "cards": [
   {
    "title": "Küçük adımlar, büyük sonuçlar",
-   "text": "Her gün yalnızca %1 daha iyi olmak, bir yılın sonunda yaklaşık 37 kat ilerleme demek (1,01³⁶⁵ ≈ 37,8). Tersi de geçerli: Her gün %1 gerilemek, seni başladığın yerin çok altına düşürür. Alışkanlıklar bileşik faiz gibi çalışır; etkisi önce görünmez, sonra birden ortaya çıkar."
+   "text": "Her gün yalnızca %1 daha iyi olmak, bir yılın sonunda yaklaşık 37 kat ilerleme demek (1,01³⁶⁵ ≈ 37,8). Tersi de geçerli: Her gün %1 gerilemek, seni başladığın yerin çok altına düşürür. Alışkanlıklar bileşik faiz gibi çalışır; etkisi önce görünmez, sonra birden ortaya çıkar.",
+   "action": "Geliştirmek istediğin tek bir beceri seç ve bugün ona sadece 10 dakika ayır. Yarın aynı saatte tekrarla."
   },
   {
    "title": "Alışkanlık döngüsü",
-   "text": "Charles Duhigg'in tarif ettiği döngü üç parçadan oluşur: işaret, rutin ve ödül. Kötü bir alışkanlığı değiştirmek için işareti ve ödülü koruyup aradaki rutini değiştirmeyi dene. Örneğin canın sıkıldığında telefona uzanmak yerine kısa bir yürüyüşe çık."
+   "text": "Charles Duhigg'in tarif ettiği döngü üç parçadan oluşur: işaret, rutin ve ödül. Kötü bir alışkanlığı değiştirmek için işareti ve ödülü koruyup aradaki rutini değiştirmeyi dene. Örneğin canın sıkıldığında telefona uzanmak yerine kısa bir yürüyüşe çık.",
+   "action": "Bırakmak istediğin bir alışkanlığın işaretini yaz: Ne zaman, nerede, hangi duyguyla başlıyor? Yerine koyacağın tek bir rutin seç."
   },
   {
    "title": "Kimlik temelli alışkanlıklar",
-   "text": "James Clear, \"Atomik Alışkanlıklar\"da hedef yerine kimliğe odaklanmayı önerir. \"Kitap okumak istiyorum\" yerine \"Ben okuyan biriyim\" de. Yaptığın her küçük eylem, olmak istediğin kişiye verilmiş bir oy gibidir."
+   "text": "James Clear, \"Atomik Alışkanlıklar\"da hedef yerine kimliğe odaklanmayı önerir. \"Kitap okumak istiyorum\" yerine \"Ben okuyan biriyim\" de. Yaptığın her küçük eylem, olmak istediğin kişiye verilmiş bir oy gibidir.",
+   "action": "\"Ben ... yapan biriyim\" cümlesini tamamla ve telefonuna not et. Bugün bu kimliğe uyan en küçük eylemi yap."
   },
   {
    "title": "İki dakika kuralı",
-   "text": "Yeni bir alışkanlığa başlarken onu iki dakikada yapılabilecek kadar küçült: \"Her gün koşacağım\" yerine \"Koşu ayakkabılarımı giyeceğim\". Amaç önce başlamayı otomatik hale getirmek; süre ve yoğunluk sonra gelir."
+   "text": "Yeni bir alışkanlığa başlarken onu iki dakikada yapılabilecek kadar küçült: \"Her gün koşacağım\" yerine \"Koşu ayakkabılarımı giyeceğim\". Amaç önce başlamayı otomatik hale getirmek; süre ve yoğunluk sonra gelir.",
+   "action": "Ertelediğin bir alışkanlığı iki dakikalık haline indir (1 sayfa oku, 1 şınav çek) ve hemen şimdi yap."
   },
   {
    "title": "Çevreni tasarla",
-   "text": "İrade sınırlıdır ama çevre kalıcıdır. Yapmak istediğin şeyi görünür ve kolay, kaçınmak istediğini görünmez ve zor kıl. Meyveyi tezgâhın üstüne koy, telefonunu başka bir odada şarj et."
+   "text": "İrade sınırlıdır ama çevre kalıcıdır. Yapmak istediğin şeyi görünür ve kolay, kaçınmak istediğini görünmez ve zor kıl. Meyveyi tezgâhın üstüne koy, telefonunu başka bir odada şarj et.",
+   "action": "Bu akşam tek bir değişiklik yap: Telefonunu yatak odasının dışında şarj et ya da okumak istediğin kitabı yastığının üstüne koy."
   }
  ]
 }

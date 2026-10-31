@@ -2,26 +2,32 @@
  "id": "liderlik--liderligin-temelleri",
  "category": "liderlik",
  "title": "Liderliğin Temelleri",
+ "version": 2,
  "cards": [
   {
    "title": "Hizmetkâr liderlik",
-   "text": "Robert Greenleaf'in tanımladığı hizmetkâr liderlikte lider, önce ekibine hizmet eder: engelleri kaldırır, gelişimlerini destekler ve ihtiyaçlarını gözetir. Ekip büyüdükçe lider de büyür."
+   "text": "Robert Greenleaf'in tanımladığı hizmetkâr liderlikte lider, önce ekibine hizmet eder: engelleri kaldırır, gelişimlerini destekler ve ihtiyaçlarını gözetir. Ekip büyüdükçe lider de büyür.",
+   "action": "Bu hafta ekibindeki herkese sor: \"İşini zorlaştıran ve benim kaldırabileceğim bir engel var mı?\""
   },
   {
    "title": "Psikolojik güvenlik",
-   "text": "Google'ın Aristoteles Projesi, en başarılı ekiplerin ortak özelliğinin psikolojik güvenlik olduğunu buldu: hata yapmaktan, soru sormaktan ya da farklı düşünmekten korkmamak. Amy Edmondson'un araştırmaları da bu bulguyu destekler."
+   "text": "Google'ın Aristoteles Projesi, en başarılı ekiplerin ortak özelliğinin psikolojik güvenlik olduğunu buldu: hata yapmaktan, soru sormaktan ya da farklı düşünmekten korkmamak. Amy Edmondson'un araştırmaları da bu bulguyu destekler.",
+   "action": "Bir sonraki toplantıyı kendi yaptığın bir hatayı ve ondan öğrendiğini anlatarak aç."
   },
   {
    "title": "Örnek olmak",
-   "text": "Ekipler liderlerin söylediklerini değil, yaptıklarını izler. Toplantılara geç kalan bir yöneticinin dakiklik istemesi inandırıcı olmaz. Bir ekibin kültürü, liderin göz yumduğu en kötü davranışla şekillenir."
+   "text": "Ekipler liderlerin söylediklerini değil, yaptıklarını izler. Toplantılara geç kalan bir yöneticinin dakiklik istemesi inandırıcı olmaz. Bir ekibin kültürü, liderin göz yumduğu en kötü davranışla şekillenir.",
+   "action": "Ekibinden beklediğin bir davranışı (dakiklik, açık geri bildirim) seç ve bu hafta herkesten önce sen göster."
   },
   {
    "title": "Takdir etmek",
-   "text": "Övgü belirli olduğunda etkilidir. \"İyi iş\" yerine \"Sunumda verileri sadeleştirmen herkesin konuyu anlamasını sağladı\" de. Neyi takdir ettiğin, neyin tekrar edileceğini belirler."
+   "text": "Övgü belirli olduğunda etkilidir. \"İyi iş\" yerine \"Sunumda verileri sadeleştirmen herkesin konuyu anlamasını sağladı\" de. Neyi takdir ettiğin, neyin tekrar edileceğini belirler.",
+   "action": "Bugün bir iş arkadaşına neyi iyi yaptığını ve bunun neyi değiştirdiğini anlatan tek cümlelik somut bir mesaj gönder."
   },
   {
    "title": "Yetki devri",
-   "text": "Bir işi devretmek, beklenen sonucu tanımlayıp yolu ekibe bırakmaktır. Her adımı kontrol etmek hem lideri yorar hem de ekibin gelişimini durdurur. \"Ne\" ve \"neden\"i sen söyle, \"nasıl\"ı onlar bulsun."
+   "text": "Bir işi devretmek, beklenen sonucu tanımlayıp yolu ekibe bırakmaktır. Her adımı kontrol etmek hem lideri yorar hem de ekibin gelişimini durdurur. \"Ne\" ve \"neden\"i sen söyle, \"nasıl\"ı onlar bulsun.",
+   "action": "Kendin yaptığın bir işi devret: Sonucu ve nedenini anlat, yöntemi onlara bırak. Sadece ne zaman kontrol edeceğinizi belirleyin."
   }
  ]
 }

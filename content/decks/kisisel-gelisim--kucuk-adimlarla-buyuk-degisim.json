@@ -2,26 +2,32 @@
  "id": "kisisel-gelisim--kucuk-adimlarla-buyuk-degisim",
  "category": "kisisel-gelisim",
  "title": "Küçük Adımlarla Büyük Değişim",
+ "version": 2,
  "cards": [
   {
-   "title": "Kaizen Felsefesi Nedir?",
-   "text": "Kaizen, Japonca'da sürekli iyileştirme anlamına gelir. Büyük ve korkutucu hedefler koymak yerine, her gün fark edilmeyecek kadar küçük adımlar atmayı savunur. Bu yöntem, beyindeki korku merkezini tetiklemeden yeni alışkanlıklar kazanmanıza yardımcı olur ve zamanla kalıcı başarılar getirir."
+   "title": "Kaizen: sürekli küçük iyileştirme",
+   "text": "Kaizen, Japoncada \"iyiye doğru değişim\" demektir ve Toyota'nın üretim felsefesiyle tanınır. Fikir basit: Bir şeyi bir kerede değiştirmek yerine her gün onu biraz daha iyi yapmak. Fabrikada her çalışanın küçük önerileri, yıllar içinde dev bir verim farkına dönüşür.",
+   "action": "Her gün yaptığın bir işi seç (sabah rutini, rapor yazımı) ve onu yarın %1 kolaylaştıracak tek bir küçük değişikliği bugün uygula."
   },
   {
-   "title": "Zaman Bloğu Tekniği",
-   "text": "Gün boyunca sürekli görev değiştirmek dikkatimizi dağıtır ve yorgunluğa yol açar. Zaman bloğu tekniğinde gün, belirli saat aralıklarına bölünür ve her blokta yalnızca tek bir işe odaklanılır. Bu yöntem, derin çalışmayı teşvik ederek üretkenliği ve zihinsel netliği artırır."
+   "title": "Gülünç derecede küçük başla",
+   "text": "Psikolog Robert Maurer, Kaizen'i kişisel hayata uyarlarken \"gülünç derecede küçük\" adımlar önerir: Spora başlamak isteyen biri için günde bir dakika yürüyüş. Adım o kadar küçüktür ki beyin onu tehdit olarak görmez, direnç oluşmaz.",
+   "action": "Uzun süredir ertelediğin hedefi, yapmamanın utanç verici olacağı kadar küçük bir adıma indir (ör. tek bir cümle yaz) ve bugün yap."
   },
   {
-   "title": "Odaklanmayı Artıran Pomodoro",
-   "text": "Francesco Cirillo tarafından geliştirilen Pomodoro Tekniği, 25 dakikalık odaklanma ve 5 dakikalık molalardan oluşur. Bu kısa çalışma aralıkları, tükenmişlik hiss วัน önler ve dikkatin dağılmasını engeller. Dört döngünün ardından daha uzun bir mola vererek enerjinizi tazelersiniz."
+   "title": "Küçük sorular sor",
+   "text": "Maurer'ın bir diğer tekniği küçük sorulardır. \"Nasıl daha sağlıklı olurum?\" gibi büyük bir soru bunaltır. \"Bugün hangi öğüne bir sebze ekleyebilirim?\" ise beyni somut bir cevaba yönlendirir. Aynı soruyu birkaç gün sormak, zihni çözüm aramaya alıştırır.",
+   "action": "Değiştirmek istediğin bir alan için küçük bir soru yaz ve bir hafta boyunca her sabah kendine sor."
   },
   {
-   "title": "Zihinsel Yükü Azaltmak",
-   "text": "Beynimiz aynı anda pek çok şeyi hatırlamaya çalışırken ciddi bir enerji harcar. Yapılacaklar listesi hazırlamak veya düşünceleri kağıda dökmek, zihinsel yükü dışarı aktarır. Bu basit eylem, beyne rahatlama sinyali gönderir ve stres seviyesini düşürerek odaklanmayı kolaylaştırır."
+   "title": "Zinciri kırma",
+   "text": "Komedyen Jerry Seinfeld'e atfedilen yöntemde her gün yazı yazdığında takvime bir çarpı atılır. Birkaç gün sonra çarpılar bir zincire dönüşür ve tek hedef zinciri kırmamak olur. Atfın doğruluğu tartışmalı olsa da yöntem işe yarıyor: Görünür ilerleme, devam etme isteğini besler.",
+   "action": "Duvara ya da telefonuna bir aylık takvim koy ve yeni alışkanlığını yaptığın her gün büyük bir çarpı at."
   },
   {
-   "title": "Günün Değerlendirmesi ve Kapanış",
-   "text": "Gelişimin en önemli adımı, deneyimlerden ders çıkarabilmektir. Her akşam birkaç dakika ayırarak gün içinde neyi iyi yaptığınızı ve neyi geliştirebileceğinizi not edin. Bu alışkanlık, farkındalığınızı artırır ve ertesi güne daha hazırlıklı, bilinçli bir başlangıç yapmanızı sağlar."
+   "title": "Hiçbir zaman iki kez kaçırma",
+   "text": "Mükemmel bir seri gerekmez; asıl tehlike tek bir kaçırma değil, kaçırmanın alışkanlığa dönüşmesidir. James Clear'ın kuralı: Bir günü kaçırırsan sorun değil, ama asla arka arkaya iki gün kaçırma. Kötü bir günde bile işin en küçük halini yapmak, kimliğini korur.",
+   "action": "Alışkanlığının kötü günler için \"minimum\" halini şimdiden belirle (ör. 10 şınav yerine 1) ve not et."
   }
  ]
 }

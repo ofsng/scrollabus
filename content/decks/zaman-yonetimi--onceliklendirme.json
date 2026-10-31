@@ -2,26 +2,32 @@
  "id": "zaman-yonetimi--onceliklendirme",
  "category": "zaman-yonetimi",
  "title": "Önceliklendirme",
+ "version": 2,
  "cards": [
   {
    "title": "Eisenhower matrisi",
-   "text": "İşleri iki soruyla sınıflandır: Acil mi? Önemli mi? Acil ve önemli olanı hemen yap, önemli ama acil olmayanı planla, acil ama önemsiz olanı devret, ikisi de olmayanı bırak. Gerçek gelişim çoğu zaman \"önemli ama acil değil\" kutusundadır."
+   "text": "İşleri iki soruyla sınıflandır: Acil mi? Önemli mi? Acil ve önemli olanı hemen yap, önemli ama acil olmayanı planla, acil ama önemsiz olanı devret, ikisi de olmayanı bırak. Gerçek gelişim çoğu zaman \"önemli ama acil değil\" kutusundadır.",
+   "action": "Bugünkü listeni dört kutuya ayır ve \"önemli ama acil değil\" kutusundan bir işe bugün 30 dakika ayır."
   },
   {
    "title": "Acil ile önemli",
-   "text": "Acil işler bağırır, önemli işler fısıldar. E-postalar ve bildirimler acil görünür; sağlık, ilişkiler ve öğrenme ise önemlidir ama asla acele ettirmez. Önemli olana bilinçli olarak zaman ayırmazsan, acil olanlar hepsini yer."
+   "text": "Acil işler bağırır, önemli işler fısıldar. E-postalar ve bildirimler acil görünür; sağlık, ilişkiler ve öğrenme ise önemlidir ama asla acele ettirmez. Önemli olana bilinçli olarak zaman ayırmazsan, acil olanlar hepsini yer.",
+   "action": "Önemli ama acil olmayan bir şeyi (sağlık, ilişki, öğrenme) seç ve bu haftanın takvimine sabit bir saat olarak yaz."
   },
   {
    "title": "Zaman bloklama",
-   "text": "Yapılacaklar listesi ne yapacağını, takvim ise ne zaman yapacağını söyler. Önemli işleri takvimine bir toplantı gibi yerleştir ve o bloğa saygı göster. Takvimde yeri olmayan iş genellikle yapılmaz."
+   "text": "Yapılacaklar listesi ne yapacağını, takvim ise ne zaman yapacağını söyler. Önemli işleri takvimine bir toplantı gibi yerleştir ve o bloğa saygı göster. Takvimde yeri olmayan iş genellikle yapılmaz.",
+   "action": "Yarının takvimini akşamdan doldur: En önemli 2 işi saatleriyle yerleştir, aralarına 15'er dakika tampon bırak."
   },
   {
    "title": "Günün üç önemli görevi",
-   "text": "Her güne üç önemli görev belirleyerek başla. Gün ne kadar karışırsa karışsın, bu üçünü bitirdiysen gün iyi geçmiştir. Uzun listeler motivasyonu düşürür; kısa ve net hedefler yön verir."
+   "text": "Her güne üç önemli görev belirleyerek başla. Gün ne kadar karışırsa karışsın, bu üçünü bitirdiysen gün iyi geçmiştir. Uzun listeler motivasyonu düşürür; kısa ve net hedefler yön verir.",
+   "action": "Sabah ilk iş bir kâğıda günün 3 önemli görevini yaz. Gün sonunda kaçını bitirdiğine bak."
   },
   {
    "title": "Hayır demeyi öğren",
-   "text": "Her \"evet\", başka bir şeye söylenmiş bir \"hayır\"dır. Yeni bir isteği kabul etmeden önce kendine \"Bunun için neyi bırakacağım?\" diye sor. Kibar ama net bir \"Şu an bunu üstlenemem\", zamanını korur."
+   "text": "Her \"evet\", başka bir şeye söylenmiş bir \"hayır\"dır. Yeni bir isteği kabul etmeden önce kendine \"Bunun için neyi bırakacağım?\" diye sor. Kibar ama net bir \"Şu an bunu üstlenemem\", zamanını korur.",
+   "action": "Bir sonraki isteğe hemen evet deme: \"Takvimime bakıp sana döneceğim\" de ve gerçekten neye mal olacağını düşün."
   }
  ]
 }

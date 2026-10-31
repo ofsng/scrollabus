@@ -2,14 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { App as NativeApp } from "@capacitor/app";
 import { splitIntoCards } from "./split";
-import { bundledCategories, bundledDecksNotIn, fetchNewLibraryDecks } from "./library";
+import { bundledCategories, bundledLibraryDecks, fetchLibraryUpdates, mergeLibrary } from "./library";
 import {
+  loadCategoryPrefs,
   loadCustomCategories,
   loadDecks,
   loadKnownLibrary,
   loadSaved,
   newId,
   readPref,
+  saveCategoryPrefs,
   saveCustomCategories,
   saveDecks,
   saveKnownLibrary,
@@ -17,6 +19,7 @@ import {
   writePref,
   type Card,
   type Category,
+  type CategoryPrefs,
   type Deck,
 } from "./store";
 
@@ -56,16 +59,19 @@ function shuffled<T>(items: T[], seed: number): T[] {
 // Decks are shuffled, but each deck's cards stay together and in order
 const deckItems = (decks: Deck[]): FeedItem[] => decks.flatMap((deck) => deck.cards.map((card) => ({ card, deck })));
 
-function textSize(text: string) {
-  const n = text.length;
+function textSize(card: Card) {
+  const n = card.text.length + (card.action ? 120 : 0);
   if (n < 90) return 30;
   if (n < 180) return 25;
   if (n < 300) return 21;
-  return 18;
+  if (n < 450) return 19;
+  return 17;
 }
 
 const formatDate = (ms: number) =>
   new Date(ms).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" });
+
+const categoryLabel = (c: Category) => (c.emoji ? `${c.emoji} ${c.name}` : c.name);
 
 // Scrolls each chip strip sideways so its selected chip is visible
 function centerActiveChips() {
@@ -74,8 +80,6 @@ function centerActiveChips() {
     strip.scrollLeft = chip.offsetLeft - (strip.clientWidth - chip.clientWidth) / 2;
   });
 }
-
-const categoryLabel = (c: Category) => (c.emoji ? `${c.emoji} ${c.name}` : c.name);
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -91,6 +95,63 @@ const BOOKS = "M4 4h4v16H4zM10 4h4v16h-4zM16 5l3.5-1 3 15.5-3.5 1z";
 const TRASH = "M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3";
 const SHUFFLE = "M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5";
 const REFRESH = "M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5";
+const MORE = "M5 12h.01M12 12h.01M19 12h.01";
+const CLOSE = "M6 6l12 12M18 6 6 18";
+const EDIT = "M4 20h4L19 9l-4-4L4 16zM14 6l4 4";
+const EYE = "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z";
+const EYE_OFF = "M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7c1.7 0 3.2-.4 4.5-1.1M9.9 9.9a3 3 0 0 0 4.2 4.2";
+const TAGS = "M3 12V4h8l10 10-8 8zM7.5 7.5h.01";
+const CHECK = "M5 12l5 5L20 7";
+
+// ─── Bottom sheet ────────────────────────────────────────────────────────────
+
+// Open sheets, newest last; the Android back button closes the top one first
+const openSheets: (() => void)[] = [];
+
+function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
+  useEffect(() => {
+    const close = () => closeRef.current();
+    openSheets.push(close);
+    return () => {
+      openSheets.splice(openSheets.indexOf(close), 1);
+    };
+  }, []);
+
+  return (
+    <div className="sheet-backdrop" onClick={onClose}>
+      <div className="sheet" role="dialog" aria-label={title} onClick={(e) => e.stopPropagation()}>
+        <div className="sheet-head">
+          <h2>{title}</h2>
+          <button className="icon-btn" aria-label="Kapat" onClick={onClose}>
+            <Icon d={CLOSE} />
+          </button>
+        </div>
+        <div className="sheet-body">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+// Two-step delete so a stray tap never removes anything
+function ConfirmDelete({ label, onConfirm }: { label: string; onConfirm: () => void }) {
+  const [armed, setArmed] = useState(false);
+  return armed ? (
+    <div className="confirm">
+      <button className="btn danger" onClick={onConfirm}>
+        Evet, sil
+      </button>
+      <button className="btn ghost" onClick={() => setArmed(false)}>
+        Vazgeç
+      </button>
+    </div>
+  ) : (
+    <button className="btn outline-danger" onClick={() => setArmed(true)}>
+      <Icon d={TRASH} /> {label}
+    </button>
+  );
+}
 
 // ─── Feed ────────────────────────────────────────────────────────────────────
 
@@ -174,9 +235,15 @@ function Feed({
                 {card.title && card.title.toLocaleLowerCase("tr") !== deck.title.toLocaleLowerCase("tr") && (
                   <h2 className="card-title">{card.title}</h2>
                 )}
-                <p className="card-text" style={{ fontSize: textSize(card.text) }}>
+                <p className="card-text" style={{ fontSize: textSize(card) }}>
                   {card.text}
                 </p>
+                {card.action && (
+                  <div className="card-action">
+                    <span className="card-action-label">Bugün dene</span>
+                    {card.action}
+                  </div>
+                )}
               </div>
               {burst === card.id && (
                 <div className="burst">
@@ -204,29 +271,6 @@ function Feed({
 }
 
 // ─── Add ─────────────────────────────────────────────────────────────────────
-
-function CategorySelect({
-  value,
-  categories,
-  onChange,
-  className = "field",
-}: {
-  value: string;
-  categories: Category[];
-  onChange: (id: string) => void;
-  className?: string;
-}) {
-  return (
-    <select className={className} value={value} onChange={(e) => onChange(e.target.value)}>
-      <option value="">Kategorisiz</option>
-      {categories.map((c) => (
-        <option key={c.id} value={c.id}>
-          {categoryLabel(c)}
-        </option>
-      ))}
-    </select>
-  );
-}
 
 function AddScreen({
   categories,
@@ -276,7 +320,14 @@ function AddScreen({
     <div className="screen page">
       <h1>Not ekle</h1>
       <input className="field" placeholder="Başlık (isteğe bağlı)" value={title} onChange={(e) => setTitle(e.target.value)} />
-      <CategorySelect value={categoryId} categories={categories} onChange={setCategoryId} />
+      <select className="field" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+        <option value="">Kategorisiz</option>
+        {categories.map((c) => (
+          <option key={c.id} value={c.id}>
+            {categoryLabel(c)}
+          </option>
+        ))}
+      </select>
       <textarea
         className="field area"
         placeholder="Notlarını buraya yapıştır…"
@@ -294,7 +345,7 @@ function AddScreen({
           e.target.value = "";
         }}
       />
-      <button className="btn ghost" onClick={() => fileRef.current?.click()}>
+      <button className="btn ghost dashed" onClick={() => fileRef.current?.click()}>
         PDF veya TXT dosyası seç
       </button>
       {status && <p className="hint">{status}</p>}
@@ -302,6 +353,172 @@ function AddScreen({
         {cardCount ? `${cardCount} karta böl ve kaydır` : "Kartlara böl ve kaydır"}
       </button>
     </div>
+  );
+}
+
+// ─── Deck options ────────────────────────────────────────────────────────────
+
+function DeckSheet({
+  deck,
+  categories,
+  onMove,
+  onRename,
+  onDelete,
+  onClose,
+}: {
+  deck: Deck;
+  categories: Category[];
+  onMove: (categoryId: string) => void;
+  onRename: (title: string) => void;
+  onDelete: () => void;
+  onClose: () => void;
+}) {
+  const [title, setTitle] = useState(deck.title);
+  const current = deck.categoryId ?? "";
+
+  return (
+    <Sheet title={deck.title} onClose={onClose}>
+      <p className="sheet-label">Kategori</p>
+      <div className="pick-grid">
+        {[{ id: "", name: "Kategorisiz" } as Category, ...categories].map((c) => (
+          <button key={c.id} className={`pick ${current === c.id ? "on" : ""}`} onClick={() => onMove(c.id)}>
+            {categoryLabel(c)}
+          </button>
+        ))}
+      </div>
+
+      <p className="sheet-label">Ad</p>
+      <div className="inline-form">
+        <input className="field" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <button
+          className="btn primary small"
+          disabled={!title.trim() || title.trim() === deck.title}
+          onClick={() => onRename(title.trim())}
+        >
+          Kaydet
+        </button>
+      </div>
+
+      <ConfirmDelete label="Bu notu sil" onConfirm={onDelete} />
+    </Sheet>
+  );
+}
+
+// ─── Category manager ────────────────────────────────────────────────────────
+
+function CategoryRow({
+  category,
+  count,
+  onUpdate,
+  onToggleHidden,
+  onDelete,
+}: {
+  category: Category;
+  count: number;
+  onUpdate: (name: string, emoji: string) => void;
+  onToggleHidden: () => void;
+  onDelete: () => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(category.name);
+  const [emoji, setEmoji] = useState(category.emoji ?? "");
+
+  if (editing) {
+    return (
+      <li className="cat-row editing">
+        <div className="inline-form">
+          <input className="field emoji" value={emoji} maxLength={4} placeholder="🙂" onChange={(e) => setEmoji(e.target.value)} />
+          <input className="field" value={name} onChange={(e) => setName(e.target.value)} />
+          <button
+            className="icon-btn on"
+            aria-label="Kaydet"
+            disabled={!name.trim()}
+            onClick={() => {
+              onUpdate(name.trim(), emoji.trim());
+              setEditing(false);
+            }}
+          >
+            <Icon d={CHECK} />
+          </button>
+        </div>
+        {category.custom && <ConfirmDelete label="Kategoriyi sil (notlar kalır)" onConfirm={onDelete} />}
+      </li>
+    );
+  }
+
+  return (
+    <li className={`cat-row ${category.hidden ? "dim" : ""}`}>
+      <span className="cat-emoji">{category.emoji || "•"}</span>
+      <span className="cat-name">
+        {category.name}
+        <small>
+          {count} not{category.hidden ? " · akışta gizli" : ""}
+        </small>
+      </span>
+      <button className="icon-btn" aria-label={category.hidden ? "Akışta göster" : "Akışta gizle"} onClick={onToggleHidden}>
+        <Icon d={category.hidden ? EYE_OFF : EYE} />
+      </button>
+      <button className="icon-btn" aria-label="Düzenle" onClick={() => setEditing(true)}>
+        <Icon d={EDIT} />
+      </button>
+    </li>
+  );
+}
+
+function CategoryManager({
+  categories,
+  counts,
+  onAdd,
+  onUpdate,
+  onToggleHidden,
+  onDelete,
+  onClose,
+}: {
+  categories: Category[];
+  counts: Map<string, number>;
+  onAdd: (name: string, emoji: string) => void;
+  onUpdate: (id: string, name: string, emoji: string) => void;
+  onToggleHidden: (id: string) => void;
+  onDelete: (id: string) => void;
+  onClose: () => void;
+}) {
+  const [name, setName] = useState("");
+  const [emoji, setEmoji] = useState("");
+
+  return (
+    <Sheet title="Kategoriler" onClose={onClose}>
+      <p className="sheet-label">Yeni kategori</p>
+      <div className="inline-form">
+        <input className="field emoji" value={emoji} maxLength={4} placeholder="🙂" onChange={(e) => setEmoji(e.target.value)} />
+        <input className="field" value={name} placeholder="Kategori adı" onChange={(e) => setName(e.target.value)} />
+        <button
+          className="btn primary small"
+          disabled={!name.trim()}
+          onClick={() => {
+            onAdd(name.trim(), emoji.trim());
+            setName("");
+            setEmoji("");
+          }}
+        >
+          Ekle
+        </button>
+      </div>
+
+      <p className="sheet-label">Tüm kategoriler</p>
+      <p className="hint small">Göz simgesiyle bir kategoriyi akıştan gizleyebilirsin; notları kütüphanede kalır.</p>
+      <ul className="cat-list">
+        {categories.map((c) => (
+          <CategoryRow
+            key={c.id}
+            category={c}
+            count={counts.get(c.id) ?? 0}
+            onUpdate={(n, e) => onUpdate(c.id, n, e)}
+            onToggleHidden={() => onToggleHidden(c.id)}
+            onDelete={() => onDelete(c.id)}
+          />
+        ))}
+      </ul>
+    </Sheet>
   );
 }
 
@@ -313,20 +530,16 @@ function Library({
   syncStatus,
   onSync,
   onOpen,
-  onDelete,
-  onMove,
-  onAddCategory,
-  onDeleteCategory,
+  onOptions,
+  onManageCategories,
 }: {
   decks: Deck[];
   categories: Category[];
   syncStatus: string;
   onSync: () => void;
   onOpen: (id: string) => void;
-  onDelete: (id: string) => void;
-  onMove: (deckId: string, categoryId: string) => void;
-  onAddCategory: (name: string) => void;
-  onDeleteCategory: (id: string) => void;
+  onOptions: (id: string) => void;
+  onManageCategories: () => void;
 }) {
   const [filter, setFilter] = useState<string | null>(() => readPref<string | null>("libraryFilter", null));
   useEffect(() => {
@@ -339,39 +552,40 @@ function Library({
     for (const d of decks) m.set(d.categoryId ?? "", (m.get(d.categoryId ?? "") ?? 0) + 1);
     return m;
   }, [decks]);
+  const byId = new Map(categories.map((c) => [c.id, c]));
 
   const visible = decks
     .filter((d) => filter === null || (d.categoryId ?? "") === filter)
     .sort((a, b) => b.createdAt - a.createdAt);
-  const activeCategory = categories.find((c) => c.id === filter);
 
   return (
     <div className="screen page">
       <div className="page-head">
-        <h1>Kütüphane</h1>
-        <button className="sync" onClick={onSync}>
-          <Icon d={REFRESH} /> {syncStatus}
-        </button>
+        <div>
+          <h1>Kütüphane</h1>
+          <p className="hint small">{syncStatus}</p>
+        </div>
+        <div className="head-actions">
+          <button className="pill-btn round-pill" aria-label="Yeni içerikleri kontrol et" onClick={onSync}>
+            <Icon d={REFRESH} />
+          </button>
+          <button className="pill-btn" onClick={onManageCategories}>
+            <Icon d={TAGS} /> Kategoriler
+          </button>
+        </div>
       </div>
 
       <div className="chips strip">
         <button className={`chip ${filter === null ? "on" : ""}`} onClick={() => setFilter(null)}>
           Tümü · {decks.length}
         </button>
-        <button
-          className="chip add"
-          onClick={() => {
-            const name = window.prompt("Yeni kategori adı")?.trim();
-            if (name) onAddCategory(name);
-          }}
-        >
-          <Icon d={PLUS} /> Kategori
-        </button>
-        {categories.map((c) => (
-          <button key={c.id} className={`chip ${filter === c.id ? "on" : ""}`} onClick={() => setFilter(c.id)}>
-            {categoryLabel(c)} · {counts.get(c.id) ?? 0}
-          </button>
-        ))}
+        {categories
+          .filter((c) => (counts.get(c.id) ?? 0) > 0)
+          .map((c) => (
+            <button key={c.id} className={`chip ${filter === c.id ? "on" : ""}`} onClick={() => setFilter(c.id)}>
+              {categoryLabel(c)} · {counts.get(c.id)}
+            </button>
+          ))}
         {(counts.get("") ?? 0) > 0 && (
           <button className={`chip ${filter === "" ? "on" : ""}`} onClick={() => setFilter("")}>
             Kategorisiz · {counts.get("")}
@@ -379,49 +593,25 @@ function Library({
         )}
       </div>
 
-      {activeCategory?.custom && (
-        <button
-          className="link-danger"
-          onClick={() => {
-            if (window.confirm(`"${activeCategory.name}" kategorisi silinsin mi? İçindeki notlar silinmez, kategorisiz kalır.`)) {
-              onDeleteCategory(activeCategory.id);
-              setFilter(null);
-            }
-          }}
-        >
-          Bu kategoriyi sil
-        </button>
-      )}
-
-      {visible.length === 0 && <p className="hint">Burada henüz not yok. Ekle sekmesinden not ekleyebilirsin.</p>}
+      {visible.length === 0 && <p className="hint">Burada henüz not yok.</p>}
       <ul className="list">
-        {visible.map((deck) => (
-          <li key={deck.id} className="row" style={{ borderLeftColor: `hsl(${hueFor(deck.categoryId ?? deck.id)} 60% 55%)` }}>
-            <div className="row-main">
-              <button className="row-open" onClick={() => onOpen(deck.id)}>
+        {visible.map((deck) => {
+          const cat = deck.categoryId ? byId.get(deck.categoryId) : undefined;
+          return (
+            <li key={deck.id} className="row" style={{ borderLeftColor: `hsl(${hueFor(deck.categoryId ?? deck.id)} 60% 55%)` }}>
+              <button className="row-main" onClick={() => onOpen(deck.id)}>
                 <span className="row-title">{deck.title}</span>
                 <span className="row-meta">
-                  {deck.cards.length} kart · {deck.fromLibrary ? "Okuma" : "Notum"} · {formatDate(deck.createdAt)}
+                  {cat ? categoryLabel(cat) : "Kategorisiz"} · {deck.cards.length} kart
+                  {deck.fromLibrary ? "" : ` · ${formatDate(deck.createdAt)}`}
                 </span>
               </button>
-              <CategorySelect
-                className="row-select"
-                value={deck.categoryId ?? ""}
-                categories={categories}
-                onChange={(id) => onMove(deck.id, id)}
-              />
-            </div>
-            <button
-              className="icon-btn"
-              aria-label="Sil"
-              onClick={() => {
-                if (window.confirm(`"${deck.title}" silinsin mi?`)) onDelete(deck.id);
-              }}
-            >
-              <Icon d={TRASH} />
-            </button>
-          </li>
-        ))}
+              <button className="icon-btn" aria-label="Seçenekler" onClick={() => onOptions(deck.id)}>
+                <Icon d={MORE} />
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -434,62 +624,80 @@ export function App() {
   const [decks, setDecks] = useState<Deck[] | null>(null);
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [customCategories, setCustomCategories] = useState<Category[]>([]);
+  const [categoryPrefs, setCategoryPrefs] = useState<CategoryPrefs>({});
   const [libraryCategories, setLibraryCategories] = useState<Category[]>(() =>
     readPref<Category[]>("libraryCategories", bundledCategories)
   );
   const [source, setSource] = useState<FeedSource>(() => readPref<FeedSource>("source", { kind: "mix" }));
   const [seed, setSeed] = useState(() => readPref<number>("seed", Date.now() % 100000));
-  const [syncStatus, setSyncStatus] = useState("Yeni içerik");
+  const [syncStatus, setSyncStatus] = useState("");
+  const [deckOptions, setDeckOptions] = useState<string | null>(null);
+  const [managingCategories, setManagingCategories] = useState(false);
 
-  // Latest decks for async sync callbacks
+  // Latest values for async sync callbacks
   const decksRef = useRef<Deck[]>([]);
   decksRef.current = decks ?? [];
+  const knownRef = useRef<Set<string>>(new Set());
 
-  async function syncLibrary(known: Set<string>) {
+  function updateDecks(next: Deck[]) {
+    decksRef.current = next;
+    setDecks(next);
+    void saveDecks(next);
+  }
+
+  async function syncLibrary() {
     setSyncStatus("Kontrol ediliyor…");
     try {
-      const { categories, decks: incoming } = await fetchNewLibraryDecks(known);
+      const known = knownRef.current;
+      const byId = new Map(decksRef.current.map((d) => [d.id, d]));
+      const { categories, decks: incoming } = await fetchLibraryUpdates((id, version) => {
+        const have = byId.get(id);
+        return have ? !!have.fromLibrary && (have.version ?? 1) < version : !known.has(id);
+      });
       setLibraryCategories(categories);
       writePref("libraryCategories", categories);
-      if (incoming.length > 0) {
-        incoming.forEach((d) => known.add(d.id));
+      const { decks: merged, added, updated } = mergeLibrary(decksRef.current, incoming, known);
+      if (added || updated) {
+        updateDecks(merged);
         void saveKnownLibrary(known);
-        updateDecks([...decksRef.current, ...incoming]);
       }
-      setSyncStatus(incoming.length ? `${incoming.length} yeni okuma` : "Güncel");
+      setSyncStatus(added ? `${added} yeni okuma eklendi` : updated ? `${updated} okuma güncellendi` : "İçerikler güncel");
     } catch {
-      setSyncStatus("Çevrimdışı");
+      setSyncStatus("Çevrimdışı · yeni içerik için internete bağlan");
     }
   }
 
   useEffect(() => {
-    void Promise.all([loadDecks(), loadSaved(), loadCustomCategories(), loadKnownLibrary()]).then(([d, s, c, known]) => {
-      // First launch (or app update): add the reading decks bundled with the app
-      const bundled = bundledDecksNotIn(known);
-      bundled.forEach((deck) => known.add(deck.id));
-      const all = [...d, ...bundled];
-      if (bundled.length) {
-        void saveDecks(all);
-        void saveKnownLibrary(known);
+    void Promise.all([loadDecks(), loadSaved(), loadCustomCategories(), loadKnownLibrary(), loadCategoryPrefs()]).then(
+      ([stored, s, custom, known, prefs]) => {
+        // Add (or refresh) the reading decks bundled with this app version
+        const { decks: merged, added, updated } = mergeLibrary(stored, bundledLibraryDecks(), known);
+        knownRef.current = known;
+        if (added || updated) {
+          void saveDecks(merged);
+          void saveKnownLibrary(known);
+        }
+        decksRef.current = merged;
+        setDecks(merged);
+        setSaved(s);
+        setCustomCategories(custom);
+        setCategoryPrefs(prefs);
+        void syncLibrary();
       }
-      decksRef.current = all;
-      setDecks(all);
-      setSaved(s);
-      setCustomCategories(c);
-      void syncLibrary(known);
-    });
+    );
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => writePref("source", source), [source]);
   useEffect(() => writePref("seed", seed), [seed]);
 
-  // Android back button: leave sub-screens first, then exit
+  // Android back button: close a sheet, then leave sub-screens, then exit
   const tabRef = useRef(tab);
   tabRef.current = tab;
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
     const handle = NativeApp.addListener("backButton", () => {
-      if (tabRef.current !== "feed") setTab("feed");
+      if (openSheets.length) openSheets[openSheets.length - 1]();
+      else if (tabRef.current !== "feed") setTab("feed");
       else void NativeApp.exitApp();
     });
     return () => {
@@ -498,27 +706,41 @@ export function App() {
   }, []);
 
   const allDecks = useMemo(() => decks ?? [], [decks]);
-  const categories = useMemo(() => [...libraryCategories, ...customCategories], [libraryCategories, customCategories]);
+  const categories = useMemo<Category[]>(
+    () =>
+      [...libraryCategories, ...customCategories].map((c) => ({
+        ...c,
+        name: categoryPrefs[c.id]?.name ?? c.name,
+        emoji: categoryPrefs[c.id]?.emoji ?? c.emoji,
+        hidden: !!categoryPrefs[c.id]?.hidden,
+      })),
+    [libraryCategories, customCategories, categoryPrefs]
+  );
+  const hiddenIds = useMemo(() => new Set(categories.filter((c) => c.hidden).map((c) => c.id)), [categories]);
+  const categoryCounts = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const d of allDecks) if (d.categoryId) m.set(d.categoryId, (m.get(d.categoryId) ?? 0) + 1);
+    return m;
+  }, [allDecks]);
+
   const activeDeck = source.kind === "deck" ? allDecks.find((d) => d.id === source.id) : undefined;
   const activeCategory = source.kind === "category" ? categories.find((c) => c.id === source.id) : undefined;
-  const feedCategories = categories.filter((c) => allDecks.some((d) => d.categoryId === c.id));
+  const feedCategories = categories.filter((c) => !c.hidden && (categoryCounts.get(c.id) ?? 0) > 0);
 
   const feedItems = useMemo<FeedItem[]>(() => {
     if (activeDeck) return deckItems([activeDeck]);
-    const pool = activeCategory ? allDecks.filter((d) => d.categoryId === activeCategory.id) : allDecks;
+    const pool = activeCategory
+      ? allDecks.filter((d) => d.categoryId === activeCategory.id)
+      : allDecks.filter((d) => !d.categoryId || !hiddenIds.has(d.categoryId));
     return deckItems(shuffled(pool, seed));
-  }, [allDecks, activeDeck, activeCategory, seed]);
+  }, [allDecks, activeDeck, activeCategory, hiddenIds, seed]);
 
   const savedItems = useMemo<FeedItem[]>(
     () => allDecks.flatMap((deck) => deck.cards.filter((c) => saved.has(c.id)).map((card) => ({ card, deck }))),
     [allDecks, saved]
   );
 
-  function updateDecks(next: Deck[]) {
-    decksRef.current = next;
-    setDecks(next);
-    void saveDecks(next);
-  }
+  useEffect(() => centerActiveChips(), [tab, source]);
 
   function toggleSave(cardId: string) {
     const next = new Set(saved);
@@ -542,6 +764,10 @@ export function App() {
     setTab("feed");
   }
 
+  function patchDeck(id: string, patch: Partial<Deck>) {
+    updateDecks(allDecks.map((d) => (d.id === id ? { ...d, ...patch } : d)));
+  }
+
   function deleteDeck(id: string) {
     const deck = allDecks.find((d) => d.id === id);
     updateDecks(allDecks.filter((d) => d.id !== id));
@@ -554,12 +780,14 @@ export function App() {
     if (source.kind === "deck" && source.id === id) setSource({ kind: "mix" });
   }
 
-  function moveDeck(deckId: string, categoryId: string) {
-    updateDecks(allDecks.map((d) => (d.id === deckId ? { ...d, categoryId: categoryId || undefined } : d)));
+  function updatePrefs(id: string, patch: CategoryPrefs[string]) {
+    const next = { ...categoryPrefs, [id]: { ...categoryPrefs[id], ...patch } };
+    setCategoryPrefs(next);
+    void saveCategoryPrefs(next);
   }
 
-  function addCategory(name: string) {
-    const next = [...customCategories, { id: `custom-${newId()}`, name, custom: true }];
+  function addCategory(name: string, emoji: string) {
+    const next = [...customCategories, { id: `custom-${newId()}`, name, emoji: emoji || undefined, custom: true }];
     setCustomCategories(next);
     void saveCustomCategories(next);
   }
@@ -568,6 +796,10 @@ export function App() {
     const next = customCategories.filter((c) => c.id !== id);
     setCustomCategories(next);
     void saveCustomCategories(next);
+    const prefs = { ...categoryPrefs };
+    delete prefs[id];
+    setCategoryPrefs(prefs);
+    void saveCategoryPrefs(prefs);
     updateDecks(allDecks.map((d) => (d.categoryId === id ? { ...d, categoryId: undefined } : d)));
     if (source.kind === "category" && source.id === id) setSource({ kind: "mix" });
   }
@@ -605,11 +837,10 @@ export function App() {
     </div>
   );
 
-  useEffect(() => centerActiveChips(), [tab, source]);
-
   if (decks === null) return <div className="app" />;
 
   const feedKey = activeDeck ? `deck:${activeDeck.id}` : activeCategory ? `cat:${activeCategory.id}` : "mix";
+  const optionsDeck = deckOptions ? allDecks.find((d) => d.id === deckOptions) : undefined;
 
   return (
     <div className="app">
@@ -654,15 +885,13 @@ export function App() {
             decks={allDecks}
             categories={categories}
             syncStatus={syncStatus}
-            onSync={() => void loadKnownLibrary().then(syncLibrary)}
+            onSync={() => void syncLibrary()}
             onOpen={(id) => {
               setSource({ kind: "deck", id });
               setTab("feed");
             }}
-            onDelete={deleteDeck}
-            onMove={moveDeck}
-            onAddCategory={addCategory}
-            onDeleteCategory={deleteCategory}
+            onOptions={setDeckOptions}
+            onManageCategories={() => setManagingCategories(true)}
           />
         )}
       </main>
@@ -682,6 +911,32 @@ export function App() {
           </button>
         ))}
       </nav>
+
+      {optionsDeck && (
+        <DeckSheet
+          key={optionsDeck.id}
+          deck={optionsDeck}
+          categories={categories}
+          onMove={(categoryId) => patchDeck(optionsDeck.id, { categoryId: categoryId || undefined })}
+          onRename={(title) => patchDeck(optionsDeck.id, { title, renamed: true })}
+          onDelete={() => {
+            deleteDeck(optionsDeck.id);
+            setDeckOptions(null);
+          }}
+          onClose={() => setDeckOptions(null)}
+        />
+      )}
+      {managingCategories && (
+        <CategoryManager
+          categories={categories}
+          counts={categoryCounts}
+          onAdd={addCategory}
+          onUpdate={(id, name, emoji) => updatePrefs(id, { name, emoji: emoji || undefined })}
+          onToggleHidden={(id) => updatePrefs(id, { hidden: !hiddenIds.has(id) })}
+          onDelete={deleteCategory}
+          onClose={() => setManagingCategories(false)}
+        />
+      )}
     </div>
   );
 }

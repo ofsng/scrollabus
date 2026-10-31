@@ -2,26 +2,32 @@
  "id": "bilim--insan-bedeni-ve-beyin",
  "category": "bilim",
  "title": "İnsan Bedeni ve Beyin",
+ "version": 2,
  "cards": [
   {
    "title": "Uyku ve hafıza",
-   "text": "Uyku sırasında beyin, gün içinde öğrenilenleri pekiştirir ve uzun süreli belleğe aktarır. Sınavdan önce sabahlamak bu yüzden çoğu zaman ters teper: Öğrendiklerini kalıcı hale getirecek süreci atlamış olursun."
+   "text": "Uyku sırasında beyin, gün içinde öğrenilenleri pekiştirir ve uzun süreli belleğe aktarır. Sınavdan önce sabahlamak bu yüzden çoğu zaman ters teper: Öğrendiklerini kalıcı hale getirecek süreci atlamış olursun.",
+   "action": "Önemli bir şey öğrendiğin gün geç saate kalmak yerine 7-9 saat uyu. Yatmadan önce öğrendiklerini 5 dakika gözden geçir."
   },
   {
    "title": "Nöroplastisite",
-   "text": "Beyin yaşam boyu değişebilir; yeni bağlantılar kurar, kullanılmayanları zayıflatır. Londra taksi şoförleri üzerine yapılan bir araştırma, şehrin karmaşık haritasını ezberleyen şoförlerin hipokampüsünde belirgin farklılıklar buldu."
+   "text": "Beyin yaşam boyu değişebilir; yeni bağlantılar kurar, kullanılmayanları zayıflatır. Londra taksi şoförleri üzerine yapılan bir araştırma, şehrin karmaşık haritasını ezberleyen şoförlerin hipokampüsünde belirgin farklılıklar buldu.",
+   "action": "Bugün rutin bir şeyi farklı yap: Dişlerini diğer elinle fırçala ya da işe farklı bir yoldan git."
   },
   {
    "title": "İkinci beyin",
-   "text": "Bağırsaklarda yüz milyonlarca nöron bulunur; bu sinir ağına enterik sinir sistemi denir. Bağırsak mikrobiyotası ile beyin arasındaki iletişim, ruh hali üzerindeki olası etkileri nedeniyle yoğun biçimde araştırılıyor."
+   "text": "Bağırsaklarda yüz milyonlarca nöron bulunur; bu sinir ağına enterik sinir sistemi denir. Bağırsak mikrobiyotası ile beyin arasındaki iletişim, ruh hali üzerindeki olası etkileri nedeniyle yoğun biçimde araştırılıyor.",
+   "action": "Bu hafta tabağına lif açısından zengin bir besin ekle: baklagiller, sebze ya da tam tahıl."
   },
   {
    "title": "Hareket eden beyin",
-   "text": "Düzenli aerobik egzersiz beyne giden kan akışını artırır ve öğrenme ile hafızayla ilişkili bölgeleri destekler. Kısa bir yürüyüş bile dikkati ve ruh halini iyileştirebilir."
+   "text": "Düzenli aerobik egzersiz beyne giden kan akışını artırır ve öğrenme ile hafızayla ilişkili bölgeleri destekler. Kısa bir yürüyüş bile dikkati ve ruh halini iyileştirebilir.",
+   "action": "Zor bir işe başlamadan önce 10 dakika tempolu yürü ve odaklanmanı yürümediğin bir günle kıyasla."
   },
   {
    "title": "Unutma eğrisi",
-   "text": "Hermann Ebbinghaus, öğrenilen bilginin büyük kısmının ilk günlerde hızla unutulduğunu gösterdi. Aralıklı tekrar, yani bilgiyi giderek uzayan aralıklarla yeniden gözden geçirmek, bu eğriyi düzleştirmenin en etkili yollarından biridir."
+   "text": "Hermann Ebbinghaus, öğrenilen bilginin büyük kısmının ilk günlerde hızla unutulduğunu gösterdi. Aralıklı tekrar, yani bilgiyi giderek uzayan aralıklarla yeniden gözden geçirmek, bu eğriyi düzleştirmenin en etkili yollarından biridir.",
+   "action": "Bugün öğrendiğin bir şeyi 1, 3 ve 7 gün sonra tekrar etmek için üç hatırlatma kur."
   }
  ]
 }

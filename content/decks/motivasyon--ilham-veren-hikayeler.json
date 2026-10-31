@@ -2,26 +2,32 @@
  "id": "motivasyon--ilham-veren-hikayeler",
  "category": "motivasyon",
  "title": "İlham Veren Hikâyeler",
+ "version": 2,
  "cards": [
   {
    "title": "Binlerce deneme",
-   "text": "Thomas Edison'a ampul için yaptığı başarısız denemeler sorulduğunda \"Başarısız olmadım, işe yaramayan binlerce yol buldum\" dediği anlatılır. Sözün tam ifadesi tartışmalı olsa da fikir güçlüdür: Her deneme yeni bir bilgi üretir."
+   "text": "Thomas Edison'a ampul için yaptığı başarısız denemeler sorulduğunda \"Başarısız olmadım, işe yaramayan binlerce yol buldum\" dediği anlatılır. Sözün tam ifadesi tartışmalı olsa da fikir güçlüdür: Her deneme yeni bir bilgi üretir.",
+   "action": "Son başarısızlığından öğrendiğin 3 şeyi yaz ve bir sonraki denemede hangisini değiştireceğine karar ver."
   },
   {
    "title": "Ret mektupları",
-   "text": "Harry Potter'ın ilk kitabı, yayımlanmadan önce birçok yayınevinden ret aldı. Sonunda küçük bir yayınevi kabul etti ve seri, dünyanın en çok satan kitap serilerinden biri oldu. Ret, çoğu zaman eserin değil, kapının yanlış olduğunu gösterir."
+   "text": "Harry Potter'ın ilk kitabı, yayımlanmadan önce birçok yayınevinden ret aldı. Sonunda küçük bir yayınevi kabul etti ve seri, dünyanın en çok satan kitap serilerinden biri oldu. Ret, çoğu zaman eserin değil, kapının yanlış olduğunu gösterir.",
+   "action": "Ret aldığın bir başvuruyu ya da teklifi bu hafta farklı bir kapıya (başka bir firma, kişi ya da platform) yeniden gönder."
   },
   {
    "title": "Stockdale paradoksu",
-   "text": "Vietnam'da yıllarca esir kalan Amiral James Stockdale, hayatta kalamayanların çoğunun \"Noel'e kadar çıkarız\" diyen aşırı iyimserler olduğunu anlattı. Sırrı: Sonunda başaracağına dair sarsılmaz inancı, mevcut durumun acı gerçekleriyle yüzleşmeyle birlikte taşımak."
+   "text": "Vietnam'da yıllarca esir kalan Amiral James Stockdale, hayatta kalamayanların çoğunun \"Noel'e kadar çıkarız\" diyen aşırı iyimserler olduğunu anlattı. Sırrı: Sonunda başaracağına dair sarsılmaz inancı, mevcut durumun acı gerçekleriyle yüzleşmeyle birlikte taşımak.",
+   "action": "Zor bir durum için iki liste yap: \"Kabul etmem gereken gerçekler\" ve \"Sonunda başaracağıma dair nedenlerim\"."
   },
   {
    "title": "Bir sonraki kilometre",
-   "text": "Uzun bir hedefe bütünüyle bakmak bunaltıcıdır. Maraton koşucuları yarışı genellikle küçük parçalara böler: bir sonraki kilometre, bir sonraki su istasyonu. Büyük hedeflerde de en güçlü soru şudur: Şimdiki adım ne?"
+   "text": "Uzun bir hedefe bütünüyle bakmak bunaltıcıdır. Maraton koşucuları yarışı genellikle küçük parçalara böler: bir sonraki kilometre, bir sonraki su istasyonu. Büyük hedeflerde de en güçlü soru şudur: Şimdiki adım ne?",
+   "action": "Seni bunaltan büyük hedefinin sadece bu haftaki ilk adımını yaz. Gerisini şimdilik düşünme."
   },
   {
    "title": "Kintsugi",
-   "text": "Japon kintsugi sanatında kırılan seramik, çatlakları altınla doldurularak onarılır. Kırık gizlenmez; aksine eserin hikâyesinin bir parçası olur. Yaralarımız ve başarısızlıklarımız da bizi daha az değil, daha özgün kılar."
+   "text": "Japon kintsugi sanatında kırılan seramik, çatlakları altınla doldurularak onarılır. Kırık gizlenmez; aksine eserin hikâyesinin bir parçası olur. Yaralarımız ve başarısızlıklarımız da bizi daha az değil, daha özgün kılar.",
+   "action": "Seni bugünkü sen yapan bir zorluğu düşün ve o deneyimin sana kazandırdığı bir gücü tek cümleyle yaz."
   }
  ]
 }

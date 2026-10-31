@@ -2,26 +2,32 @@
  "id": "finans--bilesik-getirinin-gucu",
  "category": "finans",
  "title": "Bileşik Getirinin Gücü",
+ "version": 2,
  "cards": [
   {
-   "title": "Bileşik Getiri Nedir?",
-   "text": "Bileşik getiri, kazanılan kazancın da yeniden yatırım yoluyla getiri sağlaması sürecidir. Albert Einstein'ın 'dünyanın sekizinci harikası' olarak nitelendirdiği bu etki, paran zamanla kartopu etkisiyle büyümesini sağlar. Küçük meblağlar bile uzun vadede ciddi servetlere dönüşebilir."
+   "title": "Sayılarla bileşik getiri",
+   "text": "Her ay 1.000 TL'yi yıllık %10 reel getiriyle biriktirdiğini düşün. 10 yılda yatırdığın toplam 120.000 TL yaklaşık 205.000 TL'ye, 30 yılda yatırdığın 360.000 TL ise 2,2 milyon TL'yi aşar. Son on yılda gelen büyüme, ilk yirmi yılın toplamından fazladır.",
+   "action": "İnternette bir bileşik faiz hesaplayıcısı aç ve kendi aylık birikim tutarınla 10, 20 ve 30 yıl sonrasını hesapla."
   },
   {
-   "title": "Zamanın Önemi",
-   "text": "Bileşik getiride en kritik faktör zamandır. Yatırıma ne kadar erken başlarsan, paran o kadar uzun süre büyüme şansı yakalar. Çok büyük miktarlarla geç başlamaktansa, küçük miktarlarla erken başlamak uzun vadede her zaman daha avantajlı sonuçlar verir."
+   "title": "Erken başlamanın matematiği",
+   "text": "Ayşe 25 yaşında başlayıp 10 yıl boyunca birikim yapıyor ve sonra duruyor. Mehmet 35 yaşında başlayıp 30 yıl boyunca aynı tutarı yatırıyor. Yıllık %8 getiride Ayşe, üç kat az para yatırmasına rağmen 65 yaşında Mehmet'ten yaklaşık %30 daha fazla birikime ulaşır. Zaman, tutardan güçlüdür.",
+   "action": "Birikime başlamayı ertelediğin bir neden varsa bugün çok küçük bir tutarla (ör. 100 TL) otomatik birikim başlat; tutarı sonra artırırsın."
   },
   {
-   "title": "Kartopu Etkisi Nasıl Çalışır?",
-   "text": "İlk başta kazançlar küçük görünür ve insanı heyecanlandırmaz. Ancak yıllar geçtikçe eğri dikleşir ve getiri ana parayı bile geçebilir. Bu süreç sabır gerektirir çünkü asıl büyük sıçramalar yatırım döngüsünün ilerleyen ve olgunlaşan son yıllarında gerçekleşir."
+   "title": "Masrafların sessiz bileşiği",
+   "text": "Bileşik etki masraflarda da çalışır. Yıllık %2 yönetim ücreti ilk bakışta küçük görünür; ama %8 getirili bir birikimde 30 yıl sonunda elde edeceğin paranın yaklaşık %40'ını eritir. Yüzde 1'lik farklar uzun vadede çok büyük paralara dönüşür.",
+   "action": "Kullandığın fonların ya da hesapların yıllık yönetim ücretini ve masraflarını bul ve not et. Daha düşük maliyetli bir alternatif var mı bak."
   },
   {
-   "title": "Borçta Bileşik Getirinin Koyu Yüzü",
-   "text": "Bileşik etki sadece yatırımlar için değil, ödenmeyen borçlar ve kredi kartı bakiyeleri için de çalışır. Kredi kartı borçları bileşik faizle hızla büyüyebilir. Bu yüzden, yüksek faizli borçları kapatmak, en az yatırım yapmak kadar finansal sağlığın için hayati önem taşır."
+   "title": "Borçta ters bileşik",
+   "text": "Kredi kartı borcunda bileşik faiz senin aleyhine çalışır. Asgari ödeme yaptığında kalan borca faiz işler, sonraki ay o faize de faiz işler. Bu yüzden yüksek faizli borcu kapatmak, garantili ve yüksek getirili bir yatırım yapmaya eşdeğerdir.",
+   "action": "Tüm borçlarını faiz oranına göre sırala. Asgari ödemeleri yap, kalan her kuruşu en yüksek faizli borca yönlendir (çığ yöntemi)."
   },
   {
-   "title": "Uygulanabilir Tasarruf Önerisi",
-   "text": "Bugün bütçenden ayıracağın küçük bir miktar bile gelecekte büyük fark yaratabilir. Harcamalarını gözden geçirip artan parayı düzenli olarak yatırım araçlarına yönlendir. Unutma, istikrarlı ve düzenli küçük adımlar, düzensiz yapılan büyük hamlelerden her zaman daha etkilidir."
+   "title": "Sabır, en zor kısım",
+   "text": "Bileşik büyüme ilk yıllarda neredeyse görünmez olduğu için çoğu insan erkenden vazgeçer ya da yöntem değiştirir. Warren Buffett'ın servetinin çok büyük kısmı 65 yaşından sonra oluştu. En iyi strateji çoğu zaman sıkıcı olanıdır: düzenli birikim ve dokunmamak.",
+   "action": "Yatırım hesabının uygulamasını telefonunun ana ekranından kaldır ve bakmayı ayda bire indir."
   }
  ]
 }

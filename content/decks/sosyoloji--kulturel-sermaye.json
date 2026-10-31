@@ -2,26 +2,32 @@
  "id": "sosyoloji--kulturel-sermaye",
  "category": "sosyoloji",
  "title": "Kültürel Sermaye",
+ "version": 2,
  "cards": [
   {
-   "title": "Kültürel Sermaye Nedir?",
-   "text": "Fransız sosyolog Pierre Bourdieu tarafından ortaya atılan kültürel sermaye kavramı, bireyin sahip olduğu bilgi, beceri, eğitim ve estetik tercihleri kapsar. Sadece ekonomik varlıkların değil, bu kültürel birikimin de toplumsal sınıflar arası geçişte ve bireyin toplumdaki yerini belirlemede kritik bir rol oynadığını savunur."
+   "title": "Paradan fazlası",
+   "text": "Fransız sosyolog Pierre Bourdieu'ye göre insanların toplumdaki yerini yalnızca para belirlemez. Bilgi birikimi, konuşma tarzı, zevkler ve diplomalar da bir tür sermayedir. Bourdieu buna kültürel sermaye der ve bunun da para gibi biriktirilip çocuklara aktarılabildiğini savunur.",
+   "action": "Ailenden ya da çevrenden aldığın ve sana kapı açan bir alışkanlığı ya da bilgiyi düşün (kitap okuma, bir dil, bir hobi) ve yaz."
   },
   {
-   "title": "Üç Farklı Biçimi",
-   "text": "Bourdieu’ye göre kültürel sermaye üç biçimde kendini gösterir: Bedenselleşmiş hal (konuşma tarzı, duruş ve uzun sürede içselleştirilen beceriler), nesnelleşmiş hal (sanat eserleri, kitaplar gibi kültürel mallara sahip olma) ve kurumsallaşmış hal (diplomalar ve akademik unvanlar). Her biri bireyin sosyal konumunu etkiler."
+   "title": "Üç biçimi",
+   "text": "Bourdieu kültürel sermayeyi üç biçimde görür: Bedenselleşmiş (konuşma şekli, özgüven, tavırlar), nesneleşmiş (kitaplar, sanat eserleri, müzik aletleri) ve kurumsallaşmış (diplomalar, sertifikalar). Üçüncüsü en kolay görünendir ama ilk ikisi çoğu zaman daha belirleyicidir.",
+   "action": "Bu üç biçimden hangisinde en güçlü, hangisinde en zayıf olduğunu yaz. Zayıf olanı güçlendirecek tek bir adım seç."
   },
   {
-   "title": "Eğitim Sistemi ve Eşitsizlik",
-   "text": "Okullar, tarafsız bilgi aktarıcılar gibi görünse de aslında hâkim sınıfın kültürel sermayesini ödüllendirir. Ailesinden bu sermayeyle gelen çocuklar okulda daha rahat başarılı olurken, dezavantajlı çocuklar sistem içinde uyum sağlamakta zorlanır. Böylece eğitim, mevcut toplumsal eşitsizlikleri meşrulaştırıp yeniden üretir."
+   "title": "Okul neden herkese eşit değil?",
+   "text": "Bourdieu'ya göre okul tarafsız görünse de evde kitapla, müzeyle, \"okul diliyle\" büyüyen çocukları ödüllendirir. Aynı zekâdaki iki çocuktan biri sınıfa bu birikimle gelir, diğeri gelmez. Başarı farkının bir kısmı yetenekten değil, bu görünmez başlangıç avantajından doğar.",
+   "action": "Bir başkasının başarısını ya da başarısızlığını yargılamadan önce, onun hangi görünmez avantajlara sahip olup olmadığını bir kez düşün."
   },
   {
-   "title": "Günlük Hayatta Pratik Örnekler",
-   "text": "Klasik müzik konserine gitmek, belirli sanat akımlarını bilmek, doğru sofra adabına sahip olmak veya nitelikli edebiyat eserlerini takip etmek kültürel sermayenin görünür tezahürleridir. Bireyler bu alanlardaki beğenilerini sergileyerek belirli bir sosyal gruba ait olduklarını sembolik olarak ifade ederler."
+   "title": "Habitus",
+   "text": "Bourdieu, yetiştiğimiz çevrenin bize kazandırdığı ve çoğu zaman fark etmeden tekrarladığımız düşünme ve davranma kalıplarına habitus der. Restoranda nasıl sipariş verdiğimiz, mülakatta nasıl oturduğumuz bile bundan etkilenir. Habitus değişebilir ama önce fark edilmesi gerekir.",
+   "action": "Yeni girdiğin bir ortamda (iş, okul, şehir) seni zorlayan bir \"görünmez kural\" fark et ve o ortamda rahat olan birine nasıl davrandığını sor."
   },
   {
-   "title": "Kendi Sermayenizi Keşfedin",
-   "text": "Çevrenizdeki insanlarla iletişim kurarken veya kariyerinizi şekillendirirken sahip olduğunuz kültürel birikimin farkında olun. Farklı sanat dallarına ilgi duyarak, yeni diller öğrenerek ve okuma alışkanlığınızı derinleştirerek kendi kültürel sermayenizi zenginleştirebilir, sosyal dünyayı okuma becerinizi artırabilirsiniz."
+   "title": "Kendi sermayeni büyüt",
+   "text": "Kültürel sermaye doğuştan sabit değildir; bilinçli olarak biriktirilebilir. Yeni bir dil, müzeler, iyi kitaplar ve farklı çevrelerden insanlarla sohbet bu birikimi artırır. Amaç gösteriş değil, farklı ortamların dilini konuşabilmek ve daha fazla kapıyı açabilmektir.",
+   "action": "Bu ay hiç bilmediğin bir alandan bir şey dene: bir müze, bir belgesel, farklı bir müzik türü ya da başka bir meslekten biriyle kahve."
   }
  ]
 }

@@ -2,26 +2,32 @@
  "id": "sosyoloji--grup-davranisi",
  "category": "sosyoloji",
  "title": "Grup Davranışı",
+ "version": 2,
  "cards": [
   {
    "title": "Seyirci etkisi",
-   "text": "Acil bir durumda etrafta ne kadar çok insan varsa, herhangi birinin yardım etme olasılığı o kadar azalabilir; sorumluluk kalabalığa dağılır. Yardım isterken birini doğrudan işaret etmek (\"Kırmızı montlu siz, ambulans çağırır mısınız?\") bu etkiyi kırar."
+   "text": "Acil bir durumda etrafta ne kadar çok insan varsa, herhangi birinin yardım etme olasılığı o kadar azalabilir; sorumluluk kalabalığa dağılır. Yardım isterken birini doğrudan işaret etmek (\"Kırmızı montlu siz, ambulans çağırır mısınız?\") bu etkiyi kırar.",
+   "action": "Kalabalıkta biri yardıma ihtiyaç duyduğunda ilk hareket eden sen ol. Yardım isterken de her zaman tek bir kişiyi işaret et."
   },
   {
    "title": "Uyma deneyi",
-   "text": "Solomon Asch'ın 1950'lerdeki deneylerinde katılımcıların önemli bir kısmı, açıkça yanlış olduğunu gördükleri bir cevaba, grup öyle dediği için en az bir kez uydu. Grup baskısı, kendi gözümüze güvenmeyi bile zorlaştırabilir."
+   "text": "Solomon Asch'ın 1950'lerdeki deneylerinde katılımcıların önemli bir kısmı, açıkça yanlış olduğunu gördükleri bir cevaba, grup öyle dediği için en az bir kez uydu. Grup baskısı, kendi gözümüze güvenmeyi bile zorlaştırabilir.",
+   "action": "Bir sonraki toplantıda herkes hemfikirken içinden itiraz geliyorsa onu bir soru olarak sor: \"Bunu şu açıdan da düşündük mü?\""
   },
   {
    "title": "Grup düşüncesi",
-   "text": "Uyumu korumaya çalışan gruplar, alternatifleri yeterince tartışmadan hatalı kararlara varabilir. Irving Janis buna grup düşüncesi adını verdi. Panzehiri: bilinçli olarak bir \"şeytanın avukatı\" atamak ve farklı görüşleri teşvik etmek."
+   "text": "Uyumu korumaya çalışan gruplar, alternatifleri yeterince tartışmadan hatalı kararlara varabilir. Irving Janis buna grup düşüncesi adını verdi. Panzehiri: bilinçli olarak bir \"şeytanın avukatı\" atamak ve farklı görüşleri teşvik etmek.",
+   "action": "Ekibinle önemli bir karar alırken birini resmi olarak karşı görüş sunmakla görevlendir ve bu rolü her toplantıda değiştirin."
   },
   {
    "title": "Sosyal kanıt",
-   "text": "Ne yapacağımızdan emin olmadığımızda başkalarına bakarız. Kalabalık restoran daha iyi görünür, çok yorum almış ürün daha güvenilir gelir. Bu kestirme çoğu zaman işe yarar ama sürü davranışına da yol açabilir."
+   "text": "Ne yapacağımızdan emin olmadığımızda başkalarına bakarız. Kalabalık restoran daha iyi görünür, çok yorum almış ürün daha güvenilir gelir. Bu kestirme çoğu zaman işe yarar ama sürü davranışına da yol açabilir.",
+   "action": "Bir dahaki alışverişte \"herkes alıyor\" hissine kapıldığında dur ve sor: Bunu kimse almasaydı da ister miydim?"
   },
   {
    "title": "Biz ve onlar",
-   "text": "Henri Tajfel'in deneyleri, insanların en anlamsız ölçütlerle (örneğin hangi ressamı beğendiklerine göre) gruplara ayrıldıklarında bile kendi gruplarını kayırdığını gösterdi. Grup kimliği çok hızlı oluşur ve önyargının tohumlarını taşıyabilir."
+   "text": "Henri Tajfel'in deneyleri, insanların en anlamsız ölçütlerle (örneğin hangi ressamı beğendiklerine göre) gruplara ayrıldıklarında bile kendi gruplarını kayırdığını gösterdi. Grup kimliği çok hızlı oluşur ve önyargının tohumlarını taşıyabilir.",
+   "action": "Bu hafta \"onlar\" diye düşündüğün bir gruptan biriyle gerçekten sohbet et ve ortak noktalarınızı not et."
   }
  ]
 }

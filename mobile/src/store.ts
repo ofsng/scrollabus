@@ -4,6 +4,8 @@ import type { CardDraft } from "./split";
 
 export interface Card extends CardDraft {
   id: string;
+  // Concrete "try this today" step on reading cards
+  action?: string;
 }
 
 export interface Deck {
@@ -14,6 +16,10 @@ export interface Deck {
   categoryId?: string;
   // Reading decks that came with the app or from the online library
   fromLibrary?: boolean;
+  // Library content version; a newer one replaces the cards in place
+  version?: number;
+  // Set when the user renames a deck, so library updates keep their title
+  renamed?: boolean;
 }
 
 export interface Category {
@@ -21,6 +27,8 @@ export interface Category {
   name: string;
   emoji?: string;
   custom?: boolean;
+  // Hidden categories stay in the library but leave the feed
+  hidden?: boolean;
 }
 
 export const newId = () =>
@@ -34,6 +42,11 @@ export const saveDecks = (decks: Deck[]) => set("decks", decks);
 // Categories the user created; built-in ones come from the content library
 export const loadCustomCategories = async () => (await get<Category[]>("categories")) ?? [];
 export const saveCustomCategories = (categories: Category[]) => set("categories", categories);
+
+// Per-category overrides: renamed built-ins, custom emoji, hidden from the feed
+export type CategoryPrefs = Record<string, { name?: string; emoji?: string; hidden?: boolean }>;
+export const loadCategoryPrefs = async () => (await get<CategoryPrefs>("categoryPrefs")) ?? {};
+export const saveCategoryPrefs = (prefs: CategoryPrefs) => set("categoryPrefs", prefs);
 
 // Library deck ids already imported (or deleted), so they are never added twice
 export const loadKnownLibrary = async () => new Set((await get<string[]>("knownLibrary")) ?? []);

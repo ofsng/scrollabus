@@ -2,26 +2,32 @@
  "id": "teknoloji--gelecegi-sekillendiren-fikirler",
  "category": "teknoloji",
  "title": "Geleceği Şekillendiren Fikirler",
+ "version": 2,
  "cards": [
   {
    "title": "Moore yasası",
-   "text": "Gordon Moore 1965'te bir çipe sığan transistör sayısının düzenli aralıklarla ikiye katlanacağını öngördü ve 1975'te bu süreyi yaklaşık iki yıl olarak güncelledi. Bu üstel büyüme, cebimizdeki telefonların eski süper bilgisayarlardan güçlü olmasının nedenidir."
+   "text": "Gordon Moore 1965'te bir çipe sığan transistör sayısının düzenli aralıklarla ikiye katlanacağını öngördü ve 1975'te bu süreyi yaklaşık iki yıl olarak güncelledi. Bu üstel büyüme, cebimizdeki telefonların eski süper bilgisayarlardan güçlü olmasının nedenidir.",
+   "action": "Bugün yaptığın bir işin 10 yıl sonra teknolojiyle nasıl değişebileceğine dair 3 madde yaz."
   },
   {
    "title": "Üstel düşünmek zordur",
-   "text": "Beynimiz doğrusal düşünmeye alışkındır. Bir gölde nilüferler her gün ikiye katlanıyor ve gölü 30 günde dolduruyorsa, 29. günün sonunda göl yalnızca yarı doludur. Teknolojik değişim de uzun süre yavaş görünür, sonra birden hızlanır."
+   "text": "Beynimiz doğrusal düşünmeye alışkındır. Bir gölde nilüferler her gün ikiye katlanıyor ve gölü 30 günde dolduruyorsa, 29. günün sonunda göl yalnızca yarı doludur. Teknolojik değişim de uzun süre yavaş görünür, sonra birden hızlanır.",
+   "action": "Bir alışkanlığın etkisini 10 yıl için hesapla: Günde 10 sayfa okumak 10 yılda yaklaşık 36.500 sayfa eder."
   },
   {
    "title": "Amara yasası",
-   "text": "Roy Amara'nın gözlemi: Bir teknolojinin kısa vadedeki etkisini abartır, uzun vadedeki etkisini ise küçümseriz. İnternet 1990'ların sonunda bir balon yarattı ama sonraki yirmi yılda hayatı kökten değiştirdi."
+   "text": "Roy Amara'nın gözlemi: Bir teknolojinin kısa vadedeki etkisini abartır, uzun vadedeki etkisini ise küçümseriz. İnternet 1990'ların sonunda bir balon yarattı ama sonraki yirmi yılda hayatı kökten değiştirdi.",
+   "action": "Bugün abartıldığını düşündüğün bir teknolojiyi seç ve 10 yıl sonra hayatını nasıl değiştirebileceğine dair 3 senaryo yaz."
   },
   {
    "title": "Güneşin yükselişi",
-   "text": "Güneş panellerinin maliyeti son on yıllarda çarpıcı biçimde düştü ve güneş enerjisi birçok bölgede en ucuz yeni elektrik kaynakları arasına girdi. Bu dönüşümün kilit parçası ise enerjiyi depolayan bataryalar."
+   "text": "Güneş panellerinin maliyeti son on yıllarda çarpıcı biçimde düştü ve güneş enerjisi birçok bölgede en ucuz yeni elektrik kaynakları arasına girdi. Bu dönüşümün kilit parçası ise enerjiyi depolayan bataryalar.",
+   "action": "Elektrik faturana bak, en çok tüketen 3 cihazı bul ve birinde bu ay tasarruf etmeyi dene."
   },
   {
    "title": "Dijital minimalizm",
-   "text": "Teknoloji bir araçtır, amaç değil. Cal Newport'un önerisi: Uygulamaları değerlerine hizmet edip etmediklerine göre seç, geri kalanını bırak. 30 günlük bir dijital arınma, gerçekten neye ihtiyacın olduğunu gösterir."
+   "text": "Teknoloji bir araçtır, amaç değil. Cal Newport'un önerisi: Uygulamaları değerlerine hizmet edip etmediklerine göre seç, geri kalanını bırak. 30 günlük bir dijital arınma, gerçekten neye ihtiyacın olduğunu gösterir.",
+   "action": "Değerlerine hizmet etmeyen 3 uygulamayı 30 günlüğüne telefonundan sil ve eksikliklerini hissedip hissetmediğine bak."
   }
  ]
 }

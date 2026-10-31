@@ -2,26 +2,32 @@
  "id": "kisisel-gelisim--gelisim-zihniyeti",
  "category": "kisisel-gelisim",
  "title": "Gelişim Zihniyeti",
+ "version": 2,
  "cards": [
   {
    "title": "Sabit ve gelişen zihniyet",
-   "text": "Psikolog Carol Dweck iki zihniyet tanımlar. Sabit zihniyette yetenek doğuştan gelir ve değişmez. Gelişen zihniyette ise çaba ve doğru stratejiyle geliştirilebilir. Hangi zihniyette olduğun, zorluklar karşısında nasıl davrandığını belirler."
+   "text": "Psikolog Carol Dweck iki zihniyet tanımlar. Sabit zihniyette yetenek doğuştan gelir ve değişmez. Gelişen zihniyette ise çaba ve doğru stratejiyle geliştirilebilir. Hangi zihniyette olduğun, zorluklar karşısında nasıl davrandığını belirler.",
+   "action": "\"Bende bu yetenek yok\" dediğin bir konuyu seç ve onu geliştirmek için deneyebileceğin yeni bir yöntem yaz."
   },
   {
    "title": "\"Henüz\" kelimesinin gücü",
-   "text": "\"Bunu yapamıyorum\" yerine \"Bunu henüz yapamıyorum\" demek küçük ama etkili bir değişikliktir. Başarısızlığı kalıcı bir hüküm olmaktan çıkarır ve yolculuğun bir durağına dönüştürür."
+   "text": "\"Bunu yapamıyorum\" yerine \"Bunu henüz yapamıyorum\" demek küçük ama etkili bir değişikliktir. Başarısızlığı kalıcı bir hüküm olmaktan çıkarır ve yolculuğun bir durağına dönüştürür.",
+   "action": "Bugün kendini \"yapamıyorum\" derken yakaladığında cümleye \"henüz\" ekle ve hemen ardından bir sonraki adımı söyle."
   },
   {
    "title": "Kasıtlı pratik",
-   "text": "Anders Ericsson'un araştırmaları, ustalığın yalnızca tekrardan değil, kasıtlı pratikten geldiğini gösterir: konfor alanının biraz dışında çalışmak, net hedefler koymak ve hızlı geri bildirim almak. Aynı hatayı bin kez tekrarlamak pratik değildir."
+   "text": "Anders Ericsson'un araştırmaları, ustalığın yalnızca tekrardan değil, kasıtlı pratikten geldiğini gösterir: konfor alanının biraz dışında çalışmak, net hedefler koymak ve hızlı geri bildirim almak. Aynı hatayı bin kez tekrarlamak pratik değildir.",
+   "action": "Çalıştığın bir becerinin en zayıf parçasını seç (ör. İngilizcede dinleme) ve 20 dakikayı yalnızca ona ayır."
   },
   {
    "title": "Geri bildirim bir hediyedir",
-   "text": "Eleştiri canımızı yakar çünkü beyin onu bir tehdit gibi algılar. Kendine \"Bu bilgi beni nasıl daha iyi yapar?\" diye sor. Savunmaya geçmeden önce dinle, not al ve kararını sonra ver."
+   "text": "Eleştiri canımızı yakar çünkü beyin onu bir tehdit gibi algılar. Kendine \"Bu bilgi beni nasıl daha iyi yapar?\" diye sor. Savunmaya geçmeden önce dinle, not al ve kararını sonra ver.",
+   "action": "Güvendiğin birine sor: \"Yapmam gerekip de yapmadığım bir şey ne?\" Cevaba itiraz etme, sadece teşekkür et ve not al."
   },
   {
    "title": "Esneme bölgesi",
-   "text": "Öğrenme çoğu zaman \"esneme bölgesinde\" gerçekleşir: kolay gelecek kadar tanıdık değil, panik yaratacak kadar zor değil. Seni her seferinde biraz zorlayan küçük hedefler seç."
+   "text": "Öğrenme çoğu zaman \"esneme bölgesinde\" gerçekleşir: kolay gelecek kadar tanıdık değil, panik yaratacak kadar zor değil. Seni her seferinde biraz zorlayan küçük hedefler seç.",
+   "action": "Bu hafta seni biraz korkutan ama paniğe sokmayan bir şey seç (toplantıda ilk söz almak gibi) ve takvimine yaz."
   }
  ]
 }
