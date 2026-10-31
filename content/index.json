@@ -256,6 +256,24 @@
    "category": "bilim",
    "title": "İnsan Bedeni ve Beyin",
    "date": "2026-11-01"
+  },
+  {
+   "id": "kisisel-gelisim--kucuk-adimlarla-buyuk-degisim",
+   "category": "kisisel-gelisim",
+   "title": "Küçük Adımlarla Büyük Değişim",
+   "date": "2026-10-31"
+  },
+  {
+   "id": "sosyoloji--kulturel-sermaye",
+   "category": "sosyoloji",
+   "title": "Kültürel Sermaye",
+   "date": "2026-10-31"
+  },
+  {
+   "id": "finans--bilesik-getirinin-gucu",
+   "category": "finans",
+   "title": "Bileşik Getirinin Gücü",
+   "date": "2026-10-31"
   }
  ]
 }
