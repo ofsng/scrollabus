@@ -108,6 +108,7 @@ function FeedContent() {
   const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [generationSlow, setGenerationSlow] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [activeCommentPostId, setActiveCommentPostId] = useState<string | null>(null);
   const [activeCommentPersonaSlug, setActiveCommentPersonaSlug] = useState<string | null>(null);
@@ -234,6 +235,9 @@ function FeedContent() {
 
   useEffect(() => {
     let polling: NodeJS.Timeout | null = null;
+    // Generation normally finishes within a minute; past that it has most likely failed
+    const slowTimer = setTimeout(() => setGenerationSlow(true), 90_000);
+    setGenerationSlow(false);
 
     async function load() {
       setIsLoading(true);
@@ -270,6 +274,7 @@ function FeedContent() {
 
     load();
     return () => {
+      clearTimeout(slowTimer);
       if (polling) clearInterval(polling);
       if (flushTimer.current) clearTimeout(flushTimer.current);
       flushImpressions();
@@ -319,6 +324,12 @@ function FeedContent() {
           <p className="font-sans text-charcoal/60 text-sm max-w-xs">
             Your personas are working on it. Check back in a moment…
           </p>
+          {generationSlow && (
+            <p className="font-sans text-charcoal/80 text-sm max-w-xs mt-4">
+              This is taking longer than usual — generation may have failed.{" "}
+              <a href="/api/health" className="underline font-semibold">Run a setup check</a>
+            </p>
+          )}
           <div className="flex gap-3 mt-6">
             {["lecture-bestie", "exam-gremlin", "problem-grinder"].map((slug, i) => (
               <div key={slug} className="animate-bounce" style={{ animationDelay: `${i * 150}ms` }}>

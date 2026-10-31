@@ -137,5 +137,7 @@ export const QUIZZES_PER_MATERIAL = 3;
 export const QUIZ_INSERT_INTERVAL = { min: 4, max: 6 };
 
 // Gemini model used for every in-app AI call; override with GEMINI_MODEL
-// (e.g. "gemini-2.5-flash-lite" for higher free-tier quotas)
-export const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+// (e.g. "gemini-flash-lite-latest" for higher free-tier quotas). The "-latest"
+// aliases track Google's current Flash models, so old model IDs being retired
+// doesn't break the app.
+export const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";

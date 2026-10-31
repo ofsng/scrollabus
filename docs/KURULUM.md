@@ -101,9 +101,13 @@ Giriş, e-postana gelen bir bağlantıyla (magic link) yapılır. Bağlantının
 
 ## Sorun giderme
 
-- **Feed boş kalıyor:** Vercel → projen → **Logs**'ta `[posts]` satırlarına bak.
-  `429` / `RESOURCE_EXHAUSTED` görürsen Gemini ücretsiz sınırı dolmuştur. Birkaç dakika bekle
-  veya Vercel'e `GEMINI_MODEL = gemini-2.5-flash-lite` ekleyip yeniden deploy et (daha yüksek ücretsiz sınır).
+- **Önce kontrol sayfasını aç:** giriş yapmışken `https://SENIN-ADRESIN.vercel.app/api/health`.
+  Her satırda `"ok": true` olmalı; `false` olan satırın `detail` kısmı sorunu söyler.
+- **Feed boş kalıyor / yüklemede takılıyor:** kontrol sayfasında `gemini` satırına bak.
+  `429` / `RESOURCE_EXHAUSTED` → Gemini ücretsiz sınırı doldu; birkaç dakika bekle veya Vercel'e
+  `GEMINI_MODEL = gemini-flash-lite-latest` ekleyip yeniden deploy et (daha yüksek ücretsiz sınır).
+  `404` / `not found` → model adı geçersiz; `GEMINI_MODEL` değişkenini sil veya düzelt.
+  Düzelttikten sonra materyali **yeniden yükle** (eski yükleme kendiliğinden tekrar denenmez).
 - **Giriş bağlantısı çalışmıyor:** Adım 4'teki adresleri kontrol et. Supabase'in ücretsiz e-posta
   servisi saatte birkaç e-postayla sınırlıdır; art arda çok deneme yapma.
 - **Bir değişkeni sonradan değiştirdim:** Vercel → **Deployments** → en üstteki → **Redeploy**.
