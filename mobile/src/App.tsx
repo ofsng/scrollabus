@@ -3,18 +3,23 @@ import { Capacitor } from "@capacitor/core";
 import { App as NativeApp } from "@capacitor/app";
 import { splitIntoCards } from "./split";
 import { bundledCategories, bundledLibraryDecks, fetchLibraryUpdates, mergeLibrary } from "./library";
+import { generationErrorMessage, writeDeckOnDevice } from "./generate";
 import {
   loadCategoryPrefs,
   loadCustomCategories,
   loadDecks,
+  loadGeminiKey,
   loadKnownLibrary,
+  loadRead,
   loadSaved,
   newId,
   readPref,
   saveCategoryPrefs,
   saveCustomCategories,
   saveDecks,
+  saveGeminiKey,
   saveKnownLibrary,
+  saveRead,
   saveSaved,
   writePref,
   type Card,
@@ -23,7 +28,12 @@ import {
   type Deck,
 } from "./store";
 
-type Tab = "feed" | "add" | "library" | "saved";
+type Tab = "feed" | "add" | "library" | "history" | "saved";
+
+// A card counts as read once it has stayed on screen this long
+const READ_AFTER_MS = 2500;
+// On-device generation for the user's own categories: at most this many per launch
+const AUTO_GENERATE_PER_LAUNCH = 3;
 type FeedSource = { kind: "mix" } | { kind: "category"; id: string } | { kind: "deck"; id: string };
 
 interface FeedItem {
@@ -102,6 +112,8 @@ const EYE = "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-
 const EYE_OFF = "M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7c1.7 0 3.2-.4 4.5-1.1M9.9 9.9a3 3 0 0 0 4.2 4.2";
 const TAGS = "M3 12V4h8l10 10-8 8zM7.5 7.5h.01";
 const CHECK = "M5 12l5 5L20 7";
+const CLOCK = "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2";
+const SPARK = "M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z";
 
 // ─── Bottom sheet ────────────────────────────────────────────────────────────
 
@@ -160,24 +172,37 @@ function Feed({
   positionKey,
   saved,
   onToggleSave,
+  onRead,
   header,
   empty,
 }: {
   items: FeedItem[];
-  positionKey: string;
+  // Remembers the scroll position; feeds that drop read cards start at the top instead
+  positionKey?: string;
   saved: Set<string>;
   onToggleSave: (cardId: string) => void;
+  onRead?: (cardId: string) => void;
   header?: React.ReactNode;
   empty: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [burst, setBurst] = useState<string | null>(null);
+  const onReadRef = useRef(onRead);
+  onReadRef.current = onRead;
+
+  // A card counts as read once it has stayed on screen for a moment
+  useEffect(() => {
+    const id = items[index]?.card.id;
+    if (!id || !onReadRef.current) return;
+    const timer = setTimeout(() => onReadRef.current?.(id), READ_AFTER_MS);
+    return () => clearTimeout(timer);
+  }, [index, items]);
 
   // Restore where you left off in this feed
   useEffect(() => {
     const el = ref.current;
-    if (!el || items.length === 0) return;
+    if (!el || items.length === 0 || !positionKey) return;
     const saved = Math.min(readPref<number>(positionKey, 0), items.length - 1);
     (el.children[saved] as HTMLElement | undefined)?.scrollIntoView({ block: "start" });
     setIndex(saved);
@@ -192,7 +217,7 @@ function Feed({
           if (entry.isIntersecting) {
             const i = Number((entry.target as HTMLElement).dataset.index);
             setIndex(i);
-            writePref(positionKey, i);
+            if (positionKey) writePref(positionKey, i);
           }
         }
       },
@@ -409,12 +434,20 @@ function DeckSheet({
 function CategoryRow({
   category,
   count,
+  generating,
+  generateBusy,
+  onGenerate,
   onUpdate,
   onToggleHidden,
   onDelete,
 }: {
   category: Category;
   count: number;
+  generating: boolean;
+  // True while any category is being written, so only one runs at a time
+  generateBusy: boolean;
+  // Undefined when no Gemini key is set
+  onGenerate?: () => void;
   onUpdate: (name: string, emoji: string) => void;
   onToggleHidden: () => void;
   onDelete: () => void;
@@ -452,9 +485,14 @@ function CategoryRow({
       <span className="cat-name">
         {category.name}
         <small>
-          {count} not{category.hidden ? " · akışta gizli" : ""}
+          {generating ? "Yeni okuma yazılıyor… (yarım dakika sürebilir)" : `${count} not${category.hidden ? " · akışta gizli" : ""}`}
         </small>
       </span>
+      {onGenerate && (
+        <button className={`icon-btn ${generating ? "spin" : ""}`} aria-label="Bu kategori için yeni okuma üret" disabled={generateBusy} onClick={onGenerate}>
+          <Icon d={SPARK} />
+        </button>
+      )}
       <button className="icon-btn" aria-label={category.hidden ? "Akışta göster" : "Akışta gizle"} onClick={onToggleHidden}>
         <Icon d={category.hidden ? EYE_OFF : EYE} />
       </button>
@@ -465,9 +503,97 @@ function CategoryRow({
   );
 }
 
+function GeneratorSettings({
+  apiKey,
+  autoGenerate,
+  onSaveKey,
+  onToggleAuto,
+}: {
+  apiKey: string;
+  autoGenerate: boolean;
+  onSaveKey: (key: string) => void;
+  onToggleAuto: () => void;
+}) {
+  const [editing, setEditing] = useState(!apiKey);
+  const [draft, setDraft] = useState("");
+
+  if (!editing) {
+    return (
+      <div className="gen-box">
+        <p className="gen-ok">
+          <Icon d={CHECK} /> Gemini anahtarı kayıtlı
+        </p>
+        <label className="toggle">
+          <input type="checkbox" checked={autoGenerate} onChange={onToggleAuto} />
+          <span>Kendi kategorilerime her gün otomatik yeni okuma yaz</span>
+        </label>
+        <p className="hint small">✨ ile istediğin kategoriye hemen yeni okuma yazdırabilirsin.</p>
+        <button className="link-btn" onClick={() => setEditing(true)}>
+          Anahtarı değiştir veya kaldır
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="gen-box">
+      <p className="hint small">
+        Hazır kategoriler her gün GitHub'dan yeni okuma alır. Kendi eklediğin kategorilere de içerik yazılması için ücretsiz Gemini
+        anahtarını gir; anahtar yalnızca bu telefonda saklanır.
+      </p>
+      <div className="inline-form">
+        <input
+          className="field"
+          type="password"
+          autoComplete="off"
+          placeholder={apiKey ? "Yeni anahtar" : "Gemini API anahtarı"}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+        />
+        <button
+          className="btn primary small"
+          disabled={!draft.trim()}
+          onClick={() => {
+            onSaveKey(draft.trim());
+            setDraft("");
+            setEditing(false);
+          }}
+        >
+          Kaydet
+        </button>
+      </div>
+      <a className="link-btn" href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">
+        Anahtarı nereden alırım? (aistudio.google.com/apikey)
+      </a>
+      {apiKey && (
+        <div className="confirm">
+          <button
+            className="btn outline-danger"
+            onClick={() => {
+              onSaveKey("");
+              setEditing(true);
+            }}
+          >
+            Anahtarı kaldır
+          </button>
+          <button className="btn ghost" onClick={() => setEditing(false)}>
+            Vazgeç
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CategoryManager({
   categories,
   counts,
+  apiKey,
+  autoGenerate,
+  generatingId,
+  onSaveKey,
+  onToggleAuto,
+  onGenerate,
   onAdd,
   onUpdate,
   onToggleHidden,
@@ -476,6 +602,12 @@ function CategoryManager({
 }: {
   categories: Category[];
   counts: Map<string, number>;
+  apiKey: string;
+  autoGenerate: boolean;
+  generatingId: string | null;
+  onSaveKey: (key: string) => void;
+  onToggleAuto: () => void;
+  onGenerate: (id: string) => void;
   onAdd: (name: string, emoji: string) => void;
   onUpdate: (id: string, name: string, emoji: string) => void;
   onToggleHidden: (id: string) => void;
@@ -487,6 +619,9 @@ function CategoryManager({
 
   return (
     <Sheet title="Kategoriler" onClose={onClose}>
+      <p className="sheet-label">İçerik üretimi</p>
+      <GeneratorSettings apiKey={apiKey} autoGenerate={autoGenerate} onSaveKey={onSaveKey} onToggleAuto={onToggleAuto} />
+
       <p className="sheet-label">Yeni kategori</p>
       <div className="inline-form">
         <input className="field emoji" value={emoji} maxLength={4} placeholder="🙂" onChange={(e) => setEmoji(e.target.value)} />
@@ -512,6 +647,9 @@ function CategoryManager({
             key={c.id}
             category={c}
             count={counts.get(c.id) ?? 0}
+            generating={generatingId === c.id}
+            generateBusy={!!generatingId}
+            onGenerate={apiKey ? () => onGenerate(c.id) : undefined}
             onUpdate={(n, e) => onUpdate(c.id, n, e)}
             onToggleHidden={() => onToggleHidden(c.id)}
             onDelete={() => onDelete(c.id)}
@@ -522,11 +660,134 @@ function CategoryManager({
   );
 }
 
+// ─── History ─────────────────────────────────────────────────────────────────
+
+function dayLabel(ms: number) {
+  const day = new Date(ms);
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+  if (day.toDateString() === today.toDateString()) return "Bugün";
+  if (day.toDateString() === yesterday.toDateString()) return "Dün";
+  return day.toLocaleDateString("tr-TR", { day: "numeric", month: "long", weekday: "long" });
+}
+
+const HISTORY_PAGE = 100;
+
+function History({
+  entries,
+  onOpen,
+  onClear,
+}: {
+  entries: { item: FeedItem; readAt: number }[];
+  onOpen: (item: FeedItem) => void;
+  onClear: () => void;
+}) {
+  const [limit, setLimit] = useState(HISTORY_PAGE);
+  const shown = entries.slice(0, limit);
+  const groups: { label: string; items: typeof shown }[] = [];
+  for (const entry of shown) {
+    const label = dayLabel(entry.readAt);
+    if (groups[groups.length - 1]?.label !== label) groups.push({ label, items: [] });
+    groups[groups.length - 1].items.push(entry);
+  }
+
+  return (
+    <div className="screen page">
+      <div className="page-head">
+        <div>
+          <h1>Geçmiş</h1>
+          <p className="hint small">{entries.length ? `${entries.length} kart okudun` : ""}</p>
+        </div>
+      </div>
+
+      {entries.length === 0 && (
+        <p className="hint">
+          Akışta okuduğun kartlar burada birikir ve akışta bir daha karşına çıkmaz. Bir kart birkaç saniye ekranda kalınca okundu
+          sayılır.
+        </p>
+      )}
+
+      {groups.map((group) => (
+        <section key={group.label} className="history-group">
+          <p className="sheet-label">{group.label}</p>
+          <ul className="list">
+            {group.items.map(({ item, readAt }) => (
+              <li key={item.card.id} className="row" style={{ borderLeftColor: `hsl(${hueFor(item.deck.categoryId ?? item.deck.id)} 60% 55%)` }}>
+                <button className="row-main" onClick={() => onOpen(item)}>
+                  <span className="row-title">{item.card.title || item.card.text.slice(0, 60)}</span>
+                  <span className="row-meta">
+                    {item.deck.title} · {new Date(readAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      {entries.length > limit && (
+        <button className="btn ghost" onClick={() => setLimit(limit + HISTORY_PAGE)}>
+          Daha fazla göster
+        </button>
+      )}
+      {entries.length > 0 && (
+        <div className="history-clear">
+          <ConfirmDelete label="Tümünü okunmadı yap" onConfirm={onClear} />
+          <p className="hint small">Kartlar akışa geri döner; notların silinmez.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CardSheet({
+  item,
+  isSaved,
+  onToggleSave,
+  onUnread,
+  onOpenDeck,
+  onClose,
+}: {
+  item: FeedItem;
+  isSaved: boolean;
+  onToggleSave: () => void;
+  onUnread: () => void;
+  onOpenDeck: () => void;
+  onClose: () => void;
+}) {
+  const { card, deck } = item;
+  return (
+    <Sheet title={deck.title} onClose={onClose}>
+      {card.title && <h3 className="sheet-card-title">{card.title}</h3>}
+      <p className="sheet-card-text">{card.text}</p>
+      {card.action && (
+        <div className="card-action">
+          <span className="card-action-label">Bugün dene</span>
+          {card.action}
+        </div>
+      )}
+      <div className="sheet-actions">
+        <button className={`btn ghost ${isSaved ? "saved" : ""}`} onClick={onToggleSave}>
+          <Icon d={HEART} filled={isSaved} /> {isSaved ? "Kaydedildi" : "Kaydet"}
+        </button>
+        <button className="btn ghost" onClick={onUnread}>
+          Okunmadı yap
+        </button>
+      </div>
+      <button className="btn ghost" onClick={onOpenDeck}>
+        Notun tamamını aç
+      </button>
+    </Sheet>
+  );
+}
+
 // ─── Library ─────────────────────────────────────────────────────────────────
 
 function Library({
   decks,
   categories,
+  read,
   syncStatus,
   onSync,
   onOpen,
@@ -535,6 +796,7 @@ function Library({
 }: {
   decks: Deck[];
   categories: Category[];
+  read: Map<string, number>;
   syncStatus: string;
   onSync: () => void;
   onOpen: (id: string) => void;
@@ -597,12 +859,16 @@ function Library({
       <ul className="list">
         {visible.map((deck) => {
           const cat = deck.categoryId ? byId.get(deck.categoryId) : undefined;
+          const readCount = deck.cards.filter((c) => read.has(c.id)).length;
+          const progress =
+            readCount === 0 ? `${deck.cards.length} kart` : readCount === deck.cards.length ? "✓ Okundu" : `${readCount}/${deck.cards.length} okundu`;
           return (
             <li key={deck.id} className="row" style={{ borderLeftColor: `hsl(${hueFor(deck.categoryId ?? deck.id)} 60% 55%)` }}>
               <button className="row-main" onClick={() => onOpen(deck.id)}>
                 <span className="row-title">{deck.title}</span>
                 <span className="row-meta">
-                  {cat ? categoryLabel(cat) : "Kategorisiz"} · {deck.cards.length} kart
+                  {deck.generated ? "✨ " : ""}
+                  {cat ? categoryLabel(cat) : "Kategorisiz"} · {progress}
                   {deck.fromLibrary ? "" : ` · ${formatDate(deck.createdAt)}`}
                 </span>
               </button>
@@ -623,6 +889,7 @@ export function App() {
   const [tab, setTab] = useState<Tab>("feed");
   const [decks, setDecks] = useState<Deck[] | null>(null);
   const [saved, setSaved] = useState<Set<string>>(new Set());
+  const [read, setRead] = useState<Map<string, number>>(new Map());
   const [customCategories, setCustomCategories] = useState<Category[]>([]);
   const [categoryPrefs, setCategoryPrefs] = useState<CategoryPrefs>({});
   const [libraryCategories, setLibraryCategories] = useState<Category[]>(() =>
@@ -633,17 +900,42 @@ export function App() {
   const [syncStatus, setSyncStatus] = useState("");
   const [deckOptions, setDeckOptions] = useState<string | null>(null);
   const [managingCategories, setManagingCategories] = useState(false);
+  const [historyItem, setHistoryItem] = useState<FeedItem | null>(null);
+  const [apiKey, setApiKey] = useState("");
+  const [autoGenerate, setAutoGenerate] = useState(() => readPref<boolean>("autoGenerate", true));
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ text: string; deckId?: string } | null>(null);
+  // Bumped to rebuild the feed on purpose (e.g. after writing new content from its empty state)
+  const [feedNonce, setFeedNonce] = useState(0);
 
-  // Latest values for async sync callbacks
+  // Latest values for async callbacks
   const decksRef = useRef<Deck[]>([]);
   decksRef.current = decks ?? [];
   const knownRef = useRef<Set<string>>(new Set());
+  const readRef = useRef(read);
+  readRef.current = read;
+  const generatingRef = useRef(false);
 
   function updateDecks(next: Deck[]) {
     decksRef.current = next;
     setDecks(next);
     void saveDecks(next);
   }
+
+  function updateRead(next: Map<string, number>) {
+    readRef.current = next;
+    setRead(next);
+    void saveRead(next);
+  }
+
+  function showToast(text: string, deckId?: string) {
+    setToast({ text, deckId });
+  }
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), toast.deckId ? 6000 : 3500);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   async function syncLibrary() {
     setSyncStatus("Kontrol ediliyor…");
@@ -661,34 +953,47 @@ export function App() {
         updateDecks(merged);
         void saveKnownLibrary(known);
       }
-      setSyncStatus(added ? `${added} yeni okuma eklendi` : updated ? `${updated} okuma güncellendi` : "İçerikler güncel");
+      const status = added ? `${added} yeni okuma eklendi` : updated ? `${updated} okuma güncellendi` : "İçerikler güncel";
+      setSyncStatus(status);
+      return status;
     } catch {
       setSyncStatus("Çevrimdışı · yeni içerik için internete bağlan");
+      return "İnternet bağlantısı yok";
     }
   }
 
   useEffect(() => {
-    void Promise.all([loadDecks(), loadSaved(), loadCustomCategories(), loadKnownLibrary(), loadCategoryPrefs()]).then(
-      ([stored, s, custom, known, prefs]) => {
-        // Add (or refresh) the reading decks bundled with this app version
-        const { decks: merged, added, updated } = mergeLibrary(stored, bundledLibraryDecks(), known);
-        knownRef.current = known;
-        if (added || updated) {
-          void saveDecks(merged);
-          void saveKnownLibrary(known);
-        }
-        decksRef.current = merged;
-        setDecks(merged);
-        setSaved(s);
-        setCustomCategories(custom);
-        setCategoryPrefs(prefs);
-        void syncLibrary();
+    void Promise.all([
+      loadDecks(),
+      loadSaved(),
+      loadCustomCategories(),
+      loadKnownLibrary(),
+      loadCategoryPrefs(),
+      loadRead(),
+      loadGeminiKey(),
+    ]).then(([stored, s, custom, known, prefs, readLog, key]) => {
+      // Add (or refresh) the reading decks bundled with this app version
+      const { decks: merged, added, updated } = mergeLibrary(stored, bundledLibraryDecks(), known);
+      knownRef.current = known;
+      if (added || updated) {
+        void saveDecks(merged);
+        void saveKnownLibrary(known);
       }
-    );
+      decksRef.current = merged;
+      readRef.current = readLog;
+      setRead(readLog);
+      setDecks(merged);
+      setSaved(s);
+      setCustomCategories(custom);
+      setCategoryPrefs(prefs);
+      setApiKey(key);
+      void syncLibrary();
+    });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => writePref("source", source), [source]);
   useEffect(() => writePref("seed", seed), [seed]);
+  useEffect(() => writePref("autoGenerate", autoGenerate), [autoGenerate]);
 
   // Android back button: close a sheet, then leave sub-screens, then exit
   const tabRef = useRef(tab);
@@ -726,21 +1031,57 @@ export function App() {
   const activeDeck = source.kind === "deck" ? allDecks.find((d) => d.id === source.id) : undefined;
   const activeCategory = source.kind === "category" ? categories.find((c) => c.id === source.id) : undefined;
   const feedCategories = categories.filter((c) => !c.hidden && (categoryCounts.get(c.id) ?? 0) > 0);
+  const feedKey = activeDeck ? `deck:${activeDeck.id}` : activeCategory ? `cat:${activeCategory.id}` : "mix";
 
-  const feedItems = useMemo<FeedItem[]>(() => {
+  // The feed is built from a snapshot taken when it is (re)opened: read cards
+  // leave and new decks join then, so cards never shift under your thumb
+  const snapshotDeps = [tab, feedKey, seed, decks === null, feedNonce];
+  const readSnapshot = useMemo(() => new Set(readRef.current.keys()), snapshotDeps); // eslint-disable-line react-hooks/exhaustive-deps
+  const feedDecks = useMemo(() => decksRef.current, snapshotDeps); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const feedPool = useMemo<FeedItem[]>(() => {
     if (activeDeck) return deckItems([activeDeck]);
     const pool = activeCategory
-      ? allDecks.filter((d) => d.categoryId === activeCategory.id)
-      : allDecks.filter((d) => !d.categoryId || !hiddenIds.has(d.categoryId));
+      ? feedDecks.filter((d) => d.categoryId === activeCategory.id)
+      : feedDecks.filter((d) => !d.categoryId || !hiddenIds.has(d.categoryId));
     return deckItems(shuffled(pool, seed));
-  }, [allDecks, activeDeck, activeCategory, hiddenIds, seed]);
+  }, [feedDecks, activeDeck, activeCategory, hiddenIds, seed]);
+  // A deck opened on purpose shows every card; the endless feeds skip read ones
+  const feedItems = useMemo(
+    () => (activeDeck ? feedPool : feedPool.filter((it) => !readSnapshot.has(it.card.id))),
+    [feedPool, activeDeck, readSnapshot]
+  );
 
   const savedItems = useMemo<FeedItem[]>(
     () => allDecks.flatMap((deck) => deck.cards.filter((c) => saved.has(c.id)).map((card) => ({ card, deck }))),
     [allDecks, saved]
   );
 
+  const historyEntries = useMemo(() => {
+    const byCard = new Map<string, FeedItem>();
+    for (const deck of allDecks) for (const card of deck.cards) byCard.set(card.id, { card, deck });
+    return [...read]
+      .flatMap(([id, readAt]) => {
+        const item = byCard.get(id);
+        return item ? [{ item, readAt }] : [];
+      })
+      .sort((a, b) => b.readAt - a.readAt);
+  }, [allDecks, read]);
+
   useEffect(() => centerActiveChips(), [tab, source]);
+
+  function markRead(cardId: string) {
+    if (readRef.current.has(cardId)) return;
+    const next = new Map(readRef.current);
+    next.set(cardId, Date.now());
+    updateRead(next);
+  }
+
+  function markUnread(cardId: string) {
+    const next = new Map(readRef.current);
+    next.delete(cardId);
+    updateRead(next);
+  }
 
   function toggleSave(cardId: string) {
     const next = new Set(saved);
@@ -749,6 +1090,47 @@ export function App() {
     setSaved(next);
     void saveSaved(next);
   }
+
+  function openDeck(id: string) {
+    setSource({ kind: "deck", id });
+    setTab("feed");
+  }
+
+  async function generateFor(categoryId: string, auto = false) {
+    const category = categories.find((c) => c.id === categoryId);
+    if (!apiKey || !category || generatingRef.current) return false;
+    generatingRef.current = true;
+    setGeneratingId(categoryId);
+    try {
+      const deck = await writeDeckOnDevice(apiKey, category, decksRef.current);
+      updateDecks([...decksRef.current, deck]);
+      showToast(`✨ ${category.emoji ?? ""} ${category.name}: "${deck.title}" eklendi`, deck.id);
+      return true;
+    } catch (err) {
+      showToast(`${auto ? "Otomatik içerik yazılamadı: " : ""}${generationErrorMessage(err)}`);
+      return false;
+    } finally {
+      generatingRef.current = false;
+      setGeneratingId(null);
+    }
+  }
+
+  // Once a day, write a fresh reading for each of the user's own categories
+  const autoRanRef = useRef(false);
+  useEffect(() => {
+    if (decks === null || !apiKey || !autoGenerate || autoRanRef.current) return;
+    autoRanRef.current = true;
+    const today = new Date().toISOString().slice(0, 10);
+    const due = customCategories
+      .filter((c) => !categoryPrefs[c.id]?.hidden && readPref<string>(`autogen:${c.id}`, "") !== today)
+      .slice(0, AUTO_GENERATE_PER_LAUNCH);
+    void (async () => {
+      for (const c of due) {
+        writePref(`autogen:${c.id}`, today);
+        if (!(await generateFor(c.id, true))) break;
+      }
+    })();
+  }, [decks === null, apiKey, autoGenerate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function createDeck(title: string, text: string, categoryId: string) {
     const deck: Deck = {
@@ -760,8 +1142,7 @@ export function App() {
     };
     updateDecks([deck, ...allDecks]);
     writePref(`pos:deck:${deck.id}`, 0);
-    setSource({ kind: "deck", id: deck.id });
-    setTab("feed");
+    openDeck(deck.id);
   }
 
   function patchDeck(id: string, patch: Partial<Deck>) {
@@ -806,8 +1187,6 @@ export function App() {
 
   function reshuffle() {
     setSeed(Math.floor(Math.random() * 100000) + 1);
-    writePref("pos:mix", 0);
-    categories.forEach((c) => writePref(`pos:cat:${c.id}`, 0));
   }
 
   const chips = (
@@ -816,7 +1195,7 @@ export function App() {
         <button
           className={`chip ${source.kind === "mix" ? "on" : ""}`}
           onClick={() => {
-            // Tapping "Karışık" again reshuffles from the top
+            // Tapping "Karışık" again reshuffles
             if (source.kind === "mix") reshuffle();
             setSource({ kind: "mix" });
           }}
@@ -839,29 +1218,65 @@ export function App() {
 
   if (decks === null) return <div className="app" />;
 
-  const feedKey = activeDeck ? `deck:${activeDeck.id}` : activeCategory ? `cat:${activeCategory.id}` : "mix";
   const optionsDeck = deckOptions ? allDecks.find((d) => d.id === deckOptions) : undefined;
+
+  const feedEmpty =
+    allDecks.length === 0 ? (
+      <>
+        <h2>Kaydıracak bir şey yok</h2>
+        <p>Notlarını ekle, kart kart kaydır.</p>
+        <button className="btn primary" onClick={() => setTab("add")}>
+          Not ekle
+        </button>
+      </>
+    ) : (
+      <>
+        <h2>Hepsini okudun 🎉</h2>
+        <p>
+          {activeCategory ? `${categoryLabel(activeCategory)} kategorisinde` : "Akışta"} okunmamış kart kalmadı. Yeni içerikler her
+          sabah gelir.
+        </p>
+        <div className="empty-actions">
+          {activeCategory && apiKey && (
+            <button
+              className="btn primary"
+              disabled={!!generatingId}
+              onClick={() => void generateFor(activeCategory.id).then((ok) => ok && setFeedNonce((n) => n + 1))}
+            >
+              <Icon d={SPARK} /> {generatingId ? "Yazılıyor…" : "Bu kategoriye yeni okuma yaz"}
+            </button>
+          )}
+          <button
+            className="btn ghost"
+            onClick={() =>
+              void syncLibrary().then((status) => {
+                showToast(status);
+                setFeedNonce((n) => n + 1);
+              })
+            }
+          >
+            <Icon d={REFRESH} /> Yeni içerik var mı bak
+          </button>
+          <button className="btn ghost" onClick={() => setTab("history")}>
+            <Icon d={CLOCK} /> Geçmişe git
+          </button>
+        </div>
+      </>
+    );
 
   return (
     <div className="app">
       <main className="main">
         {tab === "feed" && (
           <Feed
-            key={`${feedKey}:${seed}`}
+            key={`${feedKey}:${seed}:${feedNonce}:${readSnapshot.size}`}
             items={feedItems}
-            positionKey={`pos:${feedKey}`}
+            positionKey={activeDeck ? `pos:${feedKey}` : undefined}
             saved={saved}
             onToggleSave={toggleSave}
+            onRead={markRead}
             header={allDecks.length > 0 ? chips : undefined}
-            empty={
-              <>
-                <h2>Kaydıracak bir şey yok</h2>
-                <p>Notlarını ekle, kart kart kaydır.</p>
-                <button className="btn primary" onClick={() => setTab("add")}>
-                  Not ekle
-                </button>
-              </>
-            }
+            empty={feedEmpty}
           />
         )}
         {tab === "saved" && (
@@ -884,17 +1299,35 @@ export function App() {
           <Library
             decks={allDecks}
             categories={categories}
+            read={read}
             syncStatus={syncStatus}
             onSync={() => void syncLibrary()}
-            onOpen={(id) => {
-              setSource({ kind: "deck", id });
-              setTab("feed");
-            }}
+            onOpen={openDeck}
             onOptions={setDeckOptions}
             onManageCategories={() => setManagingCategories(true)}
           />
         )}
+        {tab === "history" && (
+          <History entries={historyEntries} onOpen={setHistoryItem} onClear={() => updateRead(new Map())} />
+        )}
       </main>
+
+      {toast && (
+        <div className="toast" role="status">
+          <span>{toast.text}</span>
+          {toast.deckId && (
+            <button
+              onClick={() => {
+                openDeck(toast.deckId!);
+                setManagingCategories(false);
+                setToast(null);
+              }}
+            >
+              Oku
+            </button>
+          )}
+        </div>
+      )}
 
       <nav className="nav">
         {(
@@ -902,6 +1335,7 @@ export function App() {
             ["feed", HOME, "Akış"],
             ["add", PLUS, "Ekle"],
             ["library", BOOKS, "Kütüphane"],
+            ["history", CLOCK, "Geçmiş"],
             ["saved", HEART, "Kaydedilenler"],
           ] as const
         ).map(([id, icon, label]) => (
@@ -926,10 +1360,36 @@ export function App() {
           onClose={() => setDeckOptions(null)}
         />
       )}
+      {historyItem && (
+        <CardSheet
+          item={historyItem}
+          isSaved={saved.has(historyItem.card.id)}
+          onToggleSave={() => toggleSave(historyItem.card.id)}
+          onUnread={() => {
+            markUnread(historyItem.card.id);
+            setHistoryItem(null);
+            showToast("Kart akışa geri döndü");
+          }}
+          onOpenDeck={() => {
+            setHistoryItem(null);
+            openDeck(historyItem.deck.id);
+          }}
+          onClose={() => setHistoryItem(null)}
+        />
+      )}
       {managingCategories && (
         <CategoryManager
           categories={categories}
           counts={categoryCounts}
+          apiKey={apiKey}
+          autoGenerate={autoGenerate}
+          generatingId={generatingId}
+          onSaveKey={(key) => {
+            setApiKey(key);
+            void saveGeminiKey(key);
+          }}
+          onToggleAuto={() => setAutoGenerate(!autoGenerate)}
+          onGenerate={(id) => void generateFor(id)}
           onAdd={addCategory}
           onUpdate={(id, name, emoji) => updatePrefs(id, { name, emoji: emoji || undefined })}
           onToggleHidden={(id) => updatePrefs(id, { hidden: !hiddenIds.has(id) })}

@@ -22,6 +22,12 @@ Sunucu, giriş, yapay zekâ ya da API anahtarı yok; her şey telefonda saklanı
 - **Kütüphane:** notlarını ve okuma parçalarını kategoriye göre gör, aç, kategorisini
   değiştir veya sil. **+ Kategori** ile kendi kategorini ekle.
 - Akışın üstündeki kategori şeridinden tek bir kategoriyi kaydırabilirsin.
+- **Okundu takibi:** bir kart ~2,5 saniye ekranda kalınca okundu sayılır ve akışa bir daha
+  gelmez (kütüphaneden açtığın bir notta tüm kartlar görünür). **Geçmiş** sekmesinde
+  okuduklarını gün gün görür, kaydedebilir ya da "okunmadı" yapabilirsin.
+- **Kendi kategorilerine içerik:** Kütüphane → Kategoriler'e Gemini anahtarını girersen
+  uygulama kendi kategorilerine her gün (açılışta) otomatik bir okuma yazar; ✨ ile istediğin
+  kategoriye hemen yazdırabilirsin. Anahtar yalnızca telefonda saklanır.
 
 ## Hazır okuma parçaları ve günlük yeni içerik
 

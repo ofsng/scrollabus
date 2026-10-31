@@ -20,6 +20,8 @@ export interface Deck {
   version?: number;
   // Set when the user renames a deck, so library updates keep their title
   renamed?: boolean;
+  // Written on this phone with the user's own Gemini key
+  generated?: boolean;
 }
 
 export interface Category {
@@ -51,6 +53,15 @@ export const saveCategoryPrefs = (prefs: CategoryPrefs) => set("categoryPrefs", 
 // Library deck ids already imported (or deleted), so they are never added twice
 export const loadKnownLibrary = async () => new Set((await get<string[]>("knownLibrary")) ?? []);
 export const saveKnownLibrary = (ids: Set<string>) => set("knownLibrary", [...ids]);
+
+// Cards the user has read: card id → time read (ms). Read cards leave the feed.
+export const loadRead = async () => new Map((await get<[string, number][]>("read")) ?? []);
+export const saveRead = (read: Map<string, number>) => set("read", [...read]);
+
+// The user's own Gemini key for on-device generation; never leaves the phone
+// except in requests to Google
+export const loadGeminiKey = async () => (await get<string>("geminiKey")) ?? "";
+export const saveGeminiKey = (key: string) => set("geminiKey", key);
 
 export const loadSaved = async () => new Set((await get<string[]>("saved")) ?? []);
 export const saveSaved = (saved: Set<string>) => set("saved", [...saved]);

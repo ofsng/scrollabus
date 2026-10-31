@@ -604,6 +604,126 @@ select.field {
   padding: 10px;
 }
 
+/* ─── History ──────────────────────────────────────────── */
+
+.history-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.history-clear {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sheet-card-title {
+  margin: 4px 0 0;
+  font-size: 19px;
+}
+.sheet-card-text {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.sheet-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.btn.saved {
+  color: var(--accent);
+}
+
+/* ─── Generation ───────────────────────────────────────── */
+
+.gen-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--bg);
+}
+.gen-ok {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: #7ad69a;
+}
+.gen-ok svg {
+  width: 18px;
+  height: 18px;
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+.toggle input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+}
+.link-btn {
+  align-self: flex-start;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: underline;
+}
+.icon-btn.spin svg {
+  color: var(--accent);
+  animation: spin 1.2s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 320px;
+}
+.empty .empty-actions .btn {
+  width: 100%;
+}
+
+/* ─── Toast ────────────────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  z-index: 60;
+  left: 12px;
+  right: 12px;
+  top: calc(var(--sat) + 12px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: rise 0.2s ease-out;
+}
+.toast span {
+  flex: 1;
+}
+.toast button {
+  font-weight: 800;
+  color: var(--accent);
+}
+
 /* ─── Bottom nav ───────────────────────────────────────── */
 
 .nav {
@@ -622,9 +742,10 @@ select.field {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--muted);
+  white-space: nowrap;
 }
 .nav-btn.on {
   color: var(--text);
