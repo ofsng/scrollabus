@@ -1,0 +1,27 @@
+{
+ "id": "kariyer--kariyer-insa-etmek",
+ "category": "kariyer",
+ "title": "Kariyer İnşa Etmek",
+ "cards": [
+  {
+   "title": "T tipi beceriler",
+   "text": "Bir alanda derin uzmanlık (T harfinin dikey çizgisi) ile birçok alanda genel bilginin (yatay çizgi) birleşimi değerli bir profil oluşturur. Uzmanlık seni ayırt eder, genişlik ise farklı ekiplerle çalışabilmeni sağlar."
+  },
+  {
+   "title": "Zayıf bağların gücü",
+   "text": "Sosyolog Mark Granovetter, insanların iş fırsatlarını çoğu zaman yakın arkadaşlarından değil, tanıdık düzeyindeki \"zayıf bağlardan\" duyduğunu buldu. Eski iş arkadaşlarınla arada bir iletişim kurmak, düşündüğünden daha değerlidir."
+  },
+  {
+   "title": "Beceri yığını",
+   "text": "Bir alanda dünyanın en iyisi olmak çok zordur; ama birkaç alanda en iyi %25'in içinde olmak mümkündür. Bu becerilerin nadir bir birleşimi (örneğin yazılım + iletişim + finans) seni benzersiz kılar."
+  },
+  {
+   "title": "Görünür ol",
+   "text": "İyi iş yapmak yetmez; yaptığın işin bilinmesi de gerekir. Başarılarını düzenli olarak not et, öğrendiklerini paylaş ve yöneticine ilerlemeni anlat. Görünürlük övünmek değil, bilgilendirmektir."
+  },
+  {
+   "title": "Öğrenmeyi öğren",
+   "text": "Teknoloji hızla değişirken bugünün becerileri birkaç yıl içinde eskiyebilir. En kalıcı beceri, yeni bir şeyi hızlı öğrenebilmektir. Her yıl tamamen yeni bir alana küçük bir adım atmak, bu kası güçlendirir."
+  }
+ ]
+}

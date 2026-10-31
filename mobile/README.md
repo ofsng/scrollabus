@@ -19,7 +19,21 @@ Sunucu, giriş, yapay zekâ ya da API anahtarı yok; her şey telefonda saklanı
   (tekrar basınca yeniden karıştırır), not adına basınca sadece o not gelir.
   Kaldığın yeri hatırlar.
 - **Kaydet:** karta çift dokun veya kalbe bas → *Kaydedilenler*.
-- **Kütüphane:** notlarını gör, aç veya sil.
+- **Kütüphane:** notlarını ve okuma parçalarını kategoriye göre gör, aç, kategorisini
+  değiştir veya sil. **+ Kategori** ile kendi kategorini ekle.
+- Akışın üstündeki kategori şeridinden tek bir kategoriyi kaydırabilirsin.
+
+## Hazır okuma parçaları ve günlük yeni içerik
+
+Uygulama 15 kategoride 30 okuma parçasıyla (150 kart) gelir. Yeni parçalar her sabah
+GitHub Actions (`.github/workflows/daily-content.yml`) tarafından Gemini ile yazılır,
+`content/` klasörüne eklenir; uygulama açıldığında (veya Kütüphane'deki yenile
+butonuna basınca) internetten indirilir. Sunucu gerekmez.
+
+Kurulum (bir kez): GitHub'da repo → **Settings → Secrets and variables → Actions →
+New repository secret** → Name: `GEMINI_API_KEY`, Secret: Gemini anahtarın.
+Elle denemek için: **Actions → Daily content → Run workflow** (kaç parça ve hangi
+kategori olacağını seçebilirsin).
 
 Not: Taranmış (fotoğraf) PDF'lerde metin olmadığı için kart çıkmaz.
 

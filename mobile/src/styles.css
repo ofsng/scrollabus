@@ -176,6 +176,7 @@ button {
 }
 
 .chips {
+  position: relative;
   display: flex;
   gap: 8px;
   overflow-x: auto;
@@ -288,6 +289,51 @@ button {
   padding: 13px 28px;
 }
 
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.sync {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--surface);
+}
+.sync svg {
+  width: 16px;
+  height: 16px;
+}
+
+.chips.strip {
+  margin: 0 -18px;
+  padding: 2px 18px 4px;
+}
+.page .chip {
+  max-width: none;
+}
+.chip.add {
+  background: transparent;
+  border: 1px dashed var(--muted);
+}
+.page .chip:not(.on) {
+  background: var(--surface);
+}
+
+.link-danger {
+  align-self: flex-start;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+}
+
 .hint {
   margin: 0;
   color: var(--muted);
@@ -314,11 +360,29 @@ button {
 .row-main {
   flex: 1;
   min-width: 0;
+  padding: 12px 0 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.row-open {
   text-align: left;
-  padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding: 0;
+}
+.row-select {
+  align-self: flex-start;
+  max-width: 100%;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 10px;
 }
 .row-title {
   font-weight: 700;

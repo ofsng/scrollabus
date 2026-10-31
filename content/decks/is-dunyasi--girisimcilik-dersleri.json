@@ -1,0 +1,27 @@
+{
+ "id": "is-dunyasi--girisimcilik-dersleri",
+ "category": "is-dunyasi",
+ "title": "Girişimcilik Dersleri",
+ "cards": [
+  {
+   "title": "Sorunu sev, çözümü değil",
+   "text": "Girişimciler çoğu zaman buldukları çözüme âşık olur. Oysa müşteri çözümünle değil, kendi sorunuyla ilgilenir. Sorunu derinlemesine anlarsan, ilk çözümün işe yaramadığında yenisini bulabilirsin."
+  },
+  {
+   "title": "Nakit akışı",
+   "text": "Kâğıt üzerinde kârlı görünen şirketler bile nakitleri bittiği için batabilir. Satış yapmak yetmez; paranın ne zaman kasaya gireceği de önemlidir. Kâr bir görüştür, nakit ise gerçektir."
+  },
+  {
+   "title": "Müşteriyle konuş",
+   "text": "Bir ürün geliştirmeden önce hedef kitlenle konuş; ama fikrini satmaya değil, hayatlarını anlamaya çalış. \"Bunu alır mıydın?\" yerine \"Bu sorunu en son ne zaman yaşadın ve ne yaptın?\" diye sor."
+  },
+  {
+   "title": "Yön değiştirmek",
+   "text": "Bazen ilk fikir tutmaz ama yolda öğrenilenler daha iyi bir fırsatı gösterir. Slack, aslında bir oyun şirketinin ekip içinde kullandığı iletişim aracıydı; oyun başarısız olunca araç ürünün kendisi oldu. Yön değiştirmek, öğrenmenin sonucudur."
+  },
+  {
+   "title": "Odaklanmak hayır demektir",
+   "text": "Steve Jobs, 1997'de Apple'a döndüğünde şirketin ürün yelpazesini büyük ölçüde daralttı. Odaklanmak, iyi fikirlerin çoğuna hayır diyebilmektir. Her şeyi yapmaya çalışan, hiçbir şeyi iyi yapamaz."
+  }
+ ]
+}

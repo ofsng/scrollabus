@@ -1,0 +1,27 @@
+{
+ "id": "iletisim--zor-konusmalar",
+ "category": "iletisim",
+ "title": "Zor Konuşmalar",
+ "cards": [
+  {
+   "title": "Ben dili",
+   "text": "\"Hep geç kalıyorsun\" suçlar ve savunma yaratır. \"Geç kaldığında kendimi önemsenmemiş hissediyorum\" ise duygunu paylaşır. Ben dili, kişiyi yargılamadan davranışı ve onun sende yarattığı etkiyi anlatır."
+  },
+  {
+   "title": "Şiddetsiz iletişim",
+   "text": "Marshall Rosenberg'in modeli dört adımdan oluşur: yargısız gözlem, duygu, ihtiyaç ve rica. Örneğin: \"Toplantıda sözüm kesildiğinde gerildim; fikirlerimin duyulmasına ihtiyacım var. Bir dahaki sefere bitirmemi bekler misin?\""
+  },
+  {
+   "title": "Doğru zaman, doğru yer",
+   "text": "Önemli bir konuyu ikiniz de yorgun, aç ya da aceleyken açma. \"Seninle bir konuyu konuşmak istiyorum, ne zaman müsaitsin?\" demek, karşı tarafa hazırlanma şansı verir ve savunmayı azaltır."
+  },
+  {
+   "title": "Kişiyi değil, sorunu konuş",
+   "text": "Tartışma \"sen\" ile \"ben\" arasında değil, \"biz\" ile \"sorun\" arasında olmalı. Aynı tarafa geçip sorunu karşınıza koymak, çözüm bulmayı çok daha kolay hale getirir."
+  },
+  {
+   "title": "İyi bir özrün anatomisi",
+   "text": "İyi bir özür bahane içermez: Ne yaptığını kabul et, karşı tarafa etkisini anladığını göster, sorumluluk al ve nasıl telafi edeceğini söyle. \"Ama\" ile devam eden bir özür, özür değildir."
+  }
+ ]
+}

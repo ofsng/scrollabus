@@ -1,0 +1,27 @@
+{
+ "id": "pazarlama--ikna-psikolojisi",
+ "category": "pazarlama",
+ "title": "İkna Psikolojisi",
+ "cards": [
+  {
+   "title": "Karşılıklılık",
+   "text": "Robert Cialdini'nin ikna ilkelerinden biri: İnsanlar kendilerine bir şey verene karşılık verme eğilimindedir. Ücretsiz deneme, numune ya da gerçekten faydalı bir içerik, güven ve karşılık verme isteği yaratır."
+  },
+  {
+   "title": "Kıtlık etkisi",
+   "text": "Az bulunan ya da süresi sınırlı olan şeyleri daha değerli algılarız. \"Son 3 ürün\" ya da \"Bugün sona eriyor\" ifadeleri bu yüzden etkilidir. Ama sahte kıtlık, güveni çok hızlı yok eder."
+  },
+  {
+   "title": "Çapa etkisi",
+   "text": "İlk duyduğumuz sayı, sonraki yargılarımızı etkiler. Önce yüksek fiyatlı seçeneği görmek, orta seçeneği daha makul gösterir. Birçok fiyat listesinin en pahalı paketle başlamasının nedeni budur."
+  },
+  {
+   "title": "Özellik değil, fayda",
+   "text": "Pazarlama profesörü Theodore Levitt'e atfedilen söz: \"İnsanlar matkap değil, duvarda bir delik satın almak ister.\" Ürünün ne olduğunu değil, müşterinin hayatında neyi değiştirdiğini anlat."
+  },
+  {
+   "title": "Hikâye anlatıcılığı",
+   "text": "İnsanlar istatistikleri unutur, hikâyeleri hatırlar. İyi bir pazarlama hikâyesinde kahraman marka değil müşteridir; marka, kahramana yol gösteren rehberdir."
+  }
+ ]
+}

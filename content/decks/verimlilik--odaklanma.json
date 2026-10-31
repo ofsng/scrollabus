@@ -1,0 +1,27 @@
+{
+ "id": "verimlilik--odaklanma",
+ "category": "verimlilik",
+ "title": "Odaklanma",
+ "cards": [
+  {
+   "title": "Derin çalışma",
+   "text": "Cal Newport, dikkat dağıtıcılardan arınmış ve zihinsel olarak zorlayıcı çalışmaya \"derin çalışma\" der. Bildirimlerin kapalı olduğu tek bir 90 dakikalık blok, gün boyu bölünen saatlerden daha değerli sonuçlar üretebilir."
+  },
+  {
+   "title": "Görev değiştirmenin bedeli",
+   "text": "Bir işten diğerine geçtiğinde dikkatinin bir kısmı önceki işte kalır; araştırmacı Sophie Leroy buna \"dikkat kalıntısı\" der. Çoklu görev aslında hızlı görev değiştirmektir ve her geçişte biraz verim kaybedersin."
+  },
+  {
+   "title": "Pomodoro tekniği",
+   "text": "Francesco Cirillo'nun yöntemi: 25 dakika tek bir işe odaklan, ardından 5 dakika mola ver; dört turdan sonra daha uzun bir mola yap. Zamanlayıcı başlamayı kolaylaştırır, molalar da zihinsel yorgunluğu azaltır."
+  },
+  {
+   "title": "Kurbağayı ye",
+   "text": "Brian Tracy'nin önerisi: Günün en zor ve en önemli işini sabah ilk iş olarak yap. Gerisi daha kolay gelir ve ertelemenin yarattığı arka plan stresi ortadan kalkar."
+  },
+  {
+   "title": "Bildirimleri yönet",
+   "text": "Telefonun sadece masada durması bile dikkatini dağıtabilir. Bildirimleri kontrol edeceğin belirli saatler belirle ve acil olmayan uygulamaların bildirimlerini tamamen kapat."
+  }
+ ]
+}

@@ -1,0 +1,27 @@
+{
+ "id": "motivasyon--icsel-motivasyon",
+ "category": "motivasyon",
+ "title": "İçsel Motivasyon",
+ "cards": [
+  {
+   "title": "Özerklik, ustalık, amaç",
+   "text": "Daniel Pink'e göre içsel motivasyonun üç temeli vardır: işini nasıl yapacağına kendin karar verebilmek, bir şeyde giderek daha iyi olmak ve yaptığın işin bir anlamı olduğunu hissetmek. Ödül ve ceza basit işlerde işe yarar, yaratıcı işlerde çoğu zaman yaramaz."
+  },
+  {
+   "title": "Motivasyon eylemden sonra gelir",
+   "text": "Çoğumuz harekete geçmek için motive olmayı bekleriz; oysa genellikle tersi olur. Küçük bir başlangıç, devam etme isteğini doğurur. Kendine \"sadece beş dakika\" demek çoğu zaman yeterlidir."
+  },
+  {
+   "title": "İlerleme ilkesi",
+   "text": "Teresa Amabile'nin araştırması, insanlar için iş yerindeki en motive edici deneyimin anlamlı bir işte küçük de olsa ilerleme kaydetmek olduğunu gösterdi. Günün sonunda neler yaptığını yazmak, bu etkiyi görünür kılar."
+  },
+  {
+   "title": "Akış hali",
+   "text": "Mihaly Csikszentmihalyi, kendimizi tamamen bir işe kaptırdığımız ve zamanın nasıl geçtiğini anlamadığımız duruma \"akış\" der. Akış, görevin zorluğu ile becerimiz dengede olduğunda ortaya çıkar."
+  },
+  {
+   "title": "Nedenini bil",
+   "text": "Nietzsche'nin sözü: \"Yaşamak için bir nedeni olan, hemen her nasıla katlanabilir.\" Zor bir hedefe giderken onu neden istediğini yazmak ve sık sık hatırlamak, motivasyonun düştüğü anlarda yol gösterir."
+  }
+ ]
+}

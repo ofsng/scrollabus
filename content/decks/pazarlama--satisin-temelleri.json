@@ -1,0 +1,27 @@
+{
+ "id": "pazarlama--satisin-temelleri",
+ "category": "pazarlama",
+ "title": "Satışın Temelleri",
+ "cards": [
+  {
+   "title": "Dinleyen satar",
+   "text": "En iyi satışçılar en çok konuşanlar değil, en iyi soruları soranlardır. Müşterinin ihtiyacını anlamadan önerilen bir ürün, ne kadar iyi olursa olsun ilgisiz bir teklif gibi gelir."
+  },
+  {
+   "title": "İtiraz bir ilgi işaretidir",
+   "text": "\"Çok pahalı\" diyen müşteri hâlâ konuşuyordur. İtiraz, müşterinin neyi önemsediğini gösterir. Savunmaya geçmek yerine \"Bu fiyatı neyle karşılaştırıyorsunuz?\" diye sor."
+  },
+  {
+   "title": "Mevcut müşteri altındır",
+   "text": "Yeni müşteri kazanmanın maliyeti, mevcut müşteriyi elde tutmaktan genellikle çok daha yüksektir. Memnun bir müşteri tekrar alır ve başkalarına önerir; ağızdan ağıza yayılım hâlâ en güvenilir pazarlamadır."
+  },
+  {
+   "title": "Hedef kitleni daralt",
+   "text": "\"Herkes için\" olan bir ürün aslında kimse için değildir. Belirli bir kişiyi hayal et: yaşını, sorununu, gününü nasıl geçirdiğini. Mesajın ne kadar spesifik olursa o kadar güçlü yankı bulur."
+  },
+  {
+   "title": "Somut referanslar",
+   "text": "Gerçek müşteri yorumları, kullanıcı sayıları ve tanınmış referanslar karar vermeyi kolaylaştırır. Somut bir müşteri hikâyesi, en parlak reklam cümlesinden daha ikna edicidir."
+  }
+ ]
+}

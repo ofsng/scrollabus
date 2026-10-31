@@ -1,0 +1,27 @@
+{
+ "id": "kariyer--is-gorusmeleri-ve-gelisim",
+ "category": "kariyer",
+ "title": "İş Görüşmeleri ve Gelişim",
+ "cards": [
+  {
+   "title": "STAR tekniği",
+   "text": "Davranışsal mülakat sorularını yapılandırılmış şekilde cevaplamanın yolu: Durum (Situation), Görev (Task), Eylem (Action) ve Sonuç (Result). Somut bir hikâye ve ölçülebilir bir sonuç, genel ifadelerden çok daha ikna edicidir."
+  },
+  {
+   "title": "Sen de soru sor",
+   "text": "Mülakatın sonunda \"Sorunuz var mı?\" sorusuna \"Hayır\" demek kaçırılmış bir fırsattır. \"Bu rolde ilk 90 günde başarı nasıl görünür?\" gibi bir soru hem ilgini gösterir hem de işi daha iyi anlamanı sağlar."
+  },
+  {
+   "title": "Maaş görüşmesi",
+   "text": "Görüşmeye girmeden önce piyasadaki maaş aralığını araştır. Bir rakam söyleyeceksen tek bir sayı yerine araştırmaya dayanan bir aralık ver. Yalnızca maaşı değil, yan hakları ve gelişim olanaklarını da konuş."
+  },
+  {
+   "title": "Mentor bul",
+   "text": "Senden birkaç adım önde olan biri, yıllarca deneme yanılmayla öğreneceğin şeyleri kısa sürede gösterebilir. Mentorluk resmi olmak zorunda değildir; belirli bir konuda kısa bir kahve sohbeti istemek iyi bir başlangıçtır."
+  },
+  {
+   "title": "Merdiven değil, tırmanma iskelesi",
+   "text": "Sheryl Sandberg'in benzetmesiyle kariyer düz bir merdiven değil, oyun parklarındaki tırmanma iskeleleri gibidir. Bazen yana, hatta aşağı doğru hareketler daha iyi bir rotaya açılır. Yatay geçişler yeni beceriler kazandırır."
+  }
+ ]
+}

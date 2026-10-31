@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base: "./",
   plugins: [react()],
+  // Reading decks are bundled from ../content
+  server: { fs: { allow: [".."] } },
   build: {
     rollupOptions: {
       output: {

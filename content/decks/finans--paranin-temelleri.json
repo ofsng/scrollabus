@@ -1,0 +1,27 @@
+{
+ "id": "finans--paranin-temelleri",
+ "category": "finans",
+ "title": "Paranın Temelleri",
+ "cards": [
+  {
+   "title": "Bileşik faiz",
+   "text": "Bileşik faizde getiri yalnızca ana paraya değil, önceki getirilere de işler. Yıllık %10 getiriyle bir birikim yaklaşık 7 yılda ikiye katlanır. Erken başlamak, büyük miktarlarla geç başlamaktan çoğu zaman daha güçlüdür."
+  },
+  {
+   "title": "72 kuralı",
+   "text": "Paranın kaç yılda ikiye katlanacağını bulmanın kısa yolu: 72'yi yıllık getiri oranına böl. %8 getiri yaklaşık 9 yıl, %12 yaklaşık 6 yıl eder. Aynı kural enflasyona da uygulanır: %24 enflasyonda paranın alım gücü yaklaşık 3 yılda yarıya iner."
+  },
+  {
+   "title": "Önce kendine öde",
+   "text": "Maaş geldiğinde harcamalardan sonra kalanı biriktirmeye çalışmak yerine önce belirli bir oranı kenara ayır, sonra kalanla yaşa. Maaş gününe otomatik bir talimat kurmak, irade harcamadan birikim yapmanın en kolay yoludur."
+  },
+  {
+   "title": "Acil durum fonu",
+   "text": "İş kaybı, sağlık ya da tamir gibi beklenmedik masraflar için genellikle 3-6 aylık temel giderin kolay erişilebilir bir yerde tutulması önerilir. Bu fon, kriz anında borçlanmanı ya da yatırımlarını zararına satmanı önler."
+  },
+  {
+   "title": "Enflasyonun sessiz etkisi",
+   "text": "Enflasyon, aynı parayla daha az şey alabilmek demektir. Getirisi enflasyonun altında kalan bir birikim, rakam olarak büyüse bile gerçekte erir. Bu yüzden önemli olan nominal getiri değil, enflasyondan arındırılmış reel getiridir."
+  }
+ ]
+}

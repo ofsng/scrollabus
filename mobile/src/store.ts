@@ -11,6 +11,16 @@ export interface Deck {
   title: string;
   createdAt: number;
   cards: Card[];
+  categoryId?: string;
+  // Reading decks that came with the app or from the online library
+  fromLibrary?: boolean;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  emoji?: string;
+  custom?: boolean;
 }
 
 export const newId = () =>
@@ -20,6 +30,14 @@ export const newId = () =>
 
 export const loadDecks = async () => (await get<Deck[]>("decks")) ?? [];
 export const saveDecks = (decks: Deck[]) => set("decks", decks);
+
+// Categories the user created; built-in ones come from the content library
+export const loadCustomCategories = async () => (await get<Category[]>("categories")) ?? [];
+export const saveCustomCategories = (categories: Category[]) => set("categories", categories);
+
+// Library deck ids already imported (or deleted), so they are never added twice
+export const loadKnownLibrary = async () => new Set((await get<string[]>("knownLibrary")) ?? []);
+export const saveKnownLibrary = (ids: Set<string>) => set("knownLibrary", [...ids]);
 
 export const loadSaved = async () => new Set((await get<string[]>("saved")) ?? []);
 export const saveSaved = (saved: Set<string>) => set("saved", [...saved]);

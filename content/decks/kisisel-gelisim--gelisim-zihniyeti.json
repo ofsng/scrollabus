@@ -1,0 +1,27 @@
+{
+ "id": "kisisel-gelisim--gelisim-zihniyeti",
+ "category": "kisisel-gelisim",
+ "title": "Gelişim Zihniyeti",
+ "cards": [
+  {
+   "title": "Sabit ve gelişen zihniyet",
+   "text": "Psikolog Carol Dweck iki zihniyet tanımlar. Sabit zihniyette yetenek doğuştan gelir ve değişmez. Gelişen zihniyette ise çaba ve doğru stratejiyle geliştirilebilir. Hangi zihniyette olduğun, zorluklar karşısında nasıl davrandığını belirler."
+  },
+  {
+   "title": "\"Henüz\" kelimesinin gücü",
+   "text": "\"Bunu yapamıyorum\" yerine \"Bunu henüz yapamıyorum\" demek küçük ama etkili bir değişikliktir. Başarısızlığı kalıcı bir hüküm olmaktan çıkarır ve yolculuğun bir durağına dönüştürür."
+  },
+  {
+   "title": "Kasıtlı pratik",
+   "text": "Anders Ericsson'un araştırmaları, ustalığın yalnızca tekrardan değil, kasıtlı pratikten geldiğini gösterir: konfor alanının biraz dışında çalışmak, net hedefler koymak ve hızlı geri bildirim almak. Aynı hatayı bin kez tekrarlamak pratik değildir."
+  },
+  {
+   "title": "Geri bildirim bir hediyedir",
+   "text": "Eleştiri canımızı yakar çünkü beyin onu bir tehdit gibi algılar. Kendine \"Bu bilgi beni nasıl daha iyi yapar?\" diye sor. Savunmaya geçmeden önce dinle, not al ve kararını sonra ver."
+  },
+  {
+   "title": "Esneme bölgesi",
+   "text": "Öğrenme çoğu zaman \"esneme bölgesinde\" gerçekleşir: kolay gelecek kadar tanıdık değil, panik yaratacak kadar zor değil. Seni her seferinde biraz zorlayan küçük hedefler seç."
+  }
+ ]
+}

@@ -2,10 +2,26 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 import { App as NativeApp } from "@capacitor/app";
 import { splitIntoCards } from "./split";
-import { loadDecks, loadSaved, newId, readPref, saveDecks, saveSaved, writePref, type Card, type Deck } from "./store";
+import { bundledCategories, bundledDecksNotIn, fetchNewLibraryDecks } from "./library";
+import {
+  loadCustomCategories,
+  loadDecks,
+  loadKnownLibrary,
+  loadSaved,
+  newId,
+  readPref,
+  saveCustomCategories,
+  saveDecks,
+  saveKnownLibrary,
+  saveSaved,
+  writePref,
+  type Card,
+  type Category,
+  type Deck,
+} from "./store";
 
 type Tab = "feed" | "add" | "library" | "saved";
-type FeedSource = { kind: "mix" } | { kind: "deck"; id: string };
+type FeedSource = { kind: "mix" } | { kind: "category"; id: string } | { kind: "deck"; id: string };
 
 interface FeedItem {
   card: Card;
@@ -37,6 +53,9 @@ function shuffled<T>(items: T[], seed: number): T[] {
   return out;
 }
 
+// Decks are shuffled, but each deck's cards stay together and in order
+const deckItems = (decks: Deck[]): FeedItem[] => decks.flatMap((deck) => deck.cards.map((card) => ({ card, deck })));
+
 function textSize(text: string) {
   const n = text.length;
   if (n < 90) return 30;
@@ -47,6 +66,16 @@ function textSize(text: string) {
 
 const formatDate = (ms: number) =>
   new Date(ms).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" });
+
+// Scrolls each chip strip sideways so its selected chip is visible
+function centerActiveChips() {
+  document.querySelectorAll<HTMLElement>(".chips .chip.on").forEach((chip) => {
+    const strip = chip.parentElement!;
+    strip.scrollLeft = chip.offsetLeft - (strip.clientWidth - chip.clientWidth) / 2;
+  });
+}
+
+const categoryLabel = (c: Category) => (c.emoji ? `${c.emoji} ${c.name}` : c.name);
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -61,6 +90,7 @@ const PLUS = "M12 5v14M5 12h14";
 const BOOKS = "M4 4h4v16H4zM10 4h4v16h-4zM16 5l3.5-1 3 15.5-3.5 1z";
 const TRASH = "M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3";
 const SHUFFLE = "M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5";
+const REFRESH = "M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5";
 
 // ─── Feed ────────────────────────────────────────────────────────────────────
 
@@ -125,7 +155,7 @@ function Feed({
       {header}
       <div className="feed" ref={ref}>
         {items.map(({ card, deck }, i) => {
-          const hue = hueFor(deck.id);
+          const hue = hueFor(deck.categoryId ?? deck.id);
           const isSaved = saved.has(card.id);
           return (
             <article
@@ -175,9 +205,39 @@ function Feed({
 
 // ─── Add ─────────────────────────────────────────────────────────────────────
 
-function AddScreen({ onCreate }: { onCreate: (title: string, text: string) => void }) {
+function CategorySelect({
+  value,
+  categories,
+  onChange,
+  className = "field",
+}: {
+  value: string;
+  categories: Category[];
+  onChange: (id: string) => void;
+  className?: string;
+}) {
+  return (
+    <select className={className} value={value} onChange={(e) => onChange(e.target.value)}>
+      <option value="">Kategorisiz</option>
+      {categories.map((c) => (
+        <option key={c.id} value={c.id}>
+          {categoryLabel(c)}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+function AddScreen({
+  categories,
+  onCreate,
+}: {
+  categories: Category[];
+  onCreate: (title: string, text: string, categoryId: string) => void;
+}) {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [categoryId, setCategoryId] = useState(() => readPref<string>("lastCategory", ""));
   const [status, setStatus] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const cardCount = useMemo(() => (text.trim() ? splitIntoCards(text).length : 0), [text]);
@@ -205,8 +265,9 @@ function AddScreen({ onCreate }: { onCreate: (title: string, text: string) => vo
   }
 
   function submit() {
-    const fallback = text.trim().split("\n")[0].slice(0, 40) || "Not";
-    onCreate(title.trim() || fallback, text);
+    const fallback = text.trim().split("\n")[0].slice(0, 40).trim() || "Not";
+    writePref("lastCategory", categoryId);
+    onCreate(title.trim() || fallback, text, categoryId);
     setTitle("");
     setText("");
   }
@@ -215,6 +276,7 @@ function AddScreen({ onCreate }: { onCreate: (title: string, text: string) => vo
     <div className="screen page">
       <h1>Not ekle</h1>
       <input className="field" placeholder="Başlık (isteğe bağlı)" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <CategorySelect value={categoryId} categories={categories} onChange={setCategoryId} />
       <textarea
         className="field area"
         placeholder="Notlarını buraya yapıştır…"
@@ -245,20 +307,110 @@ function AddScreen({ onCreate }: { onCreate: (title: string, text: string) => vo
 
 // ─── Library ─────────────────────────────────────────────────────────────────
 
-function Library({ decks, onOpen, onDelete }: { decks: Deck[]; onOpen: (id: string) => void; onDelete: (id: string) => void }) {
+function Library({
+  decks,
+  categories,
+  syncStatus,
+  onSync,
+  onOpen,
+  onDelete,
+  onMove,
+  onAddCategory,
+  onDeleteCategory,
+}: {
+  decks: Deck[];
+  categories: Category[];
+  syncStatus: string;
+  onSync: () => void;
+  onOpen: (id: string) => void;
+  onDelete: (id: string) => void;
+  onMove: (deckId: string, categoryId: string) => void;
+  onAddCategory: (name: string) => void;
+  onDeleteCategory: (id: string) => void;
+}) {
+  const [filter, setFilter] = useState<string | null>(() => readPref<string | null>("libraryFilter", null));
+  useEffect(() => {
+    writePref("libraryFilter", filter);
+    centerActiveChips();
+  }, [filter]);
+
+  const counts = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const d of decks) m.set(d.categoryId ?? "", (m.get(d.categoryId ?? "") ?? 0) + 1);
+    return m;
+  }, [decks]);
+
+  const visible = decks
+    .filter((d) => filter === null || (d.categoryId ?? "") === filter)
+    .sort((a, b) => b.createdAt - a.createdAt);
+  const activeCategory = categories.find((c) => c.id === filter);
+
   return (
     <div className="screen page">
-      <h1>Kütüphane</h1>
-      {decks.length === 0 && <p className="hint">Henüz not yok. Ekle sekmesinden başla.</p>}
+      <div className="page-head">
+        <h1>Kütüphane</h1>
+        <button className="sync" onClick={onSync}>
+          <Icon d={REFRESH} /> {syncStatus}
+        </button>
+      </div>
+
+      <div className="chips strip">
+        <button className={`chip ${filter === null ? "on" : ""}`} onClick={() => setFilter(null)}>
+          Tümü · {decks.length}
+        </button>
+        <button
+          className="chip add"
+          onClick={() => {
+            const name = window.prompt("Yeni kategori adı")?.trim();
+            if (name) onAddCategory(name);
+          }}
+        >
+          <Icon d={PLUS} /> Kategori
+        </button>
+        {categories.map((c) => (
+          <button key={c.id} className={`chip ${filter === c.id ? "on" : ""}`} onClick={() => setFilter(c.id)}>
+            {categoryLabel(c)} · {counts.get(c.id) ?? 0}
+          </button>
+        ))}
+        {(counts.get("") ?? 0) > 0 && (
+          <button className={`chip ${filter === "" ? "on" : ""}`} onClick={() => setFilter("")}>
+            Kategorisiz · {counts.get("")}
+          </button>
+        )}
+      </div>
+
+      {activeCategory?.custom && (
+        <button
+          className="link-danger"
+          onClick={() => {
+            if (window.confirm(`"${activeCategory.name}" kategorisi silinsin mi? İçindeki notlar silinmez, kategorisiz kalır.`)) {
+              onDeleteCategory(activeCategory.id);
+              setFilter(null);
+            }
+          }}
+        >
+          Bu kategoriyi sil
+        </button>
+      )}
+
+      {visible.length === 0 && <p className="hint">Burada henüz not yok. Ekle sekmesinden not ekleyebilirsin.</p>}
       <ul className="list">
-        {decks.map((deck) => (
-          <li key={deck.id} className="row" style={{ borderLeftColor: `hsl(${hueFor(deck.id)} 60% 55%)` }}>
-            <button className="row-main" onClick={() => onOpen(deck.id)}>
-              <span className="row-title">{deck.title}</span>
-              <span className="row-meta">
-                {deck.cards.length} kart · {formatDate(deck.createdAt)}
-              </span>
-            </button>
+        {visible.map((deck) => (
+          <li key={deck.id} className="row" style={{ borderLeftColor: `hsl(${hueFor(deck.categoryId ?? deck.id)} 60% 55%)` }}>
+            <div className="row-main">
+              <button className="row-open" onClick={() => onOpen(deck.id)}>
+                <span className="row-title">{deck.title}</span>
+                <span className="row-meta">
+                  {deck.cards.length} kart · {deck.fromLibrary ? "Okuma" : "Notum"} · {formatDate(deck.createdAt)}
+                </span>
+              </button>
+              <CategorySelect
+                className="row-select"
+                value={deck.categoryId ?? ""}
+                categories={categories}
+                onChange={(id) => onMove(deck.id, id)}
+              />
+            </div>
             <button
               className="icon-btn"
               aria-label="Sil"
@@ -281,15 +433,52 @@ export function App() {
   const [tab, setTab] = useState<Tab>("feed");
   const [decks, setDecks] = useState<Deck[] | null>(null);
   const [saved, setSaved] = useState<Set<string>>(new Set());
+  const [customCategories, setCustomCategories] = useState<Category[]>([]);
+  const [libraryCategories, setLibraryCategories] = useState<Category[]>(() =>
+    readPref<Category[]>("libraryCategories", bundledCategories)
+  );
   const [source, setSource] = useState<FeedSource>(() => readPref<FeedSource>("source", { kind: "mix" }));
   const [seed, setSeed] = useState(() => readPref<number>("seed", Date.now() % 100000));
+  const [syncStatus, setSyncStatus] = useState("Yeni içerik");
+
+  // Latest decks for async sync callbacks
+  const decksRef = useRef<Deck[]>([]);
+  decksRef.current = decks ?? [];
+
+  async function syncLibrary(known: Set<string>) {
+    setSyncStatus("Kontrol ediliyor…");
+    try {
+      const { categories, decks: incoming } = await fetchNewLibraryDecks(known);
+      setLibraryCategories(categories);
+      writePref("libraryCategories", categories);
+      if (incoming.length > 0) {
+        incoming.forEach((d) => known.add(d.id));
+        void saveKnownLibrary(known);
+        updateDecks([...decksRef.current, ...incoming]);
+      }
+      setSyncStatus(incoming.length ? `${incoming.length} yeni okuma` : "Güncel");
+    } catch {
+      setSyncStatus("Çevrimdışı");
+    }
+  }
 
   useEffect(() => {
-    void Promise.all([loadDecks(), loadSaved()]).then(([d, s]) => {
-      setDecks(d);
+    void Promise.all([loadDecks(), loadSaved(), loadCustomCategories(), loadKnownLibrary()]).then(([d, s, c, known]) => {
+      // First launch (or app update): add the reading decks bundled with the app
+      const bundled = bundledDecksNotIn(known);
+      bundled.forEach((deck) => known.add(deck.id));
+      const all = [...d, ...bundled];
+      if (bundled.length) {
+        void saveDecks(all);
+        void saveKnownLibrary(known);
+      }
+      decksRef.current = all;
+      setDecks(all);
       setSaved(s);
+      setCustomCategories(c);
+      void syncLibrary(known);
     });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => writePref("source", source), [source]);
   useEffect(() => writePref("seed", seed), [seed]);
@@ -308,16 +497,17 @@ export function App() {
     };
   }, []);
 
-  const allDecks = decks ?? [];
+  const allDecks = useMemo(() => decks ?? [], [decks]);
+  const categories = useMemo(() => [...libraryCategories, ...customCategories], [libraryCategories, customCategories]);
   const activeDeck = source.kind === "deck" ? allDecks.find((d) => d.id === source.id) : undefined;
+  const activeCategory = source.kind === "category" ? categories.find((c) => c.id === source.id) : undefined;
+  const feedCategories = categories.filter((c) => allDecks.some((d) => d.categoryId === c.id));
 
   const feedItems = useMemo<FeedItem[]>(() => {
-    if (activeDeck) return activeDeck.cards.map((card) => ({ card, deck: activeDeck }));
-    return shuffled(
-      allDecks.flatMap((deck) => deck.cards.map((card) => ({ card, deck }))),
-      seed
-    );
-  }, [allDecks, activeDeck, seed]);
+    if (activeDeck) return deckItems([activeDeck]);
+    const pool = activeCategory ? allDecks.filter((d) => d.categoryId === activeCategory.id) : allDecks;
+    return deckItems(shuffled(pool, seed));
+  }, [allDecks, activeDeck, activeCategory, seed]);
 
   const savedItems = useMemo<FeedItem[]>(
     () => allDecks.flatMap((deck) => deck.cards.filter((c) => saved.has(c.id)).map((card) => ({ card, deck }))),
@@ -325,6 +515,7 @@ export function App() {
   );
 
   function updateDecks(next: Deck[]) {
+    decksRef.current = next;
     setDecks(next);
     void saveDecks(next);
   }
@@ -337,11 +528,12 @@ export function App() {
     void saveSaved(next);
   }
 
-  function createDeck(title: string, text: string) {
+  function createDeck(title: string, text: string, categoryId: string) {
     const deck: Deck = {
       id: newId(),
       title,
       createdAt: Date.now(),
+      categoryId: categoryId || undefined,
       cards: splitIntoCards(text).map((c) => ({ ...c, id: newId() })),
     };
     updateDecks([deck, ...allDecks]);
@@ -362,45 +554,71 @@ export function App() {
     if (source.kind === "deck" && source.id === id) setSource({ kind: "mix" });
   }
 
+  function moveDeck(deckId: string, categoryId: string) {
+    updateDecks(allDecks.map((d) => (d.id === deckId ? { ...d, categoryId: categoryId || undefined } : d)));
+  }
+
+  function addCategory(name: string) {
+    const next = [...customCategories, { id: `custom-${newId()}`, name, custom: true }];
+    setCustomCategories(next);
+    void saveCustomCategories(next);
+  }
+
+  function deleteCategory(id: string) {
+    const next = customCategories.filter((c) => c.id !== id);
+    setCustomCategories(next);
+    void saveCustomCategories(next);
+    updateDecks(allDecks.map((d) => (d.categoryId === id ? { ...d, categoryId: undefined } : d)));
+    if (source.kind === "category" && source.id === id) setSource({ kind: "mix" });
+  }
+
+  function reshuffle() {
+    setSeed(Math.floor(Math.random() * 100000) + 1);
+    writePref("pos:mix", 0);
+    categories.forEach((c) => writePref(`pos:cat:${c.id}`, 0));
+  }
+
   const chips = (
     <div className="topbar">
       <div className="chips">
         <button
           className={`chip ${source.kind === "mix" ? "on" : ""}`}
           onClick={() => {
-            if (source.kind === "mix") {
-              // Tapping "Karışık" again reshuffles from the top
-              setSeed(Math.floor(Math.random() * 100000) + 1);
-              writePref("pos:mix", 0);
-            }
+            // Tapping "Karışık" again reshuffles from the top
+            if (source.kind === "mix") reshuffle();
             setSource({ kind: "mix" });
           }}
         >
           <Icon d={SHUFFLE} /> Karışık
         </button>
-        {allDecks.map((deck) => (
+        {activeDeck && <button className="chip on">{activeDeck.title}</button>}
+        {feedCategories.map((c) => (
           <button
-            key={deck.id}
-            className={`chip ${activeDeck?.id === deck.id ? "on" : ""}`}
-            onClick={() => setSource({ kind: "deck", id: deck.id })}
+            key={c.id}
+            className={`chip ${activeCategory?.id === c.id ? "on" : ""}`}
+            onClick={() => setSource({ kind: "category", id: c.id })}
           >
-            {deck.title}
+            {categoryLabel(c)}
           </button>
         ))}
       </div>
     </div>
   );
 
+  useEffect(() => centerActiveChips(), [tab, source]);
+
   if (decks === null) return <div className="app" />;
+
+  const feedKey = activeDeck ? `deck:${activeDeck.id}` : activeCategory ? `cat:${activeCategory.id}` : "mix";
 
   return (
     <div className="app">
       <main className="main">
         {tab === "feed" && (
           <Feed
-            key={`${activeDeck ? activeDeck.id : "mix"}:${seed}`}
+            key={`${feedKey}:${seed}`}
             items={feedItems}
-            positionKey={activeDeck ? `pos:deck:${activeDeck.id}` : "pos:mix"}
+            positionKey={`pos:${feedKey}`}
             saved={saved}
             onToggleSave={toggleSave}
             header={allDecks.length > 0 ? chips : undefined}
@@ -430,15 +648,21 @@ export function App() {
             }
           />
         )}
-        {tab === "add" && <AddScreen onCreate={createDeck} />}
+        {tab === "add" && <AddScreen categories={categories} onCreate={createDeck} />}
         {tab === "library" && (
           <Library
             decks={allDecks}
+            categories={categories}
+            syncStatus={syncStatus}
+            onSync={() => void loadKnownLibrary().then(syncLibrary)}
             onOpen={(id) => {
               setSource({ kind: "deck", id });
               setTab("feed");
             }}
             onDelete={deleteDeck}
+            onMove={moveDeck}
+            onAddCategory={addCategory}
+            onDeleteCategory={deleteCategory}
           />
         )}
       </main>

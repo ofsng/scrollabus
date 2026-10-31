@@ -1,0 +1,27 @@
+{
+ "id": "verimlilik--sistemler-ve-araclar",
+ "category": "verimlilik",
+ "title": "Sistemler ve Araçlar",
+ "cards": [
+  {
+   "title": "Pareto ilkesi",
+   "text": "Sonuçların yaklaşık %80'i, çabanın yaklaşık %20'sinden gelir. Bu kesin bir yasa değil ama güçlü bir sezgidir: Listendeki işlerden hangileri gerçekten fark yaratıyor? Önce onlara odaklan."
+  },
+  {
+   "title": "İki dakika kuralı (GTD)",
+   "text": "David Allen'ın \"Getting Things Done\" sisteminde, iki dakikadan kısa sürecek bir iş ortaya çıktığında hemen yapılır. Onu listeye yazıp takip etmek, yapmaktan daha uzun sürer."
+  },
+  {
+   "title": "Zihnini boşalt",
+   "text": "Aklında tutmaya çalıştığın her yapılacak iş zihinsel yer kaplar. Hepsini tek ve güvenilir bir yere yaz. Beyin fikir üretmek için harikadır, fikirleri saklamak için değil."
+  },
+  {
+   "title": "Parkinson yasası",
+   "text": "\"İş, kendisi için ayrılan süreyi dolduracak şekilde genişler.\" Bir işe bütün günü ayırırsan bütün gün sürer. Kendine kısa ama gerçekçi süreler koymak işi daha hızlı bitirmeni sağlar."
+  },
+  {
+   "title": "Haftalık değerlendirme",
+   "text": "Haftada bir kez 30 dakika ayır: Biten işlere bak, açık kalanları gözden geçir ve gelecek haftanın üç önemli hedefini belirle. Düzenli kısa bir kontrol, işlerin kaosa dönüşmesini önler."
+  }
+ ]
+}

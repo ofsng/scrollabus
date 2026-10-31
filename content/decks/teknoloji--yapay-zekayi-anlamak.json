@@ -1,0 +1,27 @@
+{
+ "id": "teknoloji--yapay-zekayi-anlamak",
+ "category": "teknoloji",
+ "title": "Yapay Zekâyı Anlamak",
+ "cards": [
+  {
+   "title": "Makine öğrenmesi nedir?",
+   "text": "Geleneksel yazılımda kuralları insan yazar. Makine öğrenmesinde ise sistem, çok sayıda örnekten kalıpları kendisi çıkarır. Binlerce kedi fotoğrafı görmüş bir model, daha önce hiç görmediği bir kediyi tanıyabilir."
+  },
+  {
+   "title": "Büyük dil modelleri",
+   "text": "Sohbet botlarının arkasındaki büyük dil modelleri, devasa metin verileriyle eğitilerek bir sonraki kelimeyi tahmin etmeyi öğrenir. Basit görünen bu hedef, ölçek büyüdükçe çeviri, özetleme ve akıl yürütme gibi yeteneklerin ortaya çıkmasını sağlar."
+  },
+  {
+   "title": "Halüsinasyon",
+   "text": "Dil modelleri bazen kendinden çok emin bir şekilde yanlış bilgi üretir; buna halüsinasyon denir. Model \"doğru\" olanı değil, \"olası\" görünen metni üretir. Önemli bilgileri her zaman güvenilir bir kaynaktan doğrula."
+  },
+  {
+   "title": "Veri yeni petrol mü?",
+   "text": "Bu benzetme verinin değerini vurgular ama eksiktir: Petrol tükenir, veri ise kopyalanabilir. Asıl değer ham veride değil, ondan anlam çıkarabilmektedir. Kişisel verilerin kimde olduğu ve nasıl kullanıldığı ise çağımızın temel sorularından biridir."
+  },
+  {
+   "title": "Otomasyon ve meslekler",
+   "text": "Teknoloji tarih boyunca bazı meslekleri ortadan kaldırırken yenilerini yarattı. Bugün tartışılan, yapay zekânın bu dönüşümü ne hızda yapacağı. Sürekli öğrenme ve yaratıcılık, empati gibi insana özgü beceriler bu yüzden giderek daha değerli."
+  }
+ ]
+}

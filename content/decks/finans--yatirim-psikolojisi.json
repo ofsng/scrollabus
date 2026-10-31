@@ -1,0 +1,27 @@
+{
+ "id": "finans--yatirim-psikolojisi",
+ "category": "finans",
+ "title": "Yatırım Psikolojisi",
+ "cards": [
+  {
+   "title": "Kayıptan kaçınma",
+   "text": "Daniel Kahneman ve Amos Tversky, kaybetmenin acısının aynı miktarı kazanmanın sevincinden kabaca iki kat güçlü hissedildiğini gösterdi. Bu yüzden yatırımcılar zarar eden yatırımı elde tutmaya, kâr edeni ise erken satmaya meyillidir."
+  },
+  {
+   "title": "Çeşitlendirme",
+   "text": "\"Bütün yumurtaları aynı sepete koyma.\" Farklı varlıklara, sektörlere ve bölgelere dağıtılmış bir portföy, tek bir yatırımın çöküşünden daha az etkilenir. Çeşitlendirme riski yok etmez ama azaltır."
+  },
+  {
+   "title": "Piyasayı zamanlamak",
+   "text": "En dipte alıp en tepede satmaya çalışmak cazip ama son derece zordur. Piyasanın en iyi günleri çoğu zaman en kötü günlerin hemen ardından gelir. Düzenli aralıklarla sabit tutarda yatırım yapmak, zamanlama riskini azaltmanın basit bir yoludur."
+  },
+  {
+   "title": "Batık maliyet yanılgısı",
+   "text": "Harcadığın para ya da zaman geri gelmez; bu yüzden yeni bir karar verirken onu hesaba katmamalısın. \"Bu kadar para verdim, devam etmeliyim\" düşüncesi, kötü bir yatırımı ya da projeyi gereğinden uzun sürdürmene yol açabilir."
+  },
+  {
+   "title": "Risk ve getiri",
+   "text": "Daha yüksek getiri beklentisi genellikle daha yüksek risk demektir. \"Risksiz ve yüksek getiri\" vaat eden her teklife şüpheyle yaklaş; dolandırıcılıkların çoğu tam olarak bu cümleyle başlar."
+  }
+ ]
+}

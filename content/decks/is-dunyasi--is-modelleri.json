@@ -1,0 +1,27 @@
+{
+ "id": "is-dunyasi--is-modelleri",
+ "category": "is-dunyasi",
+ "title": "İş Modelleri",
+ "cards": [
+  {
+   "title": "Değer önerisi",
+   "text": "Her başarılı işin özünde basit bir soru yatar: Müşterinin hangi sorununu çözüyorsun ve bunu alternatiflerden neden daha iyi yapıyorsun? Değer önerini tek cümleyle anlatamıyorsan, müşteri de anlamayacaktır."
+  },
+  {
+   "title": "Abonelik ekonomisi",
+   "text": "Tek seferlik satış yerine düzenli ödeme modeli, şirketlere öngörülebilir gelir sağlar. Müzik, yazılım, hatta tıraş bıçağı bile abonelikle satılıyor. Ama abonelik, müşteriyi her ay yeniden kazanmayı gerektirir."
+  },
+  {
+   "title": "Ağ etkisi",
+   "text": "Bir ürünün değeri kullanıcı sayısı arttıkça artıyorsa, orada ağ etkisi vardır. Dünyadaki tek telefon işe yaramaz; herkesin telefonu olduğunda vazgeçilmez olur. Sosyal ağlar ve pazar yerleri bu etkiyle büyür."
+  },
+  {
+   "title": "Minimum uygulanabilir ürün",
+   "text": "Eric Ries'ın \"Yalın Girişim\" yaklaşımında önce ürünün en temel hali çıkarılır, gerçek kullanıcılarla test edilir ve öğrenilenlere göre geliştirilir. Amaç, aylarca mükemmel ürünü beklemek yerine hızlı öğrenmektir."
+  },
+  {
+   "title": "Ekonomik hendek",
+   "text": "Warren Buffett kalıcı rekabet avantajını bir kalenin etrafındaki hendeğe benzetir: marka gücü, maliyet avantajı, ağ etkisi ya da müşterinin başka ürüne geçmesinin zor olması. Hendeği olmayan bir şirketin kârını rakipler hızla eritir."
+  }
+ ]
+}

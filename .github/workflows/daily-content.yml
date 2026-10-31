@@ -1,0 +1,48 @@
+name: Daily content
+
+# Writes new reading decks with Gemini every morning (Turkey time) and commits
+# them to content/. The mobile app downloads new decks on its next launch.
+# Needs the GEMINI_API_KEY repository secret.
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+    inputs:
+      decks:
+        description: "How many decks to write"
+        default: "3"
+      category:
+        description: "Only this category id (optional, e.g. finans)"
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-content
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Write new decks
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DECKS_PER_RUN: ${{ inputs.decks || '3' }}
+          CATEGORY: ${{ inputs.category }}
+        run: node content/generate.mjs
+
+      - name: Commit
+        run: |
+          git config user.name "scrollabus-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content
+          git diff --cached --quiet && exit 0
+          git commit -m "Add daily reading decks"
+          git push
