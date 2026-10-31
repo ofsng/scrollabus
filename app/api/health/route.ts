@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
-import { GEMINI_MODEL } from "@/lib/constants";
+import { GEMINI_MODEL, GEMINI_FAST_MODEL } from "@/lib/constants";
 import { generateAndSavePosts } from "@/lib/gemini-content";
 
 export const dynamic = "force-dynamic";
@@ -39,12 +39,16 @@ export async function GET(req: Request) {
     checks.database = { ok: false, detail: String(err) };
   }
 
-  try {
-    const model = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "").getGenerativeModel({ model: GEMINI_MODEL });
-    const result = await model.generateContent("Reply with the single word: ok");
-    checks.gemini = { ok: true, detail: `Model "${GEMINI_MODEL}" answered: ${result.response.text().trim().slice(0, 40)}` };
-  } catch (err) {
-    checks.gemini = { ok: false, detail: `Model "${GEMINI_MODEL}": ${err instanceof Error ? err.message : String(err)}` };
+  // Ping both models used by the app: chat/PDF and bulk generation (skipped on retry to save time)
+  for (const [name, modelId] of retry ? [] : ([["gemini", GEMINI_MODEL], ["gemini_fast", GEMINI_FAST_MODEL]] as const)) {
+    try {
+      const model = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "").getGenerativeModel({ model: modelId });
+      const started = Date.now();
+      const result = await model.generateContent("Reply with the single word: ok");
+      checks[name] = { ok: true, detail: `Model "${modelId}" answered "${result.response.text().trim().slice(0, 20)}" in ${Date.now() - started} ms` };
+    } catch (err) {
+      checks[name] = { ok: false, detail: `Model "${modelId}": ${err instanceof Error ? err.message : String(err)}` };
+    }
   }
 
   // Did the user's latest upload produce anything?
@@ -64,14 +68,15 @@ export async function GET(req: Request) {
         title: latest.title,
         enabled_personas: profile?.enabled_personas ?? undefined,
       });
-      checks.retry = result.error
-        ? { ok: false, detail: `Generation failed: ${result.error}` }
-        : { ok: true, detail: `Generated ${result.inserted} posts — open the feed` };
+      checks.retry = {
+        ok: result.inserted > 0,
+        detail: `Generated ${result.inserted} posts${result.error ? ` — errors: ${result.error}` : " — open the feed"}`,
+      };
     }
 
     const generation = retry ? undefined : (latest.teaching_plan as { generation?: { posts?: number; error?: string | null; at?: string } } | null)?.generation;
     if (!retry) checks.last_generation = generation
-      ? { ok: !generation.error, detail: generation.error ? `Failed at ${generation.at}: ${generation.error}` : `${generation.posts} posts at ${generation.at}` }
+      ? { ok: (generation.posts ?? 0) > 0, detail: `${generation.posts ?? 0} posts at ${generation.at}${generation.error ? ` — errors: ${generation.error}` : ""}` }
       : { ok: false, detail: "No generation result recorded — the background job never finished (timeout?). Try /api/health?retry=1" };
 
     const [{ count: postCount }, { count: quizCount }] = await Promise.all([

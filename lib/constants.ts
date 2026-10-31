@@ -141,3 +141,7 @@ export const QUIZ_INSERT_INTERVAL = { min: 4, max: 6 };
 // aliases track Google's current Flash models, so old model IDs being retired
 // doesn't break the app.
 export const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
+
+// Faster model for bulk generation (feed posts, quizzes) so it finishes inside
+// the serverless time limit; override with GEMINI_FAST_MODEL
+export const GEMINI_FAST_MODEL = process.env.GEMINI_FAST_MODEL || "gemini-flash-lite-latest";

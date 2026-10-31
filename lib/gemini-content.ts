@@ -1,14 +1,14 @@
 import { GoogleGenerativeAI, type GenerativeModel } from "@google/generative-ai";
 import { createServiceClient } from "@/lib/supabase/service";
 import type { PostType } from "@/lib/types";
-import { GEMINI_MODEL } from "@/lib/constants";
+import { GEMINI_MODEL, GEMINI_FAST_MODEL } from "@/lib/constants";
 
 // In-app replacement for the n8n text pipelines (Workflow 1a + Workflow 2).
 // Used when no n8n webhook URL is configured, so the whole app runs on the
 // Gemini free tier with a single API key. Text posts only — no paid image,
 // audio or video generation.
 
-// Each persona writes one post per chunk; capped to keep the single request fast.
+// Each persona writes one post per chunk; capped to keep requests fast.
 const CHUNK_WORDS = 300;
 const MAX_CHUNKS = 5;
 
@@ -23,11 +23,11 @@ const PERSONA_POST_TYPES: Record<string, PostType> = {
 
 const VALID_POST_TYPES: PostType[] = ["concept", "example", "trap", "review", "recap"];
 
-function getModel(systemInstruction: string, json: boolean) {
+function getModel(systemInstruction: string, json: boolean, model = GEMINI_MODEL) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
   return new GoogleGenerativeAI(apiKey).getGenerativeModel({
-    model: GEMINI_MODEL,
+    model,
     systemInstruction,
     generationConfig: json ? { responseMimeType: "application/json", temperature: 0.8 } : { temperature: 0.8 },
   });
@@ -131,69 +131,63 @@ async function generatePosts({
     (a, b) => Number(prioritySet.has(b.slug)) - Number(prioritySet.has(a.slug))
   );
   const chunks = splitIntoChunks(raw_text);
-
-  // A single request writes every persona's posts: stays well inside free-tier
-  // per-minute quotas and the serverless time limit.
-  const model = getModel(
-    "You ghost-write short educational social-media posts for a team of study creators. Each creator has their own voice, described below; write every post fully in that creator's voice.",
-    true
-  );
-  if (!model) return { inserted: 0, error: "GEMINI_API_KEY not configured" };
-
-  const creators = personas
-    .map((p) => `## Creator "${p.slug}" (${p.name})\n${p.system_prompt}`)
-    .join("\n\n");
+  const roster = personas.map((p) => `@${p.name}`).join(", ");
   const sections = chunks.map((c, i) => `### Section ${i + 1}\n${c}`).join("\n\n");
   const emphasisBlock = emphasis
     ? `\n\nThe student's teaching plan highlights this emphasis: "${emphasis}". Lean into this angle.`
     : "";
-  const prompt = `# Creators
-${creators}
 
-# Study material titled "${title}"
+  // One fast request per persona, in parallel; each persona's posts are saved as
+  // soon as they arrive so a slow persona can't hold back the rest of the feed.
+  const results = await Promise.allSettled(
+    personas.map(async (persona, pi) => {
+      const model = getModel(persona.system_prompt, true, GEMINI_FAST_MODEL);
+      if (!model) throw new Error("GEMINI_API_KEY not configured");
+
+      const prompt = `Study material titled "${title}":
+
 ${sections}${emphasisBlock}
 
-For EVERY creator and EVERY section, write one short post about that section's main concept, in that creator's voice.
-Creators MAY mention each other by @name when it feels natural; never force it.
+Other creators in this feed: ${roster}. You MAY mention one by @name if it feels natural; never force it.
+
+Write exactly ${chunks.length} short educational posts, one per section, each about that section's main concept.
 Write in the same language as the study material.
-Return ONLY JSON: {"posts": [{"creator": "<creator slug>", "section": <section number>, "title": "...", "body": "..."}]}`;
+Return ONLY a JSON array of objects with fields "title" (string) and "body" (string).`;
 
-  const response = await generateWithRetry(model, prompt);
-  const raw = JSON.parse(response.response.text());
-  // Accept {"posts": [...]}, a bare array, or any object wrapping an array
-  const parsed: unknown[] = Array.isArray(raw) ? raw : (Object.values(raw ?? {}).find(Array.isArray) as unknown[]) ?? [];
+      const response = await generateWithRetry(model, prompt);
+      const raw = JSON.parse(response.response.text());
+      // Gemini occasionally wraps the array, e.g. { "posts": [...] }
+      const parsed: unknown[] = Array.isArray(raw) ? raw : (Object.values(raw ?? {}).find(Array.isArray) as unknown[]) ?? [];
 
-  const personaIndex = new Map(personas.map((p, i) => [p.slug, i]));
-  const posts = parsed
-    .filter(
-      (p): p is { creator: string; section?: number; title?: string; body: string } =>
-        typeof (p as { body?: unknown })?.body === "string" &&
-        personaIndex.has((p as { creator?: string }).creator ?? "") &&
-        (p as { body: string }).body.trim().length > 0
-    )
-    .map((p) => {
-      const pi = personaIndex.get(p.creator)!;
-      const persona = personas[pi];
-      const ci = Math.max(0, Math.min(chunks.length - 1, (Number(p.section) || 1) - 1));
       const postType = PERSONA_POST_TYPES[persona.slug] ?? "concept";
-      return {
-        material_id,
-        persona_id: persona.id,
-        post_type: VALID_POST_TYPES.includes(postType) ? postType : "concept",
-        title: typeof p.title === "string" ? p.title : null,
-        body: p.body.trim(),
-        media_type: "text",
-        media_url: null,
-        // Interleave personas the same way the n8n orchestrator did
-        sort_order: ci * personas.length + pi,
-      };
-    });
+      const posts = parsed
+        .filter((p): p is { title?: string; body: string } =>
+          typeof (p as { body?: unknown })?.body === "string" && (p as { body: string }).body.trim().length > 0)
+        .slice(0, chunks.length)
+        .map((p, ci) => ({
+          material_id,
+          persona_id: persona.id,
+          post_type: VALID_POST_TYPES.includes(postType) ? postType : "concept",
+          title: typeof p.title === "string" ? p.title : null,
+          body: p.body.trim(),
+          media_type: "text",
+          media_url: null,
+          // Interleave personas the same way the n8n orchestrator did
+          sort_order: ci * personas.length + pi,
+        }));
+      if (posts.length === 0) throw new Error("Gemini returned no usable posts");
 
-  if (posts.length === 0) return { inserted: 0, error: "Gemini returned no usable posts" };
+      const { error } = await supabase.from("posts").insert(posts);
+      if (error) throw new Error(`DB insert error: ${error.message}`);
+      return posts.length;
+    })
+  );
 
-  const { error } = await supabase.from("posts").insert(posts);
-  if (error) return { inserted: 0, error: `DB insert error: ${error.message}` };
-  return { inserted: posts.length };
+  const inserted = results.reduce((n, r) => n + (r.status === "fulfilled" ? r.value : 0), 0);
+  const errors = results.flatMap((r, i) =>
+    r.status === "rejected" ? [`${personas[i].slug}: ${r.reason instanceof Error ? r.reason.message : String(r.reason)}`] : []
+  );
+  return { inserted, error: errors.length ? errors.join(" | ") : undefined };
 }
 
 export async function generateAndSaveCommentReply({
