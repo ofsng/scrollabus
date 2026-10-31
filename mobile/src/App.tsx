@@ -195,22 +195,34 @@ function ConfirmDelete({ label, onConfirm }: { label: string; onConfirm: () => v
 
 // ─── Feed ────────────────────────────────────────────────────────────────────
 
+// How far a card must be dragged sideways to count as a swipe
+const SWIPE_TRIGGER = 90;
+
+interface SwipeAction {
+  label: string;
+  onSwipe: (item: FeedItem) => void;
+}
+
 function Feed({
   items,
   positionKey,
   saved,
   onToggleSave,
   onRead,
+  swipeLeft,
+  swipeRight,
   header,
   empty,
   textScale,
 }: {
   items: FeedItem[];
-  // Remembers the scroll position; feeds that drop read cards start at the top instead
-  positionKey?: string;
+  // Remembers which card you were on, so leaving the tab and coming back resumes there
+  positionKey: string;
   saved: Set<string>;
   onToggleSave: (cardId: string) => void;
   onRead?: (cardId: string) => void;
+  swipeLeft?: SwipeAction;
+  swipeRight?: SwipeAction;
   header?: React.ReactNode;
   empty: React.ReactNode;
   // Changes when the reading size changes, to re-check which cards overflow
@@ -219,6 +231,9 @@ function Feed({
   const ref = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [burst, setBurst] = useState<string | null>(null);
+  const [drag, setDrag] = useState<{ id: string; dx: number } | null>(null);
+  const gesture = useRef<{ id: string; x: number; y: number; axis: "x" | "y" | null } | null>(null);
+  const [swipeHint, setSwipeHint] = useState(() => !!(swipeLeft || swipeRight) && !readPref<boolean>("swipeLearned", false));
   const onReadRef = useRef(onRead);
   onReadRef.current = onRead;
 
@@ -250,13 +265,13 @@ function Feed({
     };
   }, [items, textScale]);
 
-  // Restore where you left off in this feed
+  // Resume on the card you were reading
   useEffect(() => {
     const el = ref.current;
-    if (!el || items.length === 0 || !positionKey) return;
-    const saved = Math.min(readPref<number>(positionKey, 0), items.length - 1);
-    (el.children[saved] as HTMLElement | undefined)?.scrollIntoView({ block: "start" });
-    setIndex(saved);
+    if (!el || items.length === 0) return;
+    const at = Math.max(0, items.findIndex((it) => it.card.id === readPref<string | null>(positionKey, null)));
+    (el.children[at] as HTMLElement | undefined)?.scrollIntoView({ block: "start" });
+    setIndex(at);
   }, [positionKey, items.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -268,7 +283,7 @@ function Feed({
           if (entry.isIntersecting) {
             const i = Number((entry.target as HTMLElement).dataset.index);
             setIndex(i);
-            if (positionKey) writePref(positionKey, i);
+            if (items[i]) writePref(positionKey, items[i].card.id);
           }
         }
       },
@@ -277,6 +292,25 @@ function Feed({
     Array.from(el.children).forEach((c) => observer.observe(c));
     return () => observer.disconnect();
   }, [items, positionKey]);
+
+  function endGesture(item: FeedItem, clientX: number) {
+    const g = gesture.current;
+    gesture.current = null;
+    setDrag(null);
+    if (g?.axis !== "x") return;
+    const dx = clientX - g.x;
+    const action = dx > SWIPE_TRIGGER ? swipeRight : dx < -SWIPE_TRIGGER ? swipeLeft : undefined;
+    if (!action) return;
+    if (swipeHint) {
+      setSwipeHint(false);
+      writePref("swipeLearned", true);
+    }
+    if (action === swipeRight) {
+      setBurst(item.card.id);
+      setTimeout(() => setBurst(null), 700);
+    }
+    action.onSwipe(item);
+  }
 
   if (items.length === 0) {
     return (
@@ -291,23 +325,47 @@ function Feed({
     <div className="screen">
       {header}
       <div className="feed" ref={ref}>
-        {items.map(({ card, deck }, i) => {
+        {items.map((item, i) => {
+          const { card, deck } = item;
           const hue = hueFor(deck.categoryId ?? deck.id);
-          const isSaved = saved.has(card.id);
           const part = deck.cards.indexOf(card) + 1;
+          const dx = drag?.id === card.id ? drag.dx : 0;
+          const pull = Math.min(1, Math.abs(dx) / SWIPE_TRIGGER);
           return (
             <article
               key={card.id}
               data-index={i}
               className="card"
-              style={{ background: `linear-gradient(180deg, hsl(${hue} 16% 12%), hsl(${hue} 12% 8%))` }}
+              style={{ background: `linear-gradient(160deg, hsl(${hue} 42% 20%), hsl(${(hue + 40) % 360} 48% 9%))` }}
               onDoubleClick={() => {
-                if (!isSaved) onToggleSave(card.id);
+                if (!saved.has(card.id)) onToggleSave(card.id);
                 setBurst(card.id);
                 setTimeout(() => setBurst(null), 700);
               }}
+              onPointerDown={(e) => {
+                if (swipeLeft || swipeRight) gesture.current = { id: card.id, x: e.clientX, y: e.clientY, axis: null };
+              }}
+              onPointerMove={(e) => {
+                const g = gesture.current;
+                if (!g || g.id !== card.id) return;
+                const mx = e.clientX - g.x;
+                const my = e.clientY - g.y;
+                if (!g.axis) {
+                  if (Math.abs(mx) < 10 && Math.abs(my) < 10) return;
+                  g.axis = Math.abs(mx) > Math.abs(my) * 1.3 ? "x" : "y";
+                }
+                if (g.axis === "x") setDrag({ id: card.id, dx: mx });
+              }}
+              onPointerUp={(e) => endGesture(item, e.clientX)}
+              onPointerCancel={() => {
+                gesture.current = null;
+                setDrag(null);
+              }}
             >
-              <div className="card-body">
+              <div
+                className={`card-body ${dx ? "dragging" : ""}`}
+                style={dx ? { transform: `translateX(${dx}px) rotate(${dx / 30}deg)` } : undefined}
+              >
                 <div className="card-deck">
                   <span>{deck.title}</span>
                   {deck.cards.length > 1 && (
@@ -322,6 +380,16 @@ function Feed({
                   }
                 />
               </div>
+              {swipeRight && dx > 0 && (
+                <div className="swipe-label left-side" style={{ opacity: pull }}>
+                  {swipeRight.label}
+                </div>
+              )}
+              {swipeLeft && dx < 0 && (
+                <div className="swipe-label right-side" style={{ opacity: pull }}>
+                  {swipeLeft.label}
+                </div>
+              )}
               <div className="more-hint" aria-hidden="true">
                 devamı ↓
               </div>
@@ -330,19 +398,16 @@ function Feed({
                   <Icon d={HEART} filled />
                 </div>
               )}
-              <div className="card-side">
-                <button
-                  className={`round ${isSaved ? "on" : ""}`}
-                  onClick={() => onToggleSave(card.id)}
-                  aria-label={isSaved ? "Kaydedilenlerden çıkar" : "Kaydet"}
-                >
-                  <Icon d={HEART} filled={isSaved} />
-                </button>
-              </div>
             </article>
           );
         })}
       </div>
+      {swipeHint && (
+        <div className="swipe-hint" aria-hidden="true">
+          {swipeLeft && <span>← {swipeLeft.label}</span>}
+          {swipeRight && <span>{swipeRight.label} →</span>}
+        </div>
+      )}
     </div>
   );
 }
@@ -1177,11 +1242,18 @@ export function App() {
   const feedCategories = categories.filter((c) => !c.hidden && (categoryCounts.get(c.id) ?? 0) > 0);
   const feedKey = activeDeck ? `deck:${activeDeck.id}` : activeCategory ? `cat:${activeCategory.id}` : "mix";
 
-  // The feed is built from a snapshot taken when it is (re)opened: read cards
-  // leave and new decks join then, so cards never shift under your thumb
-  const snapshotDeps = [tab, feedKey, seed, decks === null, feedNonce];
+  // The feed is built from a snapshot taken when its source changes (or the app
+  // starts): read cards leave and new decks join only then. Switching tabs keeps
+  // the same feed, so you can always scroll back up to what you just read.
+  const positionKey = `cur:${feedKey}`;
+  const snapshotDeps = [feedKey, seed, decks === null, feedNonce];
   const readSnapshot = useMemo(() => new Set(readRef.current.keys()), snapshotDeps); // eslint-disable-line react-hooks/exhaustive-deps
   const feedDecks = useMemo(() => decksRef.current, snapshotDeps); // eslint-disable-line react-hooks/exhaustive-deps
+  // The reading you were in the middle of keeps all its pages, read or not
+  const currentDeckId = useMemo(() => {
+    const cardId = readPref<string | null>(positionKey, null);
+    return cardId ? feedDecks.find((d) => d.cards.some((c) => c.id === cardId))?.id : undefined;
+  }, snapshotDeps); // eslint-disable-line react-hooks/exhaustive-deps
 
   const feedPool = useMemo<FeedItem[]>(() => {
     if (activeDeck) return deckItems([activeDeck]);
@@ -1192,8 +1264,11 @@ export function App() {
   }, [feedDecks, activeDeck, activeCategory, hiddenIds, seed]);
   // A deck opened on purpose shows every card; the endless feeds skip read ones
   const feedItems = useMemo(
-    () => (activeDeck ? feedPool : feedPool.filter((it) => !readSnapshot.has(it.card.id))),
-    [feedPool, activeDeck, readSnapshot]
+    () =>
+      activeDeck
+        ? feedPool
+        : feedPool.filter((it) => !readSnapshot.has(it.card.id) || it.deck.id === currentDeckId),
+    [feedPool, activeDeck, readSnapshot, currentDeckId]
   );
 
   const savedItems = useMemo<FeedItem[]>(
@@ -1285,7 +1360,7 @@ export function App() {
       cards: splitIntoCards(text).map((c) => ({ ...c, id: newId() })),
     };
     updateDecks([deck, ...allDecks]);
-    writePref(`pos:deck:${deck.id}`, 0);
+    writePref(`cur:deck:${deck.id}`, null);
     openDeck(deck.id);
   }
 
@@ -1329,7 +1404,9 @@ export function App() {
     if (source.kind === "category" && source.id === id) setSource({ kind: "mix" });
   }
 
+  // A fresh shuffle starts from the top of the new order
   function reshuffle() {
+    writePref("cur:mix", null);
     setSeed(Math.floor(Math.random() * 100000) + 1);
   }
 
@@ -1428,10 +1505,24 @@ export function App() {
           <Feed
             key={`${feedKey}:${seed}:${feedNonce}:${readSnapshot.size}`}
             items={feedItems}
-            positionKey={activeDeck ? `pos:${feedKey}` : undefined}
+            positionKey={positionKey}
             saved={saved}
             onToggleSave={toggleSave}
             onRead={markRead}
+            swipeRight={{
+              label: "♥ Kaydet",
+              onSwipe: ({ card }) => {
+                if (!saved.has(card.id)) toggleSave(card.id);
+              },
+            }}
+            swipeLeft={{
+              label: "🔀 Karıştır",
+              onSwipe: () => {
+                reshuffle();
+                setSource({ kind: "mix" });
+                showToast("🔀 Karıştırıldı");
+              },
+            }}
             textScale={sizeIndex}
             header={allDecks.length > 0 ? chips : undefined}
             empty={feedEmpty}
@@ -1441,9 +1532,10 @@ export function App() {
           <Feed
             key="saved"
             items={savedItems}
-            positionKey="pos:saved"
+            positionKey="cur:saved"
             saved={saved}
             onToggleSave={toggleSave}
+            swipeLeft={{ label: "Çıkar", onSwipe: ({ card }) => toggleSave(card.id) }}
             textScale={sizeIndex}
             empty={
               <>

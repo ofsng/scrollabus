@@ -9,10 +9,10 @@
   --muted: #a39fae;
   --accent: #ff5d73;
   --nav-h: 60px;
-  /* Off-white on near-black: high enough contrast to read, softer than pure white */
-  --reading-text: #e3ddd2;
-  --reading-muted: rgba(227, 221, 210, 0.5);
-  --reading-font: "Literata", Georgia, "Times New Roman", serif;
+  /* The phone's own UI font (Roboto on Android) is the quickest to read on screen */
+  --reading-text: #f6f3ec;
+  --reading-muted: rgba(246, 243, 236, 0.6);
+  --reading-font: Roboto, "Segoe UI", system-ui, -apple-system, sans-serif;
   color-scheme: dark;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
@@ -74,28 +74,35 @@ button {
   display: none;
 }
 
-/* Reading: one calm, steady layout tuned for long-form text */
+/* Reading: a narrow centred column so the eye stays in one place */
 .card {
   height: 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   position: relative;
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: calc(var(--sat) + 64px) 24px 64px;
+  padding: calc(var(--sat) + 64px) 24px 56px;
   content-visibility: auto;
   contain-intrinsic-size: auto 100vh;
   user-select: none;
+  overflow: hidden;
+  /* Vertical swipes scroll the feed; horizontal ones are ours (save / shuffle) */
+  touch-action: pan-y;
 }
 
 .card-body {
   width: 100%;
-  max-width: 34em;
+  max-width: 300px;
   max-height: 100%;
   overflow-y: auto;
   scrollbar-width: none;
-  margin: auto 0;
   font-size: var(--reading-size, 19px);
+  transition: transform 0.2s ease-out;
+}
+.card-body.dragging {
+  transition: none;
 }
 .card-body::-webkit-scrollbar {
   display: none;
@@ -126,13 +133,12 @@ button {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--reading-muted);
-  margin-bottom: 1.1em;
+  margin-bottom: 0.9em;
 }
 .card-deck span:first-child {
   overflow: hidden;
@@ -147,54 +153,60 @@ button {
 .card-title,
 .reading .card-title {
   font-family: var(--reading-font);
-  font-size: 1.2em;
-  font-weight: 600;
+  font-size: 1.1em;
+  font-weight: 700;
   line-height: 1.3;
-  margin: 0 0 0.7em;
+  margin: 0 0 0.6em;
   color: var(--reading-text);
 }
 
 .card-text {
   font-family: var(--reading-font);
   font-size: 1em;
-  font-weight: 400;
-  line-height: 1.7;
+  font-weight: 500;
+  line-height: 1.5;
   color: var(--reading-text);
   text-wrap: pretty;
-  hyphens: auto;
-  font-kerning: normal;
 }
 .card-text p {
   margin: 0;
 }
 .card-text p + p {
-  margin-top: 0.85em;
+  margin-top: 0.8em;
 }
 
-.card-side {
+.swipe-label {
   position: absolute;
-  right: 12px;
-  bottom: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  pointer-events: none;
+}
+.swipe-label.left-side {
+  left: 16px;
+}
+.swipe-label.right-side {
+  right: 16px;
 }
 
-.round {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
+.swipe-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--reading-muted);
-  transition: transform 0.15s, color 0.15s;
-}
-.round svg {
-  width: 22px;
-  height: 22px;
-}
-.round:active {
-  transform: scale(0.9);
-}
-.round.on {
-  color: var(--accent);
+  pointer-events: none;
+  animation: fade 0.6s ease-out;
 }
 
 .burst {

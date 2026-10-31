@@ -1,11 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
-// Reading typeface, bundled so it works offline (Latin + Turkish glyphs only)
-import "@fontsource/literata/latin-400.css";
-import "@fontsource/literata/latin-ext-400.css";
-import "@fontsource/literata/latin-600.css";
-import "@fontsource/literata/latin-ext-600.css";
 import "./styles.css";
 
 createRoot(document.getElementById("root")!).render(

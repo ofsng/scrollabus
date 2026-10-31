@@ -18,10 +18,10 @@ ${cardTitles.length ? cardTitles.join(", ") : "(henüz yok)"}
 Bu kategoride belirli ve ilginç bir konu seç: bir kavramın tarihi, bir düşünürün fikri, önemli bir araştırmanın hikâyesi, bir olayın ya da buluşun arka planı gibi. Sonra onu bir kitap bölümü gibi derinlemesine anlat.
 
 Yapı:
-- Konu ne gerektiriyorsa o kadar kart yaz: 5 ile 9 arası, abartmadan.
-- Kartlar sırayla okunur ve tek bir bütün oluşturur. İlk kart merak uyandırarak konuya girer; ortadaki kartlar konuyu adım adım derinleştirir (kökeni, kişiler, nasıl işlediği, örnekler, tartışmalar ve eleştiriler); son kart toparlar ve konunun bugünle bağını kurar.
-- Her kartın metni 400-650 karakter olsun: bir ya da iki paragraf. Paragrafları boş satırla ayır.
-- Kart başlıkları kısa olsun (en fazla 6 kelime), bir kitabın ara başlıkları gibi.
+- Kartlar bir kitabın sayfaları gibi sırayla okunur ve tek bir bütün oluşturur. İlk kart merak uyandırarak konuya girer; sonrakiler konuyu adım adım derinleştirir (kökeni, kişiler, nasıl işlediği, örnekler, tartışmalar ve eleştiriler); son kart toparlar ve konunun bugünle bağını kurar.
+- Konu ne gerektiriyorsa o kadar kart yaz: 6 ile 12 arası, abartmadan.
+- Her kart TEK paragraf olsun ve 250-450 karakter tutsun; telefonda tek ekrana sığmalı.
+- Yeni bir alt bölüme geçen kartlara kısa bir başlık ver (en fazla 6 kelime); bir önceki kartın devamı olan kartlarda "title" alanını boş bırak.
 
 Üslup:
 - Akıcı, sıcak ve anlatıcı yaz; somut sahneler, isimler, yerler, tarihler ve örnekler kullan.
@@ -33,11 +33,14 @@ Doğruluk:
 - Yalnızca doğru olduğundan emin olduğun bilgileri kullan; tartışmalı ya da kesin olmayan bilgiyi öyle olduğunu belirterek anlat.
 
 Doğal ve akıcı bir Türkçe kullan. Yalnızca şu JSON'u döndür:
-{"title": "Yazının başlığı", "cards": [{"title": "Ara başlık", "text": "Kart metni"}]}`;
+{"title": "Yazının başlığı", "cards": [{"title": "Ara başlık", "text": "Kart metni"}, {"text": "Devam eden kart metni"}]}`;
 }
 
 // Anything outside Latin script (e.g. stray Thai or CJK tokens) means a garbled answer
 const FOREIGN = /[^\p{Script=Latin}\p{Script=Common}\p{Script=Inherited}]/u;
+
+// Cards longer than this are split at paragraph breaks so each fits one screen
+const PAGE_CHARS = 480;
 
 export function parseDeck(raw) {
   const data = JSON.parse(raw);
@@ -45,19 +48,21 @@ export function parseDeck(raw) {
   const title = typeof data?.title === "string" ? data.title.trim() : "";
   let actionUsed = false;
   const cards = (Array.isArray(data?.cards) ? data.cards : [])
-    .filter((c) => typeof c?.text === "string" && c.text.trim().length >= 150 && c.text.trim().length <= 900)
-    .map((c) => {
+    .filter((c) => typeof c?.text === "string" && c.text.trim().length >= 120 && c.text.trim().length <= 1200)
+    .flatMap((c) => {
+      const text = c.text.trim();
+      const parts = text.length > PAGE_CHARS ? text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean) : [text];
       // At most one "try this" step per deck; reading, not homework
       const action = !actionUsed && typeof c.action === "string" && c.action.trim().length >= 20 ? c.action.trim() : undefined;
       if (action) actionUsed = true;
-      return {
-        title: typeof c.title === "string" ? c.title.trim() : undefined,
-        text: c.text.trim(),
-        ...(action ? { action } : {}),
-      };
+      return parts.map((part, i) => ({
+        ...(i === 0 && typeof c.title === "string" && c.title.trim() ? { title: c.title.trim() } : {}),
+        text: part,
+        ...(action && i === parts.length - 1 ? { action } : {}),
+      }));
     });
   if (!title || cards.length < 4) throw new Error(`Unusable response: ${raw.slice(0, 200)}`);
-  return { title, cards: cards.slice(0, 10) };
+  return { title, cards: cards.slice(0, 14) };
 }
 
 export class GeminiError extends Error {

@@ -18,7 +18,8 @@ Sunucu, giriş, yapay zekâ ya da API anahtarı yok; her şey telefonda saklanı
 - **Akış:** kartları yukarı kaydır. Üstte *Karışık* tüm notlarını karıştırır
   (tekrar basınca yeniden karıştırır), not adına basınca sadece o not gelir.
   Kaldığın yeri hatırlar.
-- **Kaydet:** karta çift dokun veya kalbe bas → *Kaydedilenler*.
+- **Kaydır:** kartı **sağa** kaydır → kaydet (*Kaydedilenler*), **sola** kaydır → akışı
+  karıştır. Kaydedilenler'de sola kaydırmak kartı çıkarır.
 - **Kütüphane:** notlarını ve okuma parçalarını kategoriye göre gör, aç, kategorisini
   değiştir veya sil. **+ Kategori** ile kendi kategorini ekle.
 - Akışın üstündeki kategori şeridinden tek bir kategoriyi kaydırabilirsin.
