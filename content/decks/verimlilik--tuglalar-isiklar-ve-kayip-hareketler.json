@@ -1,0 +1,35 @@
+{
+ "id": "verimlilik--tuglalar-isiklar-ve-kayip-hareketler",
+ "category": "verimlilik",
+ "title": "Tuğlalar, Işıklar ve Kayıp Hareketler",
+ "cards": [
+  {
+   "title": "On Sekiz Hareketten Dört Buçuğa",
+   "text": "1885 yılında Boston'da henüz on yedi yaşındaki Frank Gilbreth, bir inşaatta çırak olarak işe başladı. Dikkatini ilk çeken şey, ustaların her birinin tuğla dizerken tamamen farklı hareketler yapmasıydı. Üstelik aynı usta yoruldukça ya da acele ettikçe tekniğini değiştiriyordu. Gilbreth her tuğla için yapılan on sekiz ayrı hareketi incelemeye başladı; eğilmeler, tuğlayı çevirmeler, harcı fazlaca vurmalar tek tek elendiğinde geriye yalnızca dört buçuk hareket kalıyordu."
+  },
+  {
+   "text": "Geliştirdiği ayarlanabilir iskeleler ve özel harç kutuları sayesinde işçilerin sürekli eğilip doğrulması gerekmedi. Sonuç şaşırtıcıydı: Saatte 120 olan tuğla koyma sayısı 350'ye çıktı ve işçiler gün sonunda çok daha az yoruluyordu. Frank Gilbreth, verimliliğin insanı daha hızlı koşturmakla değil, yolundaki gereksiz adımları ortadan kaldırmakla ilgili olduğunu henüz o yaşta sezmişti."
+  },
+  {
+   "title": "Kronometreye Karşı İnsan Zihni",
+   "text": "Dönemin verimlilik gurusu Frederick Winslow Taylor, elinde kronometreyle fabrikayı dolaşıyor ve her işin kaç saniyede biteceğini hesaplıyordu. Taylorizm, insanı neredeyse mekanik bir dişliye indirgemişti. Frank ve hayatını birleştirdiği psikolog Lillian Moller Gilbreth ise kronometrenin kör noktalarını gördü. Onlara göre asıl mesele hız değil, yorgunluk ve sürtünmeydi; psikolojik direnç hesaba katılmadan gerçek bir verim elde edilemezdi."
+  },
+  {
+   "text": "Lillian, endüstriyel psikolojinin ilk kadın doktorlarındandı. Çift, evlerinin bodrumunu ve fabrika atölyelerini birer laboratuvara dönüştürdü. İşçilerin parmaklarına ve eklemlerine küçük ampuller bağlayarak karanlıkta uzun pozlamalı fotoğraflar çektiler. Fotoğraf plağında beliren ışık çizgileri, bir ustanın tornayı çevirirken havada çizdiği gereksiz kavisleri, tereddütleri ve boş hareketleri apaçık gösteriyordu."
+  },
+  {
+   "title": "Kendi Adını Taşıyan Birimler",
+   "text": "Gilbreth çifti insan eylemini atomlarına ayırdı ve 17 temel mikro hareket tanımladı. Kendi soyadlarının tersten okunuşundan esinlenerek bunlara 'therblig' adını verdiler: aramak, bulmak, seçmek, kavramak, taşımak, beklemek... Bir çekmeceden tornavida ararken geçen birkaç saniye sistem için kayıptı. Eğer alet her zaman elin doğal uzantısı olan sabit bir noktada durursa, 'arama' ve 'seçme' therblig'leri doğrudan siliniyordu."
+  },
+  {
+   "text": "Bu analitik bakış yalnızca fabrikalarda kalmadı. Frank bir ameliyatı izlerken cerrahların neşter aramak için hastadan gözlerini ayırdığını fark etti. Bugün tüm dünyada standart olan, cerrahın elini arkaya uzatıp sadece 'bisturi' dediği ve hemşirenin aleti tam kavramaya hazır şekilde eline bıraktığı cerrahi düzeni, Gilbrethlerin ameliyathanelere kazandırdığı bir akıştı."
+  },
+  {
+   "title": "Fabrikanın Soğuk Yüzü",
+   "text": "Yine de hareket etütleri dönemin işçi sendikaları tarafından sert tepkilerle karşılandı. İnsanın her nefesinin ve el hareketinin ölçülmesi, denetim toplumunun erken bir provası gibiydi. Charlie Chaplin'in 'Modern Zamanlar' filminde dev dişlilerin arasına sıkışan işçi figürü, Gilbreth ve Taylor'ın dünyasına yöneltilen en çarpıcı kültürel eleştiri oldu. Aşırı optimize edilmiş bir düzen, insan doğasının dağınıklığını ve özgürlüğünü boğma riski taşıyordu."
+  },
+  {
+   "text": "Bugün bir akıllı telefonun arayüzünde tek bir dokunuşla dosya açarken ya da modern bir mutfakta tezgâh yüksekliğini ayarlarken farkında olmadan Gilbrethlerin mirasını kullanıyoruz. Modern çağda verimlilik çoğu zaman daha çok görevi daha az zamana sıkıştırmak sanılıyor. Oysa yüz yıl önce çekilen o ışıklı fotoğraflar tersini fısıldıyor: Verimlilik, hızlanmaktan ziyade üzerimizdeki fazlalıkları sakince yere bırakma sanatıdır."
+  }
+ ]
+}
