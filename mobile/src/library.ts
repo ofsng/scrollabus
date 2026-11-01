@@ -80,7 +80,9 @@ export async function fetchLibraryUpdates(
 
 // Adds decks never seen before and refreshes outdated library decks in place,
 // keeping the user's category choice. Decks the user deleted stay deleted.
-export function mergeLibrary(current: Deck[], incoming: Deck[], known: Set<string>) {
+// stampArrival: mark added decks as just arrived (downloaded ones); decks that
+// ship inside the app keep their publication date so they don't all look new.
+export function mergeLibrary(current: Deck[], incoming: Deck[], known: Set<string>, stampArrival = true) {
   const byId = new Map(current.map((d) => [d.id, d]));
   let added = 0;
   let updated = 0;
@@ -90,9 +92,12 @@ export function mergeLibrary(current: Deck[], incoming: Deck[], known: Set<strin
     updated++;
     return { ...fresh, categoryId: deck.categoryId, title: deck.renamed ? deck.title : fresh.title, renamed: deck.renamed };
   });
+  // Arrival time orders the library; later entries in the index are newer, so
+  // they get a slightly later stamp
+  const arrived = Date.now();
   for (const deck of incoming) {
     if (byId.has(deck.id) || known.has(deck.id)) continue;
-    next.push(deck);
+    next.push(stampArrival ? { ...deck, addedAt: arrived + added } : deck);
     known.add(deck.id);
     added++;
   }

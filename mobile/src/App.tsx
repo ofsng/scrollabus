@@ -107,6 +107,10 @@ function CardText({ card }: { card: Card }) {
 const formatDate = (ms: number) =>
   new Date(ms).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" });
 
+const arrivedAt = (d: Deck) => d.addedAt ?? d.createdAt;
+// Unread decks that arrived within this window get a "Yeni" badge
+const NEW_FOR_MS = 3 * 24 * 60 * 60 * 1000;
+
 const categoryLabel = (c: Category) => (c.emoji ? `${c.emoji} ${c.name}` : c.name);
 
 // Scrolls each chip strip sideways so its selected chip is visible
@@ -990,10 +994,10 @@ function Library({
   const byId = new Map(categories.map((c) => [c.id, c]));
 
   const isDone = (d: Deck) => d.cards.length > 0 && d.cards.every((c) => read.has(c.id));
-  // Newest first, but decks you have finished sink to the bottom
+  // Newest arrivals first, but decks you have finished sink to the bottom
   const visible = decks
     .filter((d) => filter === null || (d.categoryId ?? "") === filter)
-    .sort((a, b) => Number(isDone(a)) - Number(isDone(b)) || b.createdAt - a.createdAt);
+    .sort((a, b) => Number(isDone(a)) - Number(isDone(b)) || arrivedAt(b) - arrivedAt(a));
 
   return (
     <div className="screen page">
@@ -1047,7 +1051,10 @@ function Library({
               style={{ borderLeftColor: `hsl(${hueFor(deck.categoryId ?? deck.id)} 60% 55%)` }}
             >
               <button className="row-main" onClick={() => onOpen(deck.id)}>
-                <span className="row-title">{deck.title}</span>
+                <span className="row-title">
+                  {readCount === 0 && deck.addedAt && Date.now() - deck.addedAt < NEW_FOR_MS && <span className="badge">Yeni</span>}
+                  {deck.title}
+                </span>
                 <span className="row-meta">
                   {deck.generated ? "✨ " : ""}
                   {cat ? categoryLabel(cat) : "Kategorisiz"} · {progress}
@@ -1160,7 +1167,7 @@ export function App() {
       loadGeminiKey(),
     ]).then(([stored, s, custom, known, prefs, readLog, key]) => {
       // Add (or refresh) the reading decks bundled with this app version
-      const { decks: merged, added, updated } = mergeLibrary(stored, bundledLibraryDecks(), known);
+      const { decks: merged, added, updated } = mergeLibrary(stored, bundledLibraryDecks(), known, false);
       knownRef.current = known;
       if (added || updated) {
         void saveDecks(merged);
@@ -1189,8 +1196,8 @@ export function App() {
     const unread = decksRef.current
       .filter((d) => d.fromLibrary || d.generated)
       .filter((d) => d.cards.some((c) => !readRef.current.has(c.id)))
-      .sort((a, b) => b.createdAt - a.createdAt)
-      .map((d) => d.title);
+      .sort((a, b) => arrivedAt(b) - arrivedAt(a))
+      .map((d) => ({ deckId: d.id, title: d.title }));
     try {
       setReminderStatus(await scheduleReminders(settings, unread));
       setExactReminders(await exactRemindersAllowed());
@@ -1202,7 +1209,24 @@ export function App() {
     writePref("reminder", reminder);
     if (decks !== null) void refreshReminders(reminder);
   }, [reminder, decks === null]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => onReminderTapped(() => setTab("feed")), []);
+  // A tapped reminder opens its reading; a tap that launched the app waits for the decks to load
+  const [reminderDeck, setReminderDeck] = useState<string | null>(null);
+  useEffect(() => onReminderTapped((deckId) => setReminderDeck(deckId ?? "")), []);
+  useEffect(() => {
+    if (reminderDeck === null || decks === null) return;
+    setReminderDeck(null);
+    setHistoryItem(null);
+    setDeckOptions(null);
+    setManagingCategories(false);
+    setShowReminder(false);
+    const target =
+      decks.find((d) => d.id === reminderDeck) ??
+      [...decks]
+        .filter((d) => d.cards.some((c) => !readRef.current.has(c.id)))
+        .sort((a, b) => arrivedAt(b) - arrivedAt(a))[0];
+    if (target) openDeck(target.id);
+    else setTab("feed");
+  }, [reminderDeck, decks]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Android back button: close a sheet, then leave sub-screens, then exit
   const tabRef = useRef(tab);

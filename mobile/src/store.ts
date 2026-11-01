@@ -22,6 +22,8 @@ export interface Deck {
   renamed?: boolean;
   // Written on this phone with the user's own Gemini key
   generated?: boolean;
+  // When the deck arrived on this phone; the library lists newest arrivals first
+  addedAt?: number;
 }
 
 export interface Category {

@@ -33,7 +33,13 @@ export async function allowExactReminders() {
   if (remindersSupported()) await LocalNotifications.changeExactNotificationSetting();
 }
 
-export async function scheduleReminders(settings: ReminderSettings, suggestions: string[]): Promise<ReminderStatus> {
+// A reading a reminder suggests; tapping the notification opens it
+export interface ReminderSuggestion {
+  deckId: string;
+  title: string;
+}
+
+export async function scheduleReminders(settings: ReminderSettings, suggestions: ReminderSuggestion[]): Promise<ReminderStatus> {
   if (!remindersSupported()) return "unsupported";
 
   await LocalNotifications.cancel({
@@ -59,11 +65,12 @@ export async function scheduleReminders(settings: ReminderSettings, suggestions:
     notifications: Array.from({ length: DAYS_AHEAD }, (_, i) => {
       const at = new Date(first);
       at.setDate(first.getDate() + i);
-      const title = suggestions.length ? suggestions[i % suggestions.length] : undefined;
+      const pick = suggestions.length ? suggestions[i % suggestions.length] : undefined;
       return {
         id: FIRST_ID + i,
         title: "Okuma vakti 📖",
-        body: title ? `Bugün okumaya ne dersin: “${title}”` : "Bugünün okuması seni bekliyor.",
+        body: pick ? `Bugün okumaya ne dersin: “${pick.title}”` : "Bugünün okuması seni bekliyor.",
+        extra: pick ? { deckId: pick.deckId } : undefined,
         schedule: { at, allowWhileIdle: true },
         smallIcon: "ic_stat_reading",
         isExactNotification: exact,
@@ -73,9 +80,13 @@ export async function scheduleReminders(settings: ReminderSettings, suggestions:
   return "scheduled";
 }
 
-export function onReminderTapped(handler: () => void) {
+// The plugin keeps a tap that launched the app until this listener is attached
+export function onReminderTapped(handler: (deckId?: string) => void) {
   if (!remindersSupported()) return () => {};
-  const listener = LocalNotifications.addListener("localNotificationActionPerformed", handler);
+  const listener = LocalNotifications.addListener("localNotificationActionPerformed", (action) => {
+    const deckId = action.notification.extra?.deckId;
+    handler(typeof deckId === "string" ? deckId : undefined);
+  });
   return () => {
     void listener.then((l) => l.remove());
   };

@@ -18,6 +18,7 @@ export async function writeDeckOnDevice(apiKey: string, category: Category, deck
     id,
     title: result.title,
     createdAt: Date.now(),
+    addedAt: Date.now(),
     categoryId: category.id,
     generated: true,
     cards: result.cards.map((c, i) => ({ id: `${id}#${i}`, ...c })),
