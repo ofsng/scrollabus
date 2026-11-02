@@ -1,0 +1,37 @@
+{
+ "id": "iletisim--soylenmeyeni-duymak-paul-grice-ve-ima-kurami",
+ "category": "iletisim",
+ "title": "Söylenmeyeni Duymak: Paul Grice ve İma Kuramı",
+ "cards": [
+  {
+   "title": "Harvard'da Bir Filozof",
+   "text": "1967 yılında İngiliz mantıkçı ve dil filozofu Paul Grice, Harvard Üniversitesi'nde verdiği William James derslerinde basit bir diyalog kurdu: Yolda arabası bozulmuş bir sürücüye yanından geçen kişi 'Hemen köşede bir benzinlik var' der. Sürücü benzinliğin açık olduğunu ve benzin sattığını varsayar; oysa yanıtı veren kişi bunu açıkça söylememiştir."
+  },
+  {
+   "text": "Klasik biçimsel mantık, bu tür gündelik konuşmaları yetersiz ve kusurlu buluyordu. İki cümle mantıksal olarak birbirini doğrudan gerektirmiyorsa, ortada bir çıkarım hatası olmalıydı. Grice ise tam tersini savundu: İnsanlar konuşurken gevşek bir mantık kullanmıyordu; kelimelerin harfi harfine taşıdığı anlamın çok ötesinde, sessiz kurallarla işleyen derin bir işbirliği kuruyordu."
+  },
+  {
+   "title": "İşbirliği İlkesi",
+   "text": "Grice bu düzeni 'İşbirliği İlkesi' olarak adlandırdı. Temel varsayım şuydu: Bir konuşmaya dahil olan taraflar, ortak bir amaç doğrultusunda birbirlerinin söylediklerini anlamlı kılmaya çalışır. Birbirimize düşman olsak ya da tartışsak bile, iletişimin sürmesi için cümlenin o anki bağlama uygun, mantıklı bir katkı sunduğu ön kabulüyle hareket ederiz."
+  },
+  {
+   "title": "Dört Sessiz Kural",
+   "text": "Filozof, bu işbirliğini dört ana ilkeye ayırdı: Nicelik (gerektiği kadar bilgi ver, ne eksik ne fazla), Nitelik (doğru olduğuna inanmadığın şeyi söyleme), Bağıntı (konuyla ilgili ol) ve Tarz (açık, düzenli ve yalın konuş). Gündelik hayatta bu kuralları ezberden saymayız; ancak karşımızdaki kişi bu kurallara uyuyormuş gibi davranarak onun sözlerini yorumlarız."
+  },
+  {
+   "title": "Kuralları Çiğneme Sanatı",
+   "text": "Grice'ın kuramının en parlak tarafı, insanların bu kuralları bilerek ve isteyerek ihlal ettiği anlardı. Biri kuralı gizlice değil, apaçık biçimde çiğnediğinde dinleyici konuşmacının işbirliğini terk ettiğini düşünmez; aksine kuralın bilerek bozulduğunu ve bunun söylenmeyen başka bir anlama işaret ettiğini anlar. Grice bu duruma 'konuşma iması' adını verdi."
+  },
+  {
+   "text": "Grice'ın meşhur örneğinde, felsefe kürsüsüne aday olan bir öğrencisi için referans mektubu yazan profesör sadece şunu yazar: 'Bay X'in İngilizcesi kusursuzdur ve derslere vaktinde gelir.' Profesör nicelik ilkesini açıkça ihlal etmiştir. Mektubu okuyan jüri, profesörün tembel olduğunu değil; adayın felsefi yeteneğinin bahsetmeye değmeyecek kadar zayıf olduğunu ima ettiğini anlar."
+  },
+  {
+   "title": "Makinelerin Çözemediği Boşluk",
+   "text": "İroni, kinaye ve mecaz gibi edebi araçlar tam da bu mekanizma sayesinde çalışır. 'Hava da ne kadar güzel' cümlesi fırtınanın ortasında söylendiğinde, dinleyici nitelik ilkesinin ihlal edildiğini hemen fark eder ve cümlenin zıt anlamını yakalar. Doğal dil işleme algoritmalarının ve yapay zekanın insan iletişiminde en çok zorlandığı alan hâlâ bu imaların çözümlenmesidir."
+  },
+  {
+   "title": "Kelimelerden Zihinlere",
+   "text": "Paul Grice'ın çalışmaları iletişimin sadece bir kodlama ve kod çözme işlemi olmadığını gösterdi. İletişim, iki zihnin karşılıklı niyet okuma sürecidir. Konuşurken sözcükler yalnızca birer ipucudur; asıl anlam, konuşan ile dinleyenin sessizce paylaştığı ortak bağlamda ve birbirlerine duydukları rasyonel güvende inşa edilir."
+  }
+ ]
+}
