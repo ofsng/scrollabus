@@ -11,6 +11,7 @@ interface IndexEntry {
   title: string;
   date: string;
   version?: number;
+  daily?: boolean;
 }
 
 interface LibraryIndex {
@@ -30,11 +31,13 @@ const bundledFiles = import.meta.glob<LibraryDeckFile>("../../content/decks/*.js
 
 export const bundledCategories: Category[] = (bundledIndex as LibraryIndex).categories;
 
-function toDeck(file: LibraryDeckFile, date: string): Deck {
+function toDeck(file: LibraryDeckFile, entry: IndexEntry): Deck {
   return {
     id: file.id,
     title: file.title,
-    createdAt: Date.parse(date) || Date.now(),
+    createdAt: Date.parse(entry.date) || Date.now(),
+    date: entry.date,
+    daily: entry.daily,
     categoryId: file.category,
     fromLibrary: true,
     version: file.version ?? 1,
@@ -46,7 +49,7 @@ function toDeck(file: LibraryDeckFile, date: string): Deck {
 export function bundledLibraryDecks(): Deck[] {
   return (bundledIndex as LibraryIndex).decks.flatMap((d) => {
     const file = bundledFiles[`../../content/decks/${d.id}.json`];
-    return file ? [toDeck(file, d.date)] : [];
+    return file ? [toDeck(file, d)] : [];
   });
 }
 
@@ -70,7 +73,7 @@ export async function fetchLibraryUpdates(
   const decks: Deck[] = [];
   for (const entry of index.decks.filter((d) => needs(d.id, d.version ?? 1))) {
     try {
-      decks.push(toDeck(await getJson<LibraryDeckFile>(`${CONTENT_URL}/decks/${entry.id}.json`), entry.date));
+      decks.push(toDeck(await getJson<LibraryDeckFile>(`${CONTENT_URL}/decks/${entry.id}.json`), entry));
     } catch {
       // Skip a deck that fails to download; it is retried on the next sync
     }

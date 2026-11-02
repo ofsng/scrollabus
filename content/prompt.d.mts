@@ -10,6 +10,14 @@ export class GeminiError extends Error {
   status: number;
   constructor(status: number, message: string);
 }
+export function buildFactCheckPrompt(deck: GeneratedDeck): string;
+export function reviewDeck(options: {
+  apiKey: string;
+  model?: string;
+  deck: GeneratedDeck;
+  onRetry?: (message: string) => void;
+  busyRetries?: number;
+}): Promise<GeneratedDeck>;
 export function generateDeck(options: {
   apiKey: string;
   model?: string;

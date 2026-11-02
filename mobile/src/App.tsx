@@ -13,6 +13,7 @@ import {
   scheduleReminders,
   type ReminderSettings,
   type ReminderStatus,
+  type ReminderTap,
 } from "./reminders";
 import {
   loadCategoryPrefs,
@@ -22,6 +23,7 @@ import {
   loadKnownLibrary,
   loadRead,
   loadSaved,
+  isReleased,
   newId,
   readPref,
   saveCategoryPrefs,
@@ -1099,6 +1101,8 @@ export function App() {
   const [reminderStatus, setReminderStatus] = useState<ReminderStatus | null>(null);
   const [exactReminders, setExactReminders] = useState(true);
   const [showReminder, setShowReminder] = useState(false);
+  const reminderRef = useRef(reminder);
+  reminderRef.current = reminder;
   // Bumped to rebuild the feed on purpose (e.g. after writing new content from its empty state)
   const [feedNonce, setFeedNonce] = useState(0);
 
@@ -1142,12 +1146,22 @@ export function App() {
       });
       setLibraryCategories(categories);
       writePref("libraryCategories", categories);
+      // New decks dated ahead (tomorrow's reading) stay hidden until their day
+      const early = incoming.filter((d) => !byId.has(d.id) && !known.has(d.id) && !isReleased(d)).length;
       const { decks: merged, added, updated } = mergeLibrary(decksRef.current, incoming, known);
       if (added || updated) {
         updateDecks(merged);
         void saveKnownLibrary(known);
+        void refreshReminders(reminderRef.current);
       }
-      const status = added ? `${added} yeni okuma eklendi` : updated ? `${updated} okuma güncellendi` : "İçerikler güncel";
+      const status =
+        added && added === early
+          ? "Yarının yazısı hazır, sabah açılacak"
+          : added
+            ? `${added - early} yeni okuma eklendi`
+            : updated
+              ? `${updated} okuma güncellendi`
+              : "İçerikler güncel";
       setSyncStatus(status);
       return status;
     } catch {
@@ -1193,13 +1207,13 @@ export function App() {
   // Daily reminder: (re)schedule on launch and whenever its settings change,
   // each day suggesting a different unread reading, newest first
   async function refreshReminders(settings: ReminderSettings) {
-    const unread = decksRef.current
-      .filter((d) => d.fromLibrary || d.generated)
-      .filter((d) => d.cards.some((c) => !readRef.current.has(c.id)))
-      .sort((a, b) => arrivedAt(b) - arrivedAt(a))
-      .map((d) => ({ deckId: d.id, title: d.title }));
+    // Each day's reminder points to that day's reading when it is already here
+    const readingFor = (date: string) => {
+      const deck = decksRef.current.find((d) => d.daily && d.date === date);
+      return deck ? { deckId: deck.id, title: deck.title } : undefined;
+    };
     try {
-      setReminderStatus(await scheduleReminders(settings, unread));
+      setReminderStatus(await scheduleReminders(settings, readingFor));
       setExactReminders(await exactRemindersAllowed());
     } catch {
       setReminderStatus(null);
@@ -1209,24 +1223,32 @@ export function App() {
     writePref("reminder", reminder);
     if (decks !== null) void refreshReminders(reminder);
   }, [reminder, decks === null]); // eslint-disable-line react-hooks/exhaustive-deps
-  // A tapped reminder opens its reading; a tap that launched the app waits for the decks to load
-  const [reminderDeck, setReminderDeck] = useState<string | null>(null);
-  useEffect(() => onReminderTapped((deckId) => setReminderDeck(deckId ?? "")), []);
+  // A tapped reminder opens that day's reading, downloading it first if needed;
+  // a tap that launched the app waits for the decks to load
+  const [reminderTap, setReminderTap] = useState<ReminderTap | null>(null);
+  useEffect(() => onReminderTapped(setReminderTap), []);
   useEffect(() => {
-    if (reminderDeck === null || decks === null) return;
-    setReminderDeck(null);
+    if (reminderTap === null || decks === null) return;
+    const tap = reminderTap;
+    setReminderTap(null);
     setHistoryItem(null);
     setDeckOptions(null);
     setManagingCategories(false);
     setShowReminder(false);
-    const target =
-      decks.find((d) => d.id === reminderDeck) ??
-      [...decks]
-        .filter((d) => d.cards.some((c) => !readRef.current.has(c.id)))
-        .sort((a, b) => arrivedAt(b) - arrivedAt(a))[0];
-    if (target) openDeck(target.id);
-    else setTab("feed");
-  }, [reminderDeck, decks]); // eslint-disable-line react-hooks/exhaustive-deps
+    const find = () =>
+      decksRef.current.find((d) => d.id === tap.deckId) ??
+      decksRef.current.find((d) => d.daily && d.date === tap.date);
+    void (async () => {
+      if (!find()) await syncLibrary();
+      const target =
+        find() ??
+        decksRef.current
+          .filter((d) => isReleased(d) && d.cards.some((c) => !readRef.current.has(c.id)))
+          .sort((a, b) => arrivedAt(b) - arrivedAt(a))[0];
+      if (target) openDeck(target.id);
+      else setTab("feed");
+    })();
+  }, [reminderTap, decks]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Android back button: close a sheet, then leave sub-screens, then exit
   const tabRef = useRef(tab);
@@ -1243,7 +1265,10 @@ export function App() {
     };
   }, []);
 
+  // allDecks is everything stored (use it for writes); shownDecks hides
+  // readings published ahead of their day
   const allDecks = useMemo(() => decks ?? [], [decks]);
+  const shownDecks = useMemo(() => allDecks.filter(isReleased), [allDecks]);
   const categories = useMemo<Category[]>(
     () =>
       [...libraryCategories, ...customCategories].map((c) => ({
@@ -1257,9 +1282,9 @@ export function App() {
   const hiddenIds = useMemo(() => new Set(categories.filter((c) => c.hidden).map((c) => c.id)), [categories]);
   const categoryCounts = useMemo(() => {
     const m = new Map<string, number>();
-    for (const d of allDecks) if (d.categoryId) m.set(d.categoryId, (m.get(d.categoryId) ?? 0) + 1);
+    for (const d of shownDecks) if (d.categoryId) m.set(d.categoryId, (m.get(d.categoryId) ?? 0) + 1);
     return m;
-  }, [allDecks]);
+  }, [shownDecks]);
 
   const activeDeck = source.kind === "deck" ? allDecks.find((d) => d.id === source.id) : undefined;
   const activeCategory = source.kind === "category" ? categories.find((c) => c.id === source.id) : undefined;
@@ -1272,7 +1297,7 @@ export function App() {
   const positionKey = `cur:${feedKey}`;
   const snapshotDeps = [feedKey, seed, decks === null, feedNonce];
   const readSnapshot = useMemo(() => new Set(readRef.current.keys()), snapshotDeps); // eslint-disable-line react-hooks/exhaustive-deps
-  const feedDecks = useMemo(() => decksRef.current, snapshotDeps); // eslint-disable-line react-hooks/exhaustive-deps
+  const feedDecks = useMemo(() => decksRef.current.filter(isReleased), snapshotDeps); // eslint-disable-line react-hooks/exhaustive-deps
   // The reading you were in the middle of keeps all its pages, read or not
   const currentDeckId = useMemo(() => {
     const cardId = readPref<string | null>(positionKey, null);
@@ -1572,7 +1597,7 @@ export function App() {
         {tab === "add" && <AddScreen categories={categories} onCreate={createDeck} />}
         {tab === "library" && (
           <Library
-            decks={allDecks}
+            decks={shownDecks}
             categories={categories}
             read={read}
             syncStatus={syncStatus}

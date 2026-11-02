@@ -1,11 +1,21 @@
 name: Daily content
 
-# Writes one new reading every morning (Turkey time), taking the categories in
-# turn, and commits it to content/. The app downloads it on its next launch.
+# Writes the next day's reading in the evening (Turkey time), taking the
+# categories in turn, and commits it to content/. GitHub often starts scheduled
+# runs hours late, so there are backup runs; only the first one writes (the
+# script skips a day that already has its reading). The app shows the reading
+# from its date on, in time for the 07:30 reminder.
 # Needs the GEMINI_API_KEY repository secret.
 on:
   schedule:
-    - cron: "17 4 * * *"
+    - cron: "17 15 * * *" # 18:17 Turkey
+    - cron: "17 19 * * *" # 22:17 Turkey (backup)
+    - cron: "17 1 * * *" # 04:17 Turkey (backup)
+  # Also run once when the generator itself changes (the daily commits only
+  # touch content/index.json and content/decks/, so this never loops)
+  push:
+    branches: [main]
+    paths: ["content/generate.mjs", "content/prompt.mjs", ".github/workflows/daily-content.yml"]
   workflow_dispatch:
     inputs:
       decks:
@@ -14,6 +24,10 @@ on:
       category:
         description: "Only this category id (optional, e.g. finans)"
         default: ""
+      force:
+        description: "Write even if the day already has its reading"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -36,6 +50,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DECKS_PER_RUN: ${{ inputs.decks || '1' }}
           CATEGORY: ${{ inputs.category }}
+          FORCE: ${{ inputs.force && '1' || '' }}
         run: node content/generate.mjs
 
       - name: Commit

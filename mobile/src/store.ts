@@ -24,7 +24,21 @@ export interface Deck {
   generated?: boolean;
   // When the deck arrived on this phone; the library lists newest arrivals first
   addedAt?: number;
+  // Library publication date (YYYY-MM-DD); a deck is hidden until its date
+  date?: string;
+  // The reading of the day, written by the daily job for `date`
+  daily?: boolean;
 }
+
+// Local calendar date as YYYY-MM-DD, `offsetDays` from today
+export function localDate(offsetDays = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+// The evening job publishes tomorrow's reading early; it appears on its day
+export const isReleased = (deck: Deck) => !deck.date || deck.date <= localDate();
 
 export interface Category {
   id: string;

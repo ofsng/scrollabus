@@ -15,16 +15,17 @@ ${titles.length ? titles.map((t) => `- ${t}`).join("\n") : "- (henüz yok)"}
 Daha önce anlatılmış kavramlar (bunları yeniden anlatma):
 ${cardTitles.length ? cardTitles.join(", ") : "(henüz yok)"}
 
-Bu kategoride belirli ve ilginç bir konu seç: bir kavramın tarihi, bir düşünürün fikri, önemli bir araştırmanın hikâyesi, bir olayın ya da buluşun arka planı gibi. Sonra onu bir kitap bölümü gibi derinlemesine anlat.
+Bu kategoride belirli ve ilginç bir konu seç: bir kavramın tarihi, bir düşünürün fikri, önemli bir araştırmanın hikâyesi, bir olayın ya da buluşun arka planı gibi. Sonra onu bir dergi makalesi ya da kitap bölümü gibi derinlemesine anlat. Bu bir özet değil: okur konuyu gerçekten öğrenmeli ve kendini bilgilenmiş hissetmeli.
 
 Yapı:
 - Kartlar bir kitabın sayfaları gibi sırayla okunur ve tek bir bütün oluşturur. İlk kart merak uyandırarak konuya girer; sonrakiler konuyu adım adım derinleştirir (kökeni, kişiler, nasıl işlediği, örnekler, tartışmalar ve eleştiriler); son kart toparlar ve konunun bugünle bağını kurar.
-- Konu ne gerektiriyorsa o kadar kart yaz: 6 ile 12 arası, abartmadan.
+- Konu ne gerektiriyorsa o kadar kart yaz: genelde 7 ile 12 arası, abartmadan.
 - Her kart TEK paragraf olsun ve 250-450 karakter tutsun; telefonda tek ekrana sığmalı.
 - Yeni bir alt bölüme geçen kartlara kısa bir başlık ver (en fazla 6 kelime); bir önceki kartın devamı olan kartlarda "title" alanını boş bırak.
 
 Üslup:
 - Akıcı, sıcak ve anlatıcı yaz; somut sahneler, isimler, yerler, tarihler ve örnekler kullan.
+- Her cümle yeni bir bilgi ya da anlam taşısın. Dolgu, tekrar, süslü ama boş cümleler ve "Peki ama…", "Gelin birlikte bakalım" gibi kalıplar kullanma.
 - Okura emir verme ve öğüt verme ("şunu yap", "bunu dene", "unutma ki" gibi cümleler kurma).
 - "action" alanını neredeyse hiç kullanma. Yalnızca yazının sonunda gerçekten anlamlı, küçük bir deneme önerisi varsa en fazla BİR karta ekle; çoğu yazıda hiç olmasın.
 
@@ -95,9 +96,34 @@ async function callGemini(apiKey, model, prompt, onRetry, busyRetries) {
   }
 }
 
+export function buildFactCheckPrompt(deck) {
+  return `Aşağıda Türkçe bir okuma yazısı var (JSON). Bir editör ve doğruluk denetçisi olarak onu yayına hazırla:
+
+1. Her olgusal iddiayı (tarih, yer, kişi, sayı, alıntı, eser adı) kontrol et. Yanlış olduğunu bildiğin bilgiyi düzelt. Emin olmadığın ayrıntıyı ya çıkar ya da kesinlik iddia etmeyen bir ifadeyle yaz ("anlatıldığına göre", "yaklaşık", "kaynaklara göre").
+2. Dolgu, tekrar ve boş cümleleri at; anlamı ve akışı bozmadan metni sıkılaştır.
+3. Yapıyı, kart sırasını, başlıkları ve anlatıcı üslubu koru; kart sayısını ciddi biçimde değiştirme. Her kart tek paragraf ve 250-450 karakter kalsın.
+
+Yalnızca aynı JSON biçiminde, düzeltilmiş yazıyı döndür:
+${JSON.stringify(deck)}`;
+}
+
 // Writes one validated deck; retries once on a garbled or incomplete answer.
 // busyRetries: waits (15 s, 30 s, …) on rate limits or overload; the app passes
 // 0 so the user gets an answer right away instead of a minute-long spinner.
+// Second pass: fact-check and tighten a written deck. Falls back to the draft
+// if the review comes back unusable.
+export async function reviewDeck({ apiKey, model = DEFAULT_MODEL, deck, onRetry, busyRetries = 3 }) {
+  try {
+    const reviewed = parseDeck(await callGemini(apiKey, model, buildFactCheckPrompt(deck), onRetry, busyRetries));
+    // A review that drops most of the text is worse than the draft
+    const length = (d) => d.cards.reduce((n, c) => n + c.text.length, 0);
+    return length(reviewed) >= length(deck) * 0.6 ? reviewed : deck;
+  } catch (err) {
+    onRetry?.(`review skipped: ${err.message}`);
+    return deck;
+  }
+}
+
 export async function generateDeck({
   apiKey,
   model = DEFAULT_MODEL,

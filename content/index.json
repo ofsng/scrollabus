@@ -319,13 +319,15 @@
    "id": "verimlilik--tuglalar-isiklar-ve-kayip-hareketler",
    "category": "verimlilik",
    "title": "Tuğlalar, Işıklar ve Kayıp Hareketler",
-   "date": "2026-11-01"
+   "date": "2026-11-01",
+   "daily": true
   },
   {
    "id": "motivasyon--fayton-basamagindaki-ilham",
    "category": "motivasyon",
    "title": "Fayton Basamağındaki İlham",
-   "date": "2026-11-02"
+   "date": "2026-11-02",
+   "daily": true
   }
  ]
 }

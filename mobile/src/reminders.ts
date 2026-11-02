@@ -33,13 +33,26 @@ export async function allowExactReminders() {
   if (remindersSupported()) await LocalNotifications.changeExactNotificationSetting();
 }
 
-// A reading a reminder suggests; tapping the notification opens it
+// The reading a reminder points to; tapping the notification opens it
 export interface ReminderSuggestion {
   deckId: string;
   title: string;
 }
 
-export async function scheduleReminders(settings: ReminderSettings, suggestions: ReminderSuggestion[]): Promise<ReminderStatus> {
+// What a tapped reminder carries: the day it was for, and its reading if it
+// was already downloaded when the reminder was scheduled
+export interface ReminderTap {
+  date?: string;
+  deckId?: string;
+}
+
+const isoDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+export async function scheduleReminders(
+  settings: ReminderSettings,
+  readingFor: (date: string) => ReminderSuggestion | undefined
+): Promise<ReminderStatus> {
   if (!remindersSupported()) return "unsupported";
 
   await LocalNotifications.cancel({
@@ -65,12 +78,13 @@ export async function scheduleReminders(settings: ReminderSettings, suggestions:
     notifications: Array.from({ length: DAYS_AHEAD }, (_, i) => {
       const at = new Date(first);
       at.setDate(first.getDate() + i);
-      const pick = suggestions.length ? suggestions[i % suggestions.length] : undefined;
+      const date = isoDate(at);
+      const pick = readingFor(date);
       return {
         id: FIRST_ID + i,
-        title: "Okuma vakti 📖",
-        body: pick ? `Bugün okumaya ne dersin: “${pick.title}”` : "Bugünün okuması seni bekliyor.",
-        extra: pick ? { deckId: pick.deckId } : undefined,
+        title: "Günün okuması hazır 📖",
+        body: pick ? `“${pick.title}”` : "Bugünün yeni yazısı seni bekliyor. Dokun ve oku.",
+        extra: { date, deckId: pick?.deckId },
         schedule: { at, allowWhileIdle: true },
         smallIcon: "ic_stat_reading",
         isExactNotification: exact,
@@ -81,11 +95,14 @@ export async function scheduleReminders(settings: ReminderSettings, suggestions:
 }
 
 // The plugin keeps a tap that launched the app until this listener is attached
-export function onReminderTapped(handler: (deckId?: string) => void) {
+export function onReminderTapped(handler: (tap: ReminderTap) => void) {
   if (!remindersSupported()) return () => {};
   const listener = LocalNotifications.addListener("localNotificationActionPerformed", (action) => {
-    const deckId = action.notification.extra?.deckId;
-    handler(typeof deckId === "string" ? deckId : undefined);
+    const extra = action.notification.extra ?? {};
+    handler({
+      date: typeof extra.date === "string" ? extra.date : undefined,
+      deckId: typeof extra.deckId === "string" ? extra.deckId : undefined,
+    });
   });
   return () => {
     void listener.then((l) => l.remove());

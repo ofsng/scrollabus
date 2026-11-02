@@ -34,10 +34,11 @@ Sunucu, giriş, yapay zekâ ya da API anahtarı yok; her şey telefonda saklanı
 
 ## Hazır okuma parçaları ve günlük yeni içerik
 
-Uygulama 15 kategoride 30 okuma parçasıyla (150 kart) gelir. Yeni parçalar her sabah
-GitHub Actions (`.github/workflows/daily-content.yml`) tarafından Gemini ile yazılır,
-`content/` klasörüne eklenir; uygulama açıldığında (veya Kütüphane'deki yenile
-butonuna basınca) internetten indirilir. Sunucu gerekmez.
+Her gün mevcut kategorilerden sıradakine makale tarzında yeni bir yazı eklenir.
+GitHub Actions (`.github/workflows/daily-content.yml`) yazıyı bir önceki akşam Gemini
+ile yazar, ikinci bir turda doğruluk ve dolgu kontrolünden geçirir ve `content/`
+klasörüne ekler. Uygulama yazıyı indirir, kendi gününe kadar gizler; 07:30
+bildirimine dokununca o günün yazısı açılır. Sunucu gerekmez.
 
 Kurulum (bir kez): GitHub'da repo → **Settings → Secrets and variables → Actions →
 New repository secret** → Name: `GEMINI_API_KEY`, Secret: Gemini anahtarın.

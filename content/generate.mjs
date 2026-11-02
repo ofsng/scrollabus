@@ -1,17 +1,18 @@
-// Writes new reading decks with Gemini and adds them to content/index.json.
-// Run daily by .github/workflows/daily-content.yml; the mobile app picks the
-// new decks up from GitHub on its next launch.
+// Writes the daily reading with Gemini and adds it to content/index.json.
+// Run by .github/workflows/daily-content.yml the evening before; the app
+// downloads it and shows it from its date on (the 07:30 reminder opens it).
 //
 //   GEMINI_API_KEY=... node content/generate.mjs
 //
 // Optional env: GEMINI_MODEL (default gemini-flash-latest; there is no time
 // limit here, so the slower but better model is worth it),
-// DECKS_PER_RUN (default 1: one reading a day), CATEGORY (only that category id).
+// DECKS_PER_RUN (default 1: one reading a day), CATEGORY (only that category id),
+// FORCE=1 (write even if the day already has its reading).
 
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { DEFAULT_MODEL, generateDeck } from "./prompt.mjs";
+import { DEFAULT_MODEL, generateDeck, reviewDeck } from "./prompt.mjs";
 
 const DIR = dirname(fileURLToPath(import.meta.url));
 const KEY = process.env.GEMINI_API_KEY;
@@ -33,6 +34,18 @@ const slug = (s) =>
 const indexPath = join(DIR, "index.json");
 const index = JSON.parse(await readFile(indexPath, "utf8"));
 
+// The reading belongs to the day of the next 07:30 reminder in Turkey (UTC+3),
+// so a run in the evening prepares tomorrow's reading
+const turkeyNow = new Date(Date.now() + 3 * 60 * 60 * 1000);
+if (turkeyNow.getUTCHours() * 60 + turkeyNow.getUTCMinutes() >= 7 * 60 + 30) turkeyNow.setUTCDate(turkeyNow.getUTCDate() + 1);
+const forDate = turkeyNow.toISOString().slice(0, 10);
+
+// Several runs a day guard against GitHub's delayed schedules; only the first writes
+if (!process.env.FORCE && index.decks.some((d) => d.daily && d.date === forDate)) {
+  console.log(`The reading for ${forDate} already exists; nothing to do.`);
+  process.exit(0);
+}
+
 // Take turns: the category that has waited longest for a new reading goes next
 // (index.decks is in publication order, so a later position means more recent)
 const lastWritten = new Map(index.categories.map((c) => [c.id, -1]));
@@ -42,7 +55,6 @@ const targets = index.categories
   .sort((a, b) => lastWritten.get(a.id) - lastWritten.get(b.id))
   .slice(0, PER_RUN);
 
-const today = new Date().toISOString().slice(0, 10);
 const ids = new Set(index.decks.map((d) => d.id));
 let created = 0;
 
@@ -59,22 +71,17 @@ for (const category of targets) {
     }
   }
   try {
-    const { title, cards } = await generateDeck({
-      apiKey: KEY,
-      model: MODEL,
-      categoryName: category.name,
-      titles,
-      cardTitles,
-      onRetry: (msg) => console.warn(`  ${msg}`),
-    });
+    const onRetry = (msg) => console.warn(`  ${msg}`);
+    const draft = await generateDeck({ apiKey: KEY, model: MODEL, categoryName: category.name, titles, cardTitles, onRetry });
+    const { title, cards } = await reviewDeck({ apiKey: KEY, model: MODEL, deck: draft, onRetry });
     let id = `${category.id}--${slug(title)}`;
     for (let n = 2; ids.has(id); n++) id = `${category.id}--${slug(title)}-${n}`;
     ids.add(id);
 
     await writeFile(join(DIR, "decks", `${id}.json`), JSON.stringify({ id, category: category.id, title, cards }, null, 1) + "\n");
-    index.decks.push({ id, category: category.id, title, date: today });
+    index.decks.push({ id, category: category.id, title, date: forDate, daily: true });
     created++;
-    console.log(`+ ${category.name}: ${title} (${cards.length} cards)`);
+    console.log(`+ ${forDate} ${category.name}: ${title} (${cards.length} cards)`);
   } catch (err) {
     console.error(`! ${category.name}: ${err.message}`);
   }
