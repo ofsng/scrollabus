@@ -1,0 +1,36 @@
+{
+ "id": "is-dunyasi--isigin-altindaki-insan-hawthorne-etkisi",
+ "category": "is-dunyasi",
+ "title": "Işığın Altındaki İnsan: Hawthorne Etkisi",
+ "cards": [
+  {
+   "title": "Fabrikadaki Gizemli Deney",
+   "text": "1924 yılında Chicago yakınlarındaki Western Electric Hawthorne fabrikasında mühendisler, aydınlatma düzeyinin işçi verimliliğine etkisini ölçmek istedi. Bir grup kadının çalıştığı atölyede lambaların parlaklığı kademeli olarak artırıldı ve üretim hemen yükseldi. Ancak asıl şaşırtıcı olay, ışık düzeyi loş bir ay ışığı seviyesine kadar düşürüldüğünde bile üretimin artmaya devam etmesiydi."
+  },
+  {
+   "text": "Mühendisler şaşkındı. Fiziksel koşulların doğrudan üretkenliği belirlediğini öngören klasik fabrika mantığı çökmüştü. Araştırma tıkanınca 1927'de Harvard Üniversitesi'nden Avustralyalı psikolog Elton Mayo ve ekibi fabrikaya davet edildi. Beş yıl sürecek yeni bir araştırma evresi başladı; bu kez kadın işçilerin mola süreleri, haftalık çalışma günleri ve ikramiye sistemleri tek tek değiştirilecekti."
+  },
+  {
+   "title": "Makinelerden İnsana Geçiş",
+   "text": "Mayo ve ekibi, Röle Montaj Test Odası adını verdikleri özel bir bölmede altı kadın işçiyi gözlemledi. Sabah ve öğleden sonra molaları eklendiğinde üretim arttı; molalar kaldırılıp eski uzun saatlere dönüldüğünde ise verim düşmek yerine rekor kırdı. Deney değişkenlerinden bağımsız olarak ibre sürekli yukarıyı gösteriyordu. Ortadaki temel fark, bu işçilerin ayrı bir odaya alınıp sürekli ilgi görmesiydi."
+  },
+  {
+   "text": "O güne kadar sanayide hâkim olan yaklaşım, Frederick Winslow Taylor'ın Bilimsel Yönetim teorisiydi. Taylor insanı bir makinenin dişlisi, sadece para ve kronometreyle optimize edilecek bir girdi olarak görüyordu. Hawthorne araştırmaları ise işçilerin sadece ekonomik çıkarlarıyla değil, aynı zamanda grup aidiyeti, yönetimin ilgisi ve saygı görme ihtiyacıyla motive olan sosyal varlıklar olduğunu ortaya koydu."
+  },
+  {
+   "title": "Hawthorne Etkisinin Doğuşu",
+   "text": "1950'lerde Fransız araştırmacı John French, bu olguyu literatüre 'Hawthorne Etkisi' olarak kaydetti. Kavram, insanların incelendiklerini, gözlemlendiklerini veya kendilerine özel bir ilgi gösterildiğini fark ettiklerinde olağan davranışlarını değiştirip performanslarını artırmalarını ifade ediyordu. Işık ya da molalar değil, araştırmacıların fabrikanın zeminine inip kadınların fikirlerini dinlemesi asıl katalizördü."
+  },
+  {
+   "title": "Arşivden Çıkan Çatlaklar",
+   "text": "Yıllar boyunca yönetim kitaplarının tartışmasız bir efsanesi haline gelen bu deneyler, daha sonra ciddi metodolojik eleştirilerle karşılaştı. 2000'li yıllarda ekonomist Steven Levitt ve John List, Hawthorne fabrikasının kayıp mikrofilmlerini bulup verileri modern ekonometrik yöntemlerle yeniden analiz etti. Ortaya çıkan tablo, ders kitaplarındaki o romantik hikâyeden oldukça farklıydı."
+  },
+  {
+   "text": "Yeniden inceleme, orijinal deneyde performansı düşen iki işçinin gruptan çıkarılıp yerlerine daha hızlı iki kadının alındığını gösterdi. Üstelik üretimin arttığı pazartesi günleri, aslında işçilerin hafta sonu dinlenmesinden kaynaklanıyordu. Işığın artırılıp azaltıldığı günlerde tutulan kayıtlar, iddia edildiği kadar net bir korelasyon sunmuyordu; istatistiksel çıkarımların çoğu özensiz yapılmıştı."
+  },
+  {
+   "title": "Kalıcı Bir Yönetim Mirası",
+   "text": "Metodolojik kusurlarına rağmen Hawthorne araştırmaları modern iş dünyasının seyrini geri dönülmez biçimde değiştirdi. İnsan Kaynakları disiplininin tohumları o atölyede atıldı. Günümüzde açık ofis tasarımlarından performans değerlendirme mülakatlarına kadar birçok uygulama, insanların yalnızca görev tanımlarıyla değil, ait oldukları topluluğun dinamikleriyle var olduğu gerçeğine dayanıyor."
+  }
+ ]
+}
