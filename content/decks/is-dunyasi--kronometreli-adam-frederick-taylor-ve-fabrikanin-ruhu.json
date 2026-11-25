@@ -1,0 +1,33 @@
+{
+ "id": "is-dunyasi--kronometreli-adam-frederick-taylor-ve-fabrikanin-ruhu",
+ "category": "is-dunyasi",
+ "title": "Kronometreli Adam: Frederick Taylor ve Fabrikanın Ruhu",
+ "cards": [
+  {
+   "title": "Bethlehem'de Bir Sabah",
+   "text": "1898 yılının baharında Pensilvanya'daki Bethlehem Steel fabrikasında alışılmadık bir manzara vardı. İşçiler devasa fırınlara ham demir taşırken mühendis Frederick Winslow Taylor, elinde kronometre ve not defteriyle her bir adımı kaydediyordu. Taylor, sanayi devriminin sezgilere dayalı atölye düzenini matematiksel ve ölçülebilir bir makine intizamına dönüştürmek üzereydi."
+  },
+  {
+   "text": "Philadelphia'da varlıklı bir ailede doğan Taylor, görme bozukluğu nedeniyle Harvard Hukuk'a gidemeyince bir makine atölyesinde çıraklığa başladı. Ustalığa yükselirken işçilerin enerjilerini korumak için kasten yavaş çalıştığını—kendi tabiriyle 'askerlik yaptıklarını' (soldiering)—gözlemledi. Ona göre temel sorun tembellik değil, bir işin en doğru yapılış biçiminin henüz bilinmemesiydi."
+  },
+  {
+   "title": "Kırk Yedi Tonluk Deney",
+   "text": "Taylor, ham demir taşıyanlar arasından Henry Noll adlı göçmeni seçti ve metinlerinde ona 'Schmidt' takma adını verdi. Noll'a günde ortalama 12,5 ton yerine yaklaşık 47 ton demir taşıtabileceğini iddia ediyordu. Bu bir zorlama değil, ritim deneyiydi: Taylor, işçiye ne zaman yürüyeceğini, demiri nasıl tutacağını ve günün yaklaşık yüzde elli yedisinde ne zaman oturup dinleneceğini saniyesiyle tarif etti."
+  },
+  {
+   "text": "Deney kayıtlara göre başarıya ulaştı; Noll hedeflenen tonajı yakaladı ve gündeliği yüzde altmış arttı. Taylor ardından kürek işine odaklandı: Ağır cevher ile hafif kömür için tek tip aletin verimsizliğini gösterdi. Her yük için ideal ağırlığın yaklaşık 9,5 kilo (21 pound) olduğunu hesaplayarak amaca özel kürekler geliştirdi ve fabrika sahasındaki amele ihtiyacını üçte bire indirdi."
+  },
+  {
+   "title": "Düşünceyi Eylemden Ayırmak",
+   "text": "Taylor, 1911'de yayımlanan 'Bilimsel Yönetimin İlkeleri' kitabıyla modern işletmenin temellerini attı. En radikal tezi, planlama ile icranın kesin biçimde ayrılmasıydı. İşçi artık bir zanaatkâr değildi; neyi, nasıl ve ne sürede yapacağını düşünmeyecekti. Bütün zihinsel süreç mühendis ve yöneticilere ait olmalı, işçi ise yalnızca tanımlanmış en ideal hareketi tekrarlamalıydı."
+  },
+  {
+   "title": "Kronometreye Karşı Grev",
+   "text": "Bu mekanik yaklaşım sert bir tepkiyle karşılaştı. 1911'de Massachusetts'teki Watertown Cephaneliği'nde işçiler, arkalarında kronometreyle beklenmesini onur kırıcı bularak greve gitti. Olay Amerikan Kongresi'ne taşındı ve Taylor günlerce komisyona ifade verdi. Charlie Chaplin'in 'Modern Zamanlar' filminde dişliler arasında sıkışan fabrikasyon işçi, bu Taylorist yabancılaşmanın simgesine dönüştü."
+  },
+  {
+   "title": "Yazılıma Dönüşen Kronometre",
+   "text": "1915'te zatürreden ölen Taylor'ın mezar taşına 'Bilimsel Yönetimin Babası' yazıldı. Bugün montaj hatlarından fast food zincirlerinin saniyeli pişirme standartlarına dek pek çok iş modeli onun mirasını taşır. Hatta modern lojistik depolarındaki el terminalleri ve kurye rotalarını milisaniyelerle denetleyen algoritmalar, Taylor'ın elindeki kronometrenin dijital kodlara dökülmüş çağdaş biçimidir."
+  }
+ ]
+}
