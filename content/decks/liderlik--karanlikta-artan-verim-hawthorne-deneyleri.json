@@ -1,0 +1,34 @@
+{
+ "id": "liderlik--karanlikta-artan-verim-hawthorne-deneyleri",
+ "category": "liderlik",
+ "title": "Karanlıkta Artan Verim: Hawthorne Deneyleri",
+ "cards": [
+  {
+   "title": "Fabrikadaki Gizem",
+   "text": "1924 sonlarında Chicago yakınlarındaki Western Electric Hawthorne tesisinde bir araştırma başladı. Dönemin Taylorist yaklaşımını test eden araştırmacılar, aydınlatmayı artırarak montaj hızını ölçtü. Işık yükseldikçe üretim beklendiği gibi arttı; ancak asıl şaşırtıcı gözlem, ışık kademeli olarak neredeyse ay ışığı seviyesine kadar düşürüldüğünde bile üretimin hemen düşmemesiyle yaşandı."
+  },
+  {
+   "text": "Beklentinin aksine, telefon rölesi monte eden işçilerin çıktısı aydınlatma azaltılmasına rağmen yüksek kalmayı sürdürdü. Mühendisler araştırmayı derinleştirme kararı aldı; zira fiziksel koşulların tek başına insan emeğini açıklamaya yetmediği görülmüştü. Atölyede kronometrelerin ve lümen hesaplarının ötesinde, doğrudan ölçülemeyen psikolojik ve sosyal bir dinamik devreye girmişti."
+  },
+  {
+   "title": "Mayo ve Röle Odası",
+   "text": "1927'de Harvard Üniversitesi araştırmacısı Elton Mayo ve ekibi sürece dahil oldu. Araştırmacılar, beş montajcı ve bir malzeme dağıtıcısından oluşan kadın işçi grubunu özel bir test odasına aldı. Dinlenme molaları eklendi, çalışma saatleri esnetildi ve ikramlar sunuldu. Verimlilik hızla yükseldi; daha da çarpıcı olanı, bu imtiyazlar geri alınıp eski sert düzene dönüldüğünde dahi çıktı yüksek kaldı."
+  },
+  {
+   "title": "Görünür Olmanın Gücü",
+   "text": "Araştırma ekibinin çıkardığı sonuç, yönetim düşüncesinde dönüm noktası oldu: İşçiler yalnızca mola sürelerinden ötürü değil; izlendikleri, fikirleri sorulduğu ve önemsendiklerini hissettikleri için daha verimli çalışıyordu. Sonraları Henry Landsberger tarafından 'Hawthorne Etkisi' olarak adlandırılacak bu olgu, insanların gözlemlendiklerini bildiklerinde davranışlarını değiştirdiğini ortaya koydu."
+  },
+  {
+   "title": "Gayriresmî Örgütleniş",
+   "text": "Daha sonra kurulan Banka Kablolama Gözlem Odası'nda ise madalyonun diğer yüzü görüldü. Erkek işçiler, resmi prim teşviklerine göre değil, kendi aralarında oluşturdukları yazısız grup normlarına göre çalışıyordu. Çok hızlı üreterek kotayı yükseltenler ya da çok yavaş çalışanlar grup içi alay ve dışlamayla frenleniyor; çalışanlar kendi özerk dengelerini gayriresmî biçimde koruyordu."
+  },
+  {
+   "title": "Verilerin Yeniden İncelenmesi",
+   "text": "Hawthorne bulguları uzun süre ders kitaplarında tartışmasız yer bulsa da zamanla metodolojik eleştiriler aldı. Ekonomistler Steven Levitt ve John List, 2011'de yayımlanan çalışmalarında kayıp orijinal verileri inceledi. Analizler, verim artışının aydınlatma değişiminden ziyade haftalık çalışma ritmi ve deney sürecindeki personel değişiklikleri gibi dış etkenlerle açıklanabileceğini ortaya koydu."
+  },
+  {
+   "title": "İnsanın Yeniden Keşfi",
+   "text": "Eleştirilere ve abartılan bazı yorumlarına rağmen Hawthorne araştırmaları, yönetimi salt mekanik bir mühendislik hesabı gören Taylorist anlayışı derinden sarstı. Çalışanların yalnızca maddi ödüllerle güdülenen araçlar değil; aidiyet, takdir ve sosyal bağ arayan bireyler olduğunu kanıtlayarak örgüt psikolojisi ile modern İnsan Kaynakları yaklaşımının temellerini attı."
+  }
+ ]
+}
